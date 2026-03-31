@@ -1,3 +1,16 @@
+---
+title:       OpenStack Workshop
+description: OpenStack & Ceph
+author:      Vladislav Nazarenko (vnazarenko@📯socket.de)
+keywords:    openstack,ceph,workshops,operations,troubleshoouting
+url:         
+image:
+transition: cover
+theme: default
+backgroundImage: url(https://codecap.github.io/openstack-workshop/assets/background.jpg)
+paginate: true
+---
+
 # OpenStack & Ceph Workshop
 # Intro
 # Architecture
@@ -70,3 +83,4 @@
 ## Automation
 * ansible
 * terraform
+---

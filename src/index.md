@@ -25,12 +25,13 @@ Networking: LinkedIn, Xing
 
 ---
 # Targets
-- Application Container
-- Cointainer Orchestration
+- Deployment
 - Operations
 - Networking
 - Security
+- Monitoring
 - Troubleshooting
+- Automation
 
 ---
 # Content
