@@ -13,11 +13,15 @@ paginate: true
 
 # OpenStack & Ceph Workshop
 # Intro
-# Architecture
+## Workshop Targets
+## Architecture
+## Technology Stack
+## Workshop Environment
+## 
 # Ceph
 ## Architecture
 ## Deploy Ceph with Cephadm
-## Prasxis
+## Praxis
 ### Pools
 ### RBD Volumes
 ### Filesystems
@@ -48,6 +52,10 @@ paginate: true
 ### Debugging
 ### Backup and Recovery
 ### Upgrades
+## Monitoring / Logging
+* Ceilometer / Gnochi
+* Modernes Monitoring
+* Central Loggin
 
 ## Networking
 * OpenVSWitch
@@ -67,18 +75,11 @@ paginate: true
 
 ## Images
 
-## Cloud-Init
+## User Config (Cloud-Init)
 
-## Monitoring / Logging
-* Ceilometer / Gnochi
-* Modernes Monitoring
-* Central Loggin
-
-## Segration
+## Resource Segregation
 ### Host Aggregates
 ### Availalbility Zones
-
-
 
 ## Automation
 * ansible
