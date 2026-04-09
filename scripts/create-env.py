@@ -16,7 +16,7 @@ def generate_ip(base_cidr, vm_id):
     except Exception:
         return str(base_cidr)
 
-with open('env.yaml', 'r') as f:
+with open('conf/env.yaml', 'r') as f:
     env = yaml.safe_load(f)
 
 server_list = env.get('server_conf', [])
@@ -85,14 +85,14 @@ for server in server_list:
     netconf_json = json.dumps(netconf_obj)
     command = [
         "./create-vm.sh",
-        f"--id={vm_id}",
-        "--hostname", hostname,
+        "--id", str(vm_id),
+        "--name", hostname,
         "--cpu", str(server.get('cpu', 1)),
         "--ram", str(server.get('ram', 2048)),
-        "--disks", json.dumps(server.get('disks', [])),
-        "--netconf", netconf_json
+        "--disks", "'"+json.dumps(server.get('disks', []))+"'",
+        "--netconf", "'"+netconf_json+"'"
     ]
 
-    print(f"🛠️  Configuring {hostname}...")
-    print(command)
+    # print(f"# 🛠️  Configuring {hostname}...")
+    print(" ".join(command))
     #subprocess.run(command, check=True)
