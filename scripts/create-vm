@@ -1,0 +1,146 @@
+#!/bin/bash
+##############################################################################
+# config
+ID_START_FROM=1000
+TEMPLATE_ID=9000
+STORAGE="local-lvm"
+NCARD_MODEL="virtio"
+SNIPPET_STORAGE="local"
+SNIPPET_DIR="/var/lib/vz/snippets"
+ENV_CONF="conf/env.yaml"
+IFACE_DATA_JSON=$(cat "$ENV_CONF" | yq -r '.network_conf' -j)
+NAMESERVER=$(dig google.com | awk -F'[ #]' '/SERVER:/ {print $3}')
+SEARCHDOMAIN=""
+CIUSER=deploy
+CIPASS=deploy
+
+mkdir -p "$SNIPPET_DIR"
+##############################################################################
+# args
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --id)      ID="$2";           shift 2 ;;
+        --name)    NAME="$2";         shift 2 ;;
+        --domain)  DOMAIN="$2";       shift 2 ;;
+        --cpu)     CPU="$2";          shift 2 ;;
+        --ram)     RAM="$2";          shift 2 ;;
+        --disks)   DISKS_JSON="$2";   shift 2 ;;
+        --netconf) NETCONF_JSON="$2"; shift 2 ;;
+        *) echo "Unknown parameter: $1"; exit 1 ;;
+    esac
+done
+
+VMID=$(($ID_START_FROM + ID))
+
+# Validation
+if [[ ! -f "$ENV_CONF" ]]; then
+    echo "Error: Configuration file $ENV_CONF not found."
+    exit 1
+fi
+
+##############################################################################
+# go
+VENDOR_FILE="$SNIPPET_DIR/vm-${VMID}-vendor.yaml"
+
+
+qm clone $TEMPLATE_ID $VMID --name "$NAME" --full
+qm set $VMID --ciuser $CIUSER --cipassword $CIPASS --cores "$CPU" --memory "$RAM"
+
+cat <<EOF > "$VENDOR_FILE"
+#cloud-config
+packages_udpate: true
+packages:
+  - curl
+  - htop
+  - httping
+  - jq
+  - git
+  - net-tools
+  - ngrep
+  - nmap
+  - screen
+  - tcpdump
+  - tree
+  - vim
+  - wget
+  - yq
+manage_etc_hosts: true
+runcmd:
+  - netplan apply
+  - growpart  /dev/sda  1
+  - resize2fs /dev/sda1
+fs_setup:
+  - device:     /dev/sdb
+    filesystem: ext4
+    overwrite:  true
+mounts:
+  - [ /dev/sdb, /var/lib/docker, "ext4", "defaults,nofail", "0", "2" ]
+write_files:
+  - path: /etc/netplan/70-wrx-rename-ifaces.yaml
+    owner: root:root
+    permissions: '0600'
+    content: |
+      network:
+        version: 2
+        ethernets:
+EOF
+
+# Iterate through the requested network interfaces
+while IFS=$'\t' read -r NET_NAME MACADDR IP GW MTU; do
+
+    # Get slot ID
+    NEXT_ID=0
+    while qm config "$VMID" | grep -q "net$NEXT_ID:"; do
+        ((NEXT_ID++))
+    done
+
+    # Lookup 'iface' dynamically from the JSON we got via yq
+    HEX_OCTET=$(echo "$MACADDR" | cut -d':' -f5)
+    IDX=$((16#$HEX_OCTET))
+    NET_KEY=$(echo "$IFACE_DATA_JSON" | jq -r "to_entries | sort_by(.key) | .[$IDX].key")
+
+    TARGET_IFACE=$(echo "$IFACE_DATA_JSON" | jq -r ".\"$NET_KEY\".iface // \"\"")
+
+    qm set $VMID --net$NEXT_ID "$NCARD_MODEL,bridge=br$NET_NAME,macaddr=$MACADDR${MTU:+,mtu=$MTU}"
+    if [ -n "$IP" ]; then
+        qm set $VMID --ipconfig$NEXT_ID "ip=${IP}${GW:+,gw=$GW}"
+    fi
+
+    if [[ -n "$TARGET_IFACE" && -n "$MACADDR" ]]; then
+        cat <<EOF >> "$VENDOR_FILE"
+          eth${NEXT_ID}:
+            match:
+              macaddress: "${MACADDR,,}"
+            set-name: "$TARGET_IFACE"
+            dhcp4: false
+            dhcp6: false
+            link-local: []
+EOF
+    fi
+
+done < <(echo "$NETCONF_JSON" | jq -r 'to_entries[] | "\(.key)\t\(.value.macaddr // "")\t\(.value.ip // "")\t\(.value.gw // "")\t\(.value.mtu // "")"')
+
+qm set $VMID --cicustom "vendor=${SNIPPET_STORAGE}:snippets/$(basename $VENDOR_FILE)"
+qm cloudinit update $VMID
+
+# Disks logic (Original Loop)
+while read SIZE; do
+    D_ID=0
+    while qm config "$VMID" | grep -q "scsi$D_ID:"; do
+        ((D_ID++))
+    done
+    qm set "$VMID" "--scsi$D_ID" "${STORAGE}:${SIZE}"
+done < <(echo "$DISKS_JSON" | jq -Mr ".[]")
+
+##############################################################################
+# post steps
+
+# Clear nameservers and search domain
+qm set $VMID --nameserver   "$NAMESERVER"
+qm set $VMID --searchdomain "$SEARCHDOMAIN"
+
+# resize the root disk
+qm resize $VMID scsi0 16G
+
+
+qm start $VMID

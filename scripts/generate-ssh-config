@@ -1,0 +1,31 @@
+#!/bin/bash
+
+YAML_FILE="conf/env.yaml"
+IP_BASE="10.14.0"
+SSH_USER="deploy"
+
+echo "### Automatically generated SSH Config ###"
+echo ""
+
+# We use yq v3 to convert the YAML section to JSON,
+# then pipe it to jq to use your specific expression.
+cat "$YAML_FILE" | yq -r '.server_conf[] | (.hostname + " " + (.id | tostring))' | while read -r HOSTNAME ID; do
+
+    # Handle cases where data might be missing
+    [[ -z "$HOSTNAME" || "$HOSTNAME" == "null" ]] && continue
+
+    IP="${IP_BASE}.${ID}"
+
+    cat <<EOF
+Host ${HOSTNAME} ${IP}
+    Hostname              ${IP}
+    User                  ${SSH_USER}
+    StrictHostKeyChecking no
+    UserKnownHostsFile    /dev/null
+
+EOF
+done
+
+
+echo "### Automatically generated SSH Config ###"
+echo ""
