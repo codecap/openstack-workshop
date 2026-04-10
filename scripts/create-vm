@@ -1,13 +1,18 @@
 #!/bin/bash
 ##############################################################################
 # config
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+CONFIG_DIR="$SCRIPT_DIR/../conf/"
+ENV_CONF="$CONFIG_DIR/env.yaml"
+
+##############################################################################
+# vars
 ID_START_FROM=1000
 TEMPLATE_ID=9000
 STORAGE="local-lvm"
 NCARD_MODEL="virtio"
 SNIPPET_STORAGE="local"
 SNIPPET_DIR="/var/lib/vz/snippets"
-ENV_CONF="conf/env.yaml"
 IFACE_DATA_JSON=$(cat "$ENV_CONF" | yq -r '.network_conf' -j)
 NAMESERVER=$(dig google.com | awk -F'[ #]' '/SERVER:/ {print $3}')
 SEARCHDOMAIN=""
@@ -15,6 +20,11 @@ CIUSER=deploy
 CIPASS=deploy
 
 mkdir -p "$SNIPPET_DIR"
+
+if [[ ! -f "$ENV_CONF" ]]; then
+    echo "Error: Configuration file $ENV_CONF not found."
+    exit 1
+fi
 ##############################################################################
 # args
 while [[ "$#" -gt 0 ]]; do
@@ -32,11 +42,6 @@ done
 
 VMID=$(($ID_START_FROM + ID))
 
-# Validation
-if [[ ! -f "$ENV_CONF" ]]; then
-    echo "Error: Configuration file $ENV_CONF not found."
-    exit 1
-fi
 
 ##############################################################################
 # go
@@ -142,5 +147,5 @@ qm set $VMID --searchdomain "$SEARCHDOMAIN"
 # resize the root disk
 qm resize $VMID scsi0 16G
 
-
+# start
 qm start $VMID

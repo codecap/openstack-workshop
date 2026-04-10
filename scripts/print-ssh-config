@@ -1,21 +1,32 @@
-#!/bin/bash
+#!/usr/bin/env bash
+##############################################################################
+# config
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+CONFIG_DIR="$SCRIPT_DIR/../conf/"
 
-YAML_FILE="conf/env.yaml"
+##############################################################################
+# vars
+ENV_CONF="$CONFIG_DIR/env.yaml"
+
+if ! [ -f $ENV_CONF ]; then
+    echo "Can not access $ENV_CONF"
+    exit 1
+fi
+
 IP_BASE="10.14.0"
 SSH_USER="deploy"
 
-echo "### Automatically generated SSH Config ###"
-echo ""
+##############################################################################
+# functions
+function print_comment
+{
+    echo ""
+    echo "### Automatically generated SSH Config ###"
+    echo ""
+}
 
-# We use yq v3 to convert the YAML section to JSON,
-# then pipe it to jq to use your specific expression.
-cat "$YAML_FILE" | yq -r '.server_conf[] | (.hostname + " " + (.id | tostring))' | while read -r HOSTNAME ID; do
-
-    # Handle cases where data might be missing
-    [[ -z "$HOSTNAME" || "$HOSTNAME" == "null" ]] && continue
-
-    IP="${IP_BASE}.${ID}"
-
+function print_host_entry
+{
     cat <<EOF
 Host ${HOSTNAME} ${IP}
     Hostname              ${IP}
@@ -24,8 +35,20 @@ Host ${HOSTNAME} ${IP}
     UserKnownHostsFile    /dev/null
 
 EOF
+
+}
+##############################################################################
+# go
+
+print_comment
+
+cat "$ENV_CONF" | yq -r '.server_conf[] | (.hostname + " " + (.id | tostring))' | while read -r HOSTNAME ID; do
+
+    [[ -z "$HOSTNAME" || "$HOSTNAME" == "null" ]] && continue
+
+    IP="${IP_BASE}.${ID}"
+
+    print_host_entry
 done
 
-
-echo "### Automatically generated SSH Config ###"
-echo ""
+print_comment

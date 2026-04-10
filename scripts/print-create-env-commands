@@ -1,10 +1,20 @@
 #!/usr/bin/env python3
-
-import yaml
-import subprocess
-import json
+##############################################################################
+# libs
 import ipaddress
+import json
+import pathlib
+import subprocess
+import yaml
 
+##############################################################################
+# config
+
+script_dir = pathlib.Path(__file__).parent.resolve()
+config_dir = script_dir.parent / "conf"
+
+##############################################################################
+# functions
 def generate_ip(base_cidr, vm_id):
     if not base_cidr or not vm_id:
         return ""
@@ -18,7 +28,9 @@ def generate_ip(base_cidr, vm_id):
     except Exception:
         return str(base_cidr)
 
-with open('conf/env.yaml', 'r') as f:
+##############################################################################
+# go
+with open(config_dir  / 'env.yaml', 'r') as f:
     env = yaml.safe_load(f)
 
 server_list = env.get('server_conf', [])
