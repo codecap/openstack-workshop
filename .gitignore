@@ -1,3 +1,4 @@
 *.html
 src/*.html
 removeme
+sftp-config.json
