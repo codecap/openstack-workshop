@@ -1,9 +1,10 @@
 ---
 service_type: host
-hostname: deploy
+hostname: deployment
 addr: 10.20.21.16
 labels:
 - _admin
+- _no_schedule
 ---
 service_type: host
 hostname: cephmon01
@@ -16,7 +17,6 @@ labels:
 - nfs
 - rbd-mirror
 - rgw
-- osd
 - monitoring
 ---
 service_type: host
@@ -30,7 +30,6 @@ labels:
 - nfs
 - rbd-mirror
 - rgw
-- osd
 - monitoring
 ---
 service_type: host
@@ -44,7 +43,6 @@ labels:
 - nfs
 - rbd-mirror
 - rgw
-- osd
 - monitoring
 ---
 service_type: host
@@ -67,7 +65,7 @@ labels:
 ---
 service_type: host
 hostname: cephgra01
-addr: 10.20.21.129
+addr: 10.20.21.136
 labels:
 - monitoring
 ---
@@ -88,15 +86,15 @@ service_id: default
 placement: {label: nfs}
 ---
 service_type: osd
-service_id: nvme
+service_id: ssd
 placement: {label: osd}
 spec:
   data_devices:
     paths:
-      - /dev/sdb
       - /dev/sdc
       - /dev/sdd
-crush_device_class: nvme
+      - /dev/sde
+crush_device_class: ssd
 ---
 service_type: rbd-mirror
 service_id: default
@@ -109,30 +107,30 @@ networks: ["10.20.21.0/24"]
 spec:
   rgw_frontend_port: 8080
 ---
-# service_type: ingress
-# service_id: rgw.default
-# placement: {label: rgw}
-# networks: ["10.20.21.0/24"]
-# spec:
-#   backend_service: rgw.default
-#   virtual_ips_list: ["10.20.21.135/24"]
-#   # virtual_ip: ""
-#   frontend_port: 80
-#   monitor_port: 1967
-# ---
 service_type: ingress
-service_id: rgw.ssl
+service_id: rgw.default
 placement: {label: rgw}
 networks: ["10.20.21.0/24"]
 spec:
   backend_service: rgw.default
   virtual_ips_list: ["10.20.21.135/24"]
   # virtual_ip: ""
-  frontend_port: 443
+  frontend_port: 80
   monitor_port: 1967
-  ssl_cert: |
-$(cat ../ssl/server-crt.pem | awk '{print "    "$0}')
-$(cat ../ssl/server-key.pem | awk '{print "    "$0}')
+# ---
+# service_type: ingress
+# service_id: rgw.ssl
+# placement: {label: rgw}
+# networks: ["10.20.21.0/24"]
+# spec:
+#   backend_service: rgw.default
+#   virtual_ips_list: ["10.20.21.135/24"]
+#   # virtual_ip: ""
+#   frontend_port: 443
+#   monitor_port: 1967
+#   ssl_cert: |
+# $(cat ../ssl/server-crt.pem | awk '{print "    "$0}')
+# $(cat ../ssl/server-key.pem | awk '{print "    "$0}')
 ---
 service_type: prometheus
 service_name: prometheus
