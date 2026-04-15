@@ -17,7 +17,6 @@ labels:
 - nfs
 - rbd-mirror
 - rgw
-- monitoring
 ---
 service_type: host
 hostname: cephmon02
@@ -30,7 +29,6 @@ labels:
 - nfs
 - rbd-mirror
 - rgw
-- monitoring
 ---
 service_type: host
 hostname: cephmon03
@@ -43,7 +41,6 @@ labels:
 - nfs
 - rbd-mirror
 - rgw
-- monitoring
 ---
 service_type: host
 hostname: cephosd01
@@ -80,10 +77,11 @@ placement: {label: mgr}
 service_type: mon
 service_id: default
 placement: {label: mon}
----
-service_type: nfs
-service_id: default
-placement: {label: nfs}
+# ---
+# NOTE: nodes for nfs should have connectivity to both networks: public and cluster
+# service_type: nfs
+# service_id: default
+# placement: {label: nfs}
 ---
 service_type: osd
 service_id: ssd
