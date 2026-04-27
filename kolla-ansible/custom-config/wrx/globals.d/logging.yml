@@ -1,0 +1,6 @@
+---
+enable_central_logging: "false"
+# enable_prometheus_elasticsearch_exporter: "yes"
+# enable_fluentd:         "yes"
+# opensearch_soft_retention_period_days: "30"
+# opensearch_hard_retention_period_days: "60"

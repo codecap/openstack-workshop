@@ -1,0 +1,28 @@
+---
+# TODO
+compute01.mgmt.wrx.sckt.net:
+  ipv4_address:       10.14.0.64
+  ipv4_subnet_mask:   255.255.255.0
+  ipv4_gateway:       10.40.10.1
+  ipv4_interface_mac: bc:24:11:99:04:40 # mgmt
+  ipv4_nameserver:    10.14.0.10
+  network_mtu:        1500
+  driver:             ipmi
+  driver_info:
+    power:
+      ipmi_address:  10.14.1.64
+      ipmi_password: admin
+      ipmi_username: admin
+  instance_info:
+    image_source:   "http://sds.mgmt.wrx.sckt.net/builds/ubuntu-jammy.qcow2"
+    image_checksum: "ca7aac8feee72b0deb855cc8dea5e7e7"
+  name: compute01.mgmt.wrx.sckt.net
+  nics:
+    - mac: 'bc:24:11:99:04:40'  # mgmt
+  properties:
+    cpu_arch: x86_64
+    cpus: '24'
+    disk_size: '56'
+    ram: '127828'
+  uuid: 00000000-0000-0000-0000-010014000064
+  ssh_public_key_path: /etc/bifrost/id_rsa.pub

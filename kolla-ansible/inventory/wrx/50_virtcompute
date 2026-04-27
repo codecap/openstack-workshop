@@ -1,0 +1,6 @@
+# GPU
+[virtcompute]
+# compute01.os5.tst.sckt.net
+
+[compute:children]
+virtcompute

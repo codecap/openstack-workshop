@@ -1,0 +1,16 @@
+#
+# NOTE: ceph is managed and deployed by cephadm now
+#       no need to prepare ceph hosts by kolla
+#       this is file is only for example on how to add groups/hosts to kolla-ansible
+#
+# [cephstrg]
+# cephmon01.mgmt.wrx.sckt.net api_interface=strg0
+# cephmon02.mgmt.wrx.sckt.net api_interface=strg0
+# cephmon03.mgmt.wrx.sckt.net api_interface=strg0
+# cephgra01.mgmt.wrx.sckt.net api_interface=strg0
+#
+# [baremetal:children]
+# cephstrg
+#
+# [common:children]
+# cephstrg

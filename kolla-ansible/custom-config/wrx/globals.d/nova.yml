@@ -1,0 +1,4 @@
+---
+nova_backend_ceph:      "yes"
+nova_compute_virt_type: "kvm"
+nova_console:           "novnc"

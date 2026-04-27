@@ -1,0 +1,5 @@
+---
+enable_masakari:                 "false"
+enable_masakari_instancemonitor: "{{ enable_masakari | bool }}"
+# enable_masakari_hostmonitor:     "{{ enable_masakari | bool }}"
+enable_masakari_hostmonitor:     "no"

@@ -1,0 +1,27 @@
+[control]
+controller01.mgmt.wrx.sckt.net
+controller02.mgmt.wrx.sckt.net
+controller03.mgmt.wrx.sckt.net
+
+[network]
+network01.mgmt.wrx.sckt.net
+network02.mgmt.wrx.sckt.net
+network03.mgmt.wrx.sckt.net
+
+[hypervisor]
+compute01.mgmt.wrx.sckt.net
+compute02.mgmt.wrx.sckt.net
+compute03.mgmt.wrx.sckt.net
+# compute11.mgmt.wrx.sckt.net
+
+[compute:children]
+hypervisor
+
+[monitoring]
+monitor01.mgmt.wrx.sckt.net
+
+[storage:children]
+control
+
+[loadbalancer:children]
+control

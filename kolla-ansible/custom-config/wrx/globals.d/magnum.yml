@@ -1,0 +1,6 @@
+---
+enable_magnum:             "false"
+enable_cluster_user_trust: "yes"
+
+magnum_extra_volumes:
+  - "/etc/capi/helm:/usr/local/bin/helm"

@@ -1,0 +1,3 @@
+---
+keystone_token_provider: 'fernet'
+fernet_token_expiry: 86400

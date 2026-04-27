@@ -1,0 +1,4 @@
+---
+neutron_plugin_agent:        "ovn"
+neutron_ovn_dhcp_agent:      "yes"
+neutron_ovn_distributed_fip: "yes"

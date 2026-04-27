@@ -1,0 +1,6 @@
+---
+# kolla_enable_tls_external:     "yes"
+# kolla_enable_tls_internal:     "no"
+# kolla_enable_tls_backend:      "no"
+# CA
+# kolla_copy_ca_into_containers: "yes"
