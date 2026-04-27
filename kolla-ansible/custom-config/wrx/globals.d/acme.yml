@@ -1,0 +1,4 @@
+---
+enable_letsencrypt: "yes"
+letsencrypt_email:  "admin@wrx.sckt.net"
+letsencrypt_external_fqdns: "{{[kolla_external_fqdn] + openstack_external_fqdns + ceph_external_fqdns + artifactory_fqdn}}"

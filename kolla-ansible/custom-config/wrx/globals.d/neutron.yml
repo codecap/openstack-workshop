@@ -1,0 +1,19 @@
+---
+enable_neutron_dvr: "yes"
+enable_neutron_agent_ha: "yes"
+# enable_neutron_genericswitch: "yes"
+# enable_neutron_bgp_dragent: "yes"
+
+# enable_neutron_packet_logging: "no"       # packet logging when the registered events occur.
+# enable_neutron_vpnaas: "yes"              # vpn as a service
+# enable_neutron_sriov: "no"                # admin state of ports, configure port security (enable and disable spoof checking), and configure QoS rate limiting and minimum bandwidth
+# enable_neutron_fwaas: "yes"               # firewall at the router level (perimeter FW)
+# enable_neutron_qos: "no"                  # set network requirements like bandwidth, latency, jitter, and reliability in order to satisfy a Service Level Agreement (SLA) between an application provider and end users.
+# enable_neutron_bgp_dragent: "no"          # BGP dynamic routing
+# enable_neutron_provider_networks: "no"    # Provider networks connect, or map, to existing layer-2 networks in the data center, typically using VLAN (Create VMs in existent networks)
+# enable_neutron_segments: "no"             # management for segement ids (vxlan, vlan ...) for user defined networks, which ids are allowed to use
+# enable_neutron_sfc: "no"                  # Service Function Chaining, routes packets through one or more service functions instead of conventional routing (next hop), security and more features
+# enable_neutron_trunk: "no"                # Allows multiple networks to be connected to an instance using a single virtual NIC
+# enable_neutron_metering: "no"             # Enables o to account the traffic in/out of the OpenStack environment
+# enable_neutron_infoblox_ipam_agent: "no"  # IPAM, DNS, DHCP via InfoBlox
+# enable_neutron_port_forwarding: "no"      # Port Forwarding

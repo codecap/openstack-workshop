@@ -1,0 +1,7 @@
+custom-config/wrx/*openrc.sh
+custom-config/wrx/config/ironic/ironic-agent.kernel
+custom-config/wrx/config/ironic/ironic-agent.initramfs
+# checked out by gilt
+custom-config/wrx/config/grafana/
+custom-config/wrx/config/prometheus/
+custom-config/wrx/globals.d/monitoring.yml

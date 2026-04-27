@@ -1,0 +1,40 @@
+---
+
+#
+# NOTE: we build own ipa image to be able to debug
+#
+create_ipa_image:       true
+download_ipa:           false
+use_tinyipa:            false
+ipa_dib_os_element:     "centos"
+ipa_extra_dib_elements: "devuser"
+ipa_add_ssh_key:        true
+
+#
+# NOTE: no need to build a deployment image, we have a build server for it
+#
+create_image_via_dib:   false
+dib_image_type:         "vm"
+# deploy_image_filename:  "ubuntu-focal.qcow2"
+dib_os_element:         "ubuntu"
+dib_os_release:         "jammy"
+# deploy_image_filename:  "{{ansible_date_time.iso8601_basic_short[2:13].replace('T','_')}}_ubuntu-2204.qcow2"
+extra_dib_elements:     "devuser"
+
+#
+# NOTE: it masks the default variable in playbooks/roles/bifrost-create-dib-image/defaults/main.yml
+#
+dib_env_vars:
+  http_proxy: "{{ lookup('env','http_proxy') }}"
+  https_proxy: "{{ lookup('env','https_proxy') }}"
+  DIB_INSTALLTYPE_simple_init: repo
+  LANG: C
+  LC_ALL: C
+  LC_MESSAGES: C
+  DIB_DEV_USER_USERNAME:     deploy
+  DIB_DEV_USER_PASSWORD:     deploy
+  DIB_DEV_USER_PWDLESS_SUDO: yes
+  DIB_DEV_USER_AUTHORIZED_KEYS: /etc/bifrost/id_rsa.pub
+  # TMP_DIR: /var/lib/data/tmp
+  # DIB_IMAGE_CACHE: $IMAGE_CREATE_CACHE_DIR
+

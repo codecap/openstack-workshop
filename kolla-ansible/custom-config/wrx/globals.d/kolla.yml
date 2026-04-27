@@ -1,0 +1,26 @@
+---
+kolla_internal_fqdn:        "master.{{internal_domain}}"
+# FIXME: remove to inventory
+internal_domain:            "api.wrx.sckt.net"
+
+# kolla_external_fqdn:        "os.services.{{external_domain}}"
+kolla_external_fqdn:        "{{keystone_external_fqdn}}"
+# FIXME: remove to inventory
+external_domain:            "wrx.sckt.net"
+
+# kolla_container_engine:     docker
+#
+# Docker
+#
+# FIXME: remove to inventory
+docker_registry_insecure: "yes"
+docker_registry:          "registry.wrx.sckt.net"
+docker_namespace:         "quay/openstack.kolla"
+# docker_registry_username:
+# docker_registry_password:
+
+
+
+# config_strategy: "COPY_ALWAYS"
+# kolla_base_distro: "centos"
+# kolla_install_type: "binary"

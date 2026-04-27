@@ -1,0 +1,8 @@
+---
+enable_ceph_rgw: "yes"
+enable_ceph_rgw_keystone: "yes"
+enable_ceph_rgw_loadbalancer: "no"
+# enable_manila_backend_cephfs_native: "yes"
+ceph_rgw_swift_account_in_url: "yes"
+ceph_rgw_swift_compatibility: "yes"
+

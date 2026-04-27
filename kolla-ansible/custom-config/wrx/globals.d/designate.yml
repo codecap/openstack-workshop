@@ -1,0 +1,5 @@
+---
+enable_designate:                    "false"
+designate_backend:                   "bind9"
+designate_ns_record:                 [ "dns.wrx.sckt.net" ]
+designate_enable_notifications_sink: "yes"

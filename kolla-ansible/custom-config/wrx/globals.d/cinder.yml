@@ -1,0 +1,7 @@
+---
+enable_cinder: "yes"
+enable_cinder_backup: "yes"
+enable_cinder_backend_iscsi: "no"
+enable_cinder_backend_lvm: "no"
+cinder_backend_ceph: "yes"
+cinder_backup_driver: "ceph"

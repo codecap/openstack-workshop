@@ -1,0 +1,7 @@
+---
+#
+# Do not change these lines
+#
+# TODO
+env_name:           'wrx'
+node_custom_config: "{{inventory_dir}}/../../custom-config/{{env_name}}/config"

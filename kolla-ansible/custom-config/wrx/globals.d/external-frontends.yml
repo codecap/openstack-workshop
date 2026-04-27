@@ -1,0 +1,125 @@
+---
+haproxy_single_external_frontend: "yes"
+
+# NOTE:
+# To make this work we need follliwing DNS entries
+# DNS for OpenStack
+# *.os.svc.wrx.sckt.net              -> default.os.svc.wrx.sckt.net
+# *.openstack.services.wrx.sckt.net  -> default.os.svc.wrx.sckt.net
+# default.os.svc.wrx.sckt.net        -> default.os5.svc.wrx.sckt.net
+# defaul.os5.svc.wrx.sckt.net        -> [IP]
+#
+# # DNS for Ceph
+# *.ceph.services.wrx.sckt.net       -> default.ceph.svc.wrx.sckt.net
+# default.ceph.svc.wrx.sckt.net      -> default.ceph3.svc.wrx.sckt.net
+# default.ceph3.svc.wrx.sckt.net     -> [IP]
+
+#
+# OpenStack
+#
+
+# user acceess
+grafana_external_fqdn:                 "monitoring.openstack.services.{{external_domain}}"
+horizon_external_fqdn:                 "dashboard.openstack.services.{{external_domain}}"
+opensearch_dashboards_external_fqdn:   "logging.openstack.services.{{external_domain}}"
+# sys access
+barbican_external_fqdn:                "barbican.os.svc.{{external_domain}}"
+ceph_rgw_external_fqdn:                "s3.svc.{{external_domain}}"
+cinder_external_fqdn:                  "cinder.os.svc.{{external_domain}}"
+cloudkitty_external_fqdn:              "cloudkitty.os.svc.{{external_domain}}"
+designate_external_fqdn:               "designate.os.svc.{{external_domain}}"
+glance_external_fqdn:                  "glance.os.svc.{{external_domain}}"
+heat_cfn_external_fqdn:                "heat-cfn.os.svc.{{external_domain}}"
+heat_external_fqdn:                    "heat.os.svc.{{external_domain}}"
+ironic_external_fqdn:                  "ironic.os.svc.{{external_domain}}"
+ironic_inspector_external_fqdn:        "ironic-i.os.svc.{{external_domain}}"
+keystone_external_fqdn:                "keystone.os.svc.{{external_domain}}"
+magnum_external_fqdn:                  "magnum.os.svc.{{external_domain}}"
+manila_external_fqdn:                  "manilla.os.svc.{{external_domain}}"
+masakari_external_fqdn:                "masakari.os.svc.{{external_domain}}"
+mistral_external_fqdn:                 "mistral.os.svc.{{external_domain}}"
+neutron_external_fqdn:                 "neutron.os.svc.{{external_domain}}"
+nova_external_fqdn:                    "nova.os.svc.{{external_domain}}"
+nova_metadata_external_fqdn:           "nova-m.os.svc.{{external_domain}}"
+nova_novncproxy_fqdn:                  "novncproxy.os.svc.{{external_domain}}"
+octavia_external_fqdn:                 "octavia.os.svc.{{external_domain}}"
+placement_external_fqdn:               "placement.os.svc.{{external_domain}}"
+prometheus_alertmanager_external_fqdn: "prometheus-a.os.svc.{{external_domain}}"
+prometheus_external_fqdn:              "prometheus-s.os.svc.{{external_domain}}"
+skyline_apiserver_external_fqdn:       "skyline-a.os.svc.{{external_domain}}"
+skyline_console_external_fqdn:         "skyline-c.os.svc.{{external_domain}}"
+swift_external_fqdn:                   "{{ceph_rgw_external_fqdn}}"
+tacker_external_fqdn:                  "tacker.os.svc.{{external_domain}}"
+trove_external_fqdn:                   "trove.os.svc.{{external_domain}}"
+venus_external_fqdn:                   "venus.os.svc.{{external_domain}}"
+watcher_external_fqdn:                 "watcher.os.svc.{{external_domain}}"
+zun_external_fqdn:                     "zun.os.svc.{{external_domain}}"
+zun_wsproxy_external_fqdn:             "zun-w.os.svc.{{external_domain}}"
+
+openstack_external_fqdns: |
+  {{
+      [cinder_external_fqdn]
+    + [glance_external_fqdn]
+    + [keystone_external_fqdn]
+    + [neutron_external_fqdn]
+    + [nova_external_fqdn]
+    + [nova_metadata_external_fqdn]
+    + [nova_novncproxy_fqdn]
+    + [placement_external_fqdn]
+    + ( enable_horizon                          | bool | ternary([horizon_external_fqdn],                 []) )
+    + ( enable_opensearch_dashboards_external   | bool | ternary([opensearch_dashboards_external_fqdn],   []) )
+    + ( enable_grafana_external                 | bool | ternary([grafana_external_fqdn],                 []) )
+    + ( enable_barbican                         | bool | ternary([barbican_external_fqdn],                []) )
+    + ( enable_ceph_rgw_loadbalancer            | bool | ternary([ceph_rgw_external_fqdn],                []) )
+    + ( enable_cloudkitty                       | bool | ternary([cloudkitty_external_fqdn],              []) )
+    + ( enable_designate                        | bool | ternary([designate_external_fqdn],               []) )
+    + ( enable_heat                             | bool | ternary([heat_cfn_external_fqdn],                []) )
+    + ( enable_heat                             | bool | ternary([heat_external_fqdn],                    []) )
+    + ( enable_ironic                           | bool | ternary([ironic_external_fqdn],                  []) )
+    + ( enable_ironic                           | bool | ternary([ironic_inspector_external_fqdn],        []) )
+    + ( enable_magnum                           | bool | ternary([magnum_external_fqdn],                  []) )
+    + ( enable_manila                           | bool | ternary([manila_external_fqdn],                  []) )
+    + ( enable_masakari                         | bool | ternary([masakari_external_fqdn],                []) )
+    + ( enable_mistral                          | bool | ternary([mistral_external_fqdn],                 []) )
+    + ( enable_octavia                          | bool | ternary([octavia_external_fqdn],                 []) )
+    + ( enable_prometheus_alertmanager_external | bool | ternary([prometheus_alertmanager_external_fqdn], []) )
+    + ( enable_prometheus_server_external       | bool | ternary([prometheus_external_fqdn],              []) )
+    + ( enable_skyline                          | bool | ternary([skyline_apiserver_external_fqdn],       []) )
+    + ( enable_skyline                          | bool | ternary([skyline_console_external_fqdn],         []) )
+    + ( enable_ceph_rgw_keystone                | bool | ternary([swift_external_fqdn],                   []) )
+    + ( enable_tacker                           | bool | ternary([tacker_external_fqdn],                  []) )
+    + ( enable_trove                            | bool | ternary([trove_external_fqdn],                   []) )
+    + ( enable_venus                            | bool | ternary([venus_external_fqdn],                   []) )
+    + ( enable_watcher                          | bool | ternary([watcher_external_fqdn],                 []) )
+    + ( enable_zun                              | bool | ternary([zun_external_fqdn],                     []) )
+    + ( enable_zun                              | bool | ternary([zun_wsproxy_external_fqdn],             []) )
+  }}
+
+
+#
+# Ceph
+#
+
+# user access
+dashboard_ceph_fqdn:                   "dashboard.ceph.services.{{external_domain}}"
+grafana_ceph_fqdn:                     "monitoring.ceph.services.{{external_domain}}"
+# sys access
+rgw_ceph_fqdn:                         "{{ceph_rgw_external_fqdn}}"
+prometheus_ceph_fqdn:                  "prometheus-s.ceph.svc.{{external_domain}}"
+alertmanager_ceph_fqdn:                "prometheus-a.ceph.svc.{{external_domain}}"
+ceph_external_fqdns:
+  - "{{dashboard_ceph_fqdn}}"
+  - "{{grafana_ceph_fqdn}}"
+  - "{{rgw_ceph_fqdn}}"
+  - "{{rgw_ceph_fqdn|regex_replace('svc', 'services')}}"
+  # - "*.{{rgw_ceph_fqdn}}"                                  # does not work with HTTP-01
+  # - "*.{{rgw_ceph_fqdn|regex_replace('svc', 'services')}}" # does not work with HTTP-01
+  - "{{prometheus_ceph_fqdn}}"
+  - "{{alertmanager_ceph_fqdn}}"
+
+registry_fqdn:
+  - "repohub.services.{{external_domain}}"
+  - "registry.services.{{external_domain}}"
+  - "artifact-repositry.services.{{external_domain}}"
+  - "ar.svc.{{external_domain}}"
+  - "reg.svc.{{external_domain}}"

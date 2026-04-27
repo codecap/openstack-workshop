@@ -1,0 +1,39 @@
+#!/bin/bash
+##############################################################################
+#
+# A wrapper script for kolla-ansible for convinient usage. It makes possible
+# to place all the needed files for kolla deployment within one directory.
+#
+##############################################################################
+# set -x
+
+#KOLLA_CMD=$(find ${PATH//:/ } -maxdepth 1 -executable 2>&1 | grep kolla-ansible | tail -n+2 | head -n 1)
+KOLLA_CMD=$(/usr/bin/which --all --skip-dot kolla-ansible  | head -n1)
+MY_OPTS=""
+
+SAVED_ARGS="$@"
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -i|--inventory)
+      MY_INVENTORY="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    *)
+      shift # past argument
+      ;;
+  esac
+done
+#echo "SAVED_ARGS: $SAVED_ARGS"
+
+#
+# To make it work please add the variable *env_name* to you inventory like the following
+#   echo "env_name: '[MY_ENV_NAME]'" >> [PATH_TO_INVENTORY]/group_vars/[MY_ENV_NAME]/vars.yml
+MY_ENV_NAME_VAR=env_name
+MY_ENV_NAME=$(ansible-inventory -i $MY_INVENTORY --list 2>/dev/null | jq -Mr  "[._meta.hostvars|del(.localhost)|.[]][1].$MY_ENV_NAME_VAR")
+
+MY_CONFIG_DIR=$PWD/custom-config/$MY_ENV_NAME
+MY_OPTS="$MY_OPTS --configdir $MY_CONFIG_DIR"
+
+exec $KOLLA_CMD $MY_OPTS $SAVED_ARGS

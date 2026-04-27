@@ -1,0 +1,32 @@
+---
+#
+# NOTE: this file has the lowest priority. The varibales defined here get
+#       overritten by all specific group ones and globals.yml
+#
+
+#
+# Networking
+#
+network_conf:
+  ifaces:
+    # kolla_name  # iface_name
+    default:      "mgmt0"
+    external:     "srvc0"
+    api:          "cpln0"
+    ironic:       "cpln0"
+    storage:      "strg0"
+    tunnel:       "dpln0"
+    octavia:      "lmgt0"
+#
+# Octavia
+#
+octavia_certs_country: DE
+octavia_certs_state: Hessen
+octavia_certs_organization: socket
+octavia_certs_organizational_unit: systems
+octavia_certs_server_ca_common_name: "server-ca.{{internal_domain}}"
+octavia_certs_server_ca_expiry: 3650
+octavia_certs_client_ca_common_name: "client-ca.{{internal_domain}}"
+octavia_certs_client_ca_expiry: 3650
+octavia_certs_client_expiry:    3650 # default 365
+octavia_certs_client_req_common_name: "client.{{internal_domain}}"

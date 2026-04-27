@@ -1,0 +1,26 @@
+---
+prometheus_ceph_mgr_exporter_endpoints: "{{ceph_rgw_hosts | map(attribute='ip') | product([':9283']) | map('join')}}"
+
+prometheus_external_labels:
+  env:      wrx
+  owner:    sckt
+  location: fra
+  source:   openstack
+
+prometheus_basic_auth_users_extra:
+  - username: monitoring
+    password: "{{ 'wrx-sckt-net' | b64encode }}"
+    enabled:  yes
+
+prometheus_cmdline_extras: "--storage.tsdb.retention.size=8GB"
+
+prometheus_d_conf:
+  blackbox_exporter:
+    customer_router: []
+      # TODO
+      # - name:  demo-router
+      #   ip:    
+      # - name:  demo-vlan-router
+      #   ip:    
+      # - name:  demo-private-router
+      #   ip:    
