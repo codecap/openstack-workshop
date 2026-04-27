@@ -18,7 +18,7 @@ qm list | awk '{print $1" "$2}' | grep -E "^1[0-9]{3}" | while read -r VMID NAME
     STATUS=$(qm status "$VMID" | awk '{print $2}')
 
     if [ "$STATUS" == "running" ]; then
-        echo qm stop "$VMID"
+        echo "qm stop $VMID # $NAME"
     fi
-    echo qm destroy "$VMID" --purge --destroy-unreferenced-disks
+    echo "qm destroy "$VMID" --purge --destroy-unreferenced-disks # $NAME"
 done

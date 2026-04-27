@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ##############################################################################
 # config
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
@@ -14,8 +14,8 @@ NCARD_MODEL="virtio"
 SNIPPET_STORAGE="local"
 SNIPPET_DIR="/var/lib/vz/snippets"
 IFACE_DATA_JSON=$(cat "$ENV_CONF" | yq -r '.network_conf' -j)
-NAMESERVER=$(dig google.com | awk -F'[ #]' '/SERVER:/ {print $3}')
-SEARCHDOMAIN=""
+NAMESERVER=$(cat conf/env.yaml | yq -r '.resolve_conf.nameservers[]' | xargs)
+SEARCHDOMAIN="$(cat conf/env.yaml | yq -r '.resolve_conf.searchdomains[]' | xargs)"
 CIUSER=deploy
 CIPASS=deploy
 
@@ -56,13 +56,15 @@ cat <<EOF > "$VENDOR_FILE"
 packages_udpate: true
 packages:
   - curl
+  - docker.io
+  - git
   - htop
   - httping
   - jq
-  - git
   - net-tools
   - ngrep
   - nmap
+  - python3-venv
   - screen
   - tcpdump
   - tree
@@ -71,9 +73,12 @@ packages:
   - yq
 manage_etc_hosts: true
 runcmd:
+  # TODO: workaround for DNS
+  - mv /etc/netplan/60-dns.yaml.off /etc/netplan/60-dns.yaml
   - netplan apply
   - growpart  /dev/sda  1
   - resize2fs /dev/sda1
+  - touch /etc/cloud/cloud-init.disabled
 fs_setup:
   - device:     /dev/sdb
     filesystem: ext4
@@ -81,8 +86,31 @@ fs_setup:
 mounts:
   - [ /dev/sdb, /var/lib/docker, "ext4", "defaults,nofail", "0", "2" ]
 write_files:
-  - path: /etc/netplan/70-wrx-rename-ifaces.yaml
-    owner: root:root
+  - path:        /etc/vim/vimrc.local
+    owner:       root:root
+    permissions: '0644'
+    content:     "set paste"
+  - path:        /etc/docker/daemon.json
+    owner:       root:root
+    permissions: '0644'
+    content: |
+      {
+        "insecure-registries": ["registry.services.wrx.sckt.net", "reg.svc.sckt.net"]
+      }
+  - path:        /etc/netplan/60-dns.yaml.off
+    owner:       root:root
+    permissions: '0600'
+    content: |
+      network:
+        version: 2
+        ethernets:
+          eth0:
+            dhcp4: true
+            dhcp4-overrides:
+              use-dns: false
+              use-domains: false
+  - path:        /etc/netplan/70-wrx-rename-ifaces.yaml
+    owner:       root:root
     permissions: '0600'
     content: |
       network:
@@ -144,8 +172,20 @@ done < <(echo "$DISKS_JSON" | jq -Mr ".[]")
 qm set $VMID --nameserver   "$NAMESERVER"
 qm set $VMID --searchdomain "$SEARCHDOMAIN"
 
+# ssh keys
+qm set $VMID --sshkeys <(
+  cat ~/.ssh/authorized_keys;
+  echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEYZl8sqrmFQsjEZG7yJkLVuAY3AZQogLCK86EZPVCeB deploy@wrx.sckt.net"
+)
+
 # resize the root disk
 qm resize $VMID scsi0 16G
+
+# cpu type
+qm set $VMID --cpu host
+
+# set autostart
+qm set $VMID --onboot 1
 
 # start
 qm start $VMID
