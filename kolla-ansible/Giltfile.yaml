@@ -46,7 +46,7 @@ repositories:
          - custom-config/wrx/config/prometheus/prometheus-alertmanager.yml
       - cmd: /usr/bin/sed
         args:
-         - "$ a receivers:\\n  - name: default-receiver\\n  - name: 'telegram'\\n    telegram_configs:\\n    - bot_token: 6642010552:AAFVqKzF2G9ySQskMgOOSXq_eR5SwoA09F0\\n      api_url: https://api.telegram.org\\n      chat_id: -1002148282209\\n      parse_mode: ''\\n"
+         - "$ a receivers:\\n  - name: default-receiver\\n"
          - -i
          - custom-config/wrx/config/prometheus/prometheus-alertmanager.yml
       # remove conf files, we can not utilize

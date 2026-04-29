@@ -44,8 +44,8 @@ ml2_network_vlan_ranges:
   br-irnc0: "3890:3899"
 
 mechanism_drivers:
-  - name: "genericswitch"
-    enabled: "{{ enable_neutron_genericswitch | bool }}"
+#   - name: "genericswitch"
+#     enabled: "{{ enable_neutron_genericswitch | bool }}"
   - name: "linuxbridge"
     enabled: "{{ neutron_plugin_agent == 'linuxbridge' }}"
   - name: "openvswitch"
@@ -67,6 +67,7 @@ mechanism_drivers:
 ironic_dnsmasq_dhcp_ranges:
   - range: "10.38.90.240,10.38.90.254,255.255.255.0"
 ironic_cleaning_network:     "ironic-provisioning"
+
 #
 # Octavia
 #
