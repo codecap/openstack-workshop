@@ -8,7 +8,7 @@
 # set -x
 
 #KOLLA_CMD=$(find ${PATH//:/ } -maxdepth 1 -executable 2>&1 | grep kolla-ansible | tail -n+2 | head -n 1)
-KOLLA_CMD=$(/usr/bin/which --all --skip-dot kolla-ansible  | head -n1)
+KOLLA_CMD=$VIRTUAL_ENV/bin/kolla-ansible
 MY_OPTS=""
 
 SAVED_ARGS="$@"
@@ -36,4 +36,4 @@ MY_ENV_NAME=$(ansible-inventory -i $MY_INVENTORY --list 2>/dev/null | jq -Mr  "[
 MY_CONFIG_DIR=$PWD/custom-config/$MY_ENV_NAME
 MY_OPTS="$MY_OPTS --configdir $MY_CONFIG_DIR"
 
-exec $KOLLA_CMD $MY_OPTS $SAVED_ARGS
+exec $KOLLA_CMD $SAVED_ARGS $MY_OPTS

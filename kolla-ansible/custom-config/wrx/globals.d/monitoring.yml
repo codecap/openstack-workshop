@@ -1,0 +1,27 @@
+---
+enable_grafana:                           "yes"
+enable_prometheus:                        "yes"
+enable_prometheus_haproxy_exporter:       "yes"
+enable_prometheus_mysqld_exporter:        "yes"
+enable_prometheus_node_exporter:          "yes"
+enable_prometheus_cadvisor:               "yes"
+enable_prometheus_memcached:              "yes"
+enable_prometheus_alertmanager:           "yes"
+enable_prometheus_ceph_mgr_exporter:      "no"
+enable_prometheus_openstack_exporter:     "yes"
+enable_prometheus_elasticsearch_exporter: "yes"
+enable_prometheus_blackbox_exporter:      "yes"
+enable_ironic_prometheus_exporter:        "no"
+enable_prometheus_rabbitmq_exporter:      "yes"
+enable_prometheus_libvirt_exporter:       "yes"
+enable_prometheus_fluentd_integration:    "yes"
+
+enable_prometheus_server_external:        "yes"
+
+prometheus_blackbox_exporter_endpoints: |
+  {{
+    openstack_external_fqdns
+      | map('split', '.') | map('first') | map('regex_replace', '-', '_')
+      | product(['os_endpoint:https://'] ) | list | map('join', ':')
+      | zip(openstack_external_fqdns) | list | map('join')
+  }}

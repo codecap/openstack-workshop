@@ -1,2 +1,3 @@
 ---
 # enable_swift_s3api: "yes"
+dummy_var: dummy
