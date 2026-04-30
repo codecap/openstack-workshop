@@ -1,7 +1,7 @@
 ---
 # TODO
-kolla_internal_fqdn:        "master.{{internal_domain}}"
-# kolla_internal_fqdn:        "int.{{internal_domain}}"
+# kolla_internal_fqdn:        "master.{{internal_domain}}"
+kolla_internal_fqdn:        "int.{{internal_domain}}"
 # FIXME: remove to inventory
 internal_domain:            "os.wrx.sckt.net"
 

@@ -1,3 +1,1 @@
-[client.cinder]
-# TODO
-key = 
+../cinder-volume/ceph.client.cinder.keyring

@@ -12,3 +12,6 @@ custom-config/wrx/passwords.yml
 custom-config/wrx/*-openrc.sh
 custom-config/wrx/*-openrc-system.sh
 custom-config/wrx/clouds.yaml
+*.img
+*.qcow2
+*.raw
