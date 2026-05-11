@@ -1,5 +1,5 @@
 ---
-title:       OpenStack Workshop
+title:       Ceph
 description: OpenStack & Ceph
 author:      Vladislav Nazarenko (vnazarenko@📯socket.de)
 keywords:    openstack,ceph,workshops,operations,troubleshoouting
@@ -27,33 +27,43 @@ import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.mi
 mermaid.initialize({ startOnLoad: true, theme: 'default' });
 </script>
 
-# OpenStack Workshop
+# Ceph
 
 ---
-# Author
-
-![bg left w:256 ](https://www.xing.com/image/0_e_2_8e340a718_11349211_5/vladislav-nazarenko-foto.1024x1024.jpg)
-Author: Vladislav Nazarenko
-E-Mail: vnazarenko📯socket.de 
-URL:    https://socket.de/vna
-LiknedIn: [contact](https://www.linkedin.com/in/vladislav-nazarenko/)
+# Archtecture
 
 ---
-# Targets
-- Deployment
-- Operations
-- Networking
-- Security
-- Monitoring
-- Troubleshooting
-- Automation
+# Deploy Ceph with Cephadm
 
 ---
-# Content
-1. [Intro](intro.html)
-1. [Architecture](architecture.html)
-1. [Preparations](preparations.html)
-1. [Ceph](ceph.html)
-1. [OpenStack](openstack.html)
-1. [Automation](automation.html)
-1. [Testing](testing.html)
+# Monitoring
+
+---
+# Praxis
+
+---
+# Pools
+
+---
+# RBD Volumes
+
+---
+# Filesystems
+
+---
+# RadosGW / S3
+
+---
+# Clients
+
+---
+# Operations
+
+---
+# Replace an OSD
+
+---
+# Replace an OSD Node
+
+---
+# Replance a Controller node
