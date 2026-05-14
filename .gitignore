@@ -1,4 +1,4 @@
-*.html
+./*.html
 src/*.html
 ssh
 removeme
