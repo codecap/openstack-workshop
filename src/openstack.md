@@ -29,8 +29,31 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 # OpenStack
 
+
+[//]: # (https://docs.redhat.com/en/documentation/red_hat_openstack_platform/9/html/architecture_guide/components)
+[//]: # (https://cloudification.io/cloud-blog/openstack-microservice-architecture-main-components/)
+[//]: # (https://canonical-openstack.readthedocs-hosted.com/en/latest/explanation/)
+[//]: # (https://www.freecodecamp.org/news/openstack-tutorial-operate-your-own-private-cloud/)
+
 ---
 # Architecture
+
+![ bg right:65% 80%](https://docs.openstack.org/contributors/es_MX/_images/map-of-OpenStack-projects.png)
+
+---
+# Architecture
+
+![ bg right:65% 80%](https://access.redhat.com/webassets/avalon/d/Red_Hat_OpenStack_Platform-9-Architecture_Guide-en-US/images/fce6394275bd3444892c5d3a91ccf17c/RHEL_OSP_arch_347192_1015_JCS_01_Interface-Overview.png)
+
+---
+# Architecture
+
+![ bg right:65% 80%](https://pure-storage-openstack-docs.readthedocs.io/en/zed_a/_images/openstack_architecture.png)
+
+---
+# Architecture
+
+![ bg right:65% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_897/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F27493de3-Canonical%20OpenStack%20architecture%20diagram.png)
 
 ---
 # Deploy OpenStack with kolla-ansible

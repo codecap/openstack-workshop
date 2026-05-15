@@ -29,14 +29,6 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 # OpenStack Workshop
 
----
-# Author
-
-![bg left w:256 ](https://www.xing.com/image/0_e_2_8e340a718_11349211_5/vladislav-nazarenko-foto.1024x1024.jpg)
-Author: Vladislav Nazarenko
-E-Mail: vnazarenko📯socket.de 
-URL:    https://socket.de/vna
-LiknedIn: [contact](https://www.linkedin.com/in/vladislav-nazarenko/)
 
 ---
 # Targets
@@ -47,6 +39,7 @@ LiknedIn: [contact](https://www.linkedin.com/in/vladislav-nazarenko/)
 - Monitoring
 - Troubleshooting
 - Automation
+- Testing
 
 ---
 # Content
@@ -57,3 +50,10 @@ LiknedIn: [contact](https://www.linkedin.com/in/vladislav-nazarenko/)
 1. [OpenStack](openstack.html)
 1. [Automation](automation.html)
 1. [Testing](testing.html)
+
+---
+# Author
+
+Vladislav Nazarenko · [socket.de/vna](https://socket.de/vna) · [LinkedIn](https://www.linkedin.com/in/vladislav-nazarenko/)
+
+Found an error or want to contribute? Open a PR on [GitHub](https://github.com/codecap/openstack-workshop)

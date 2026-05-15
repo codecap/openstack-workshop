@@ -21,6 +21,14 @@ style: |
     width:  50%;
     height: 50%;    
   }
+  table {
+    border: none !important;
+    background-color: transparent !important;
+  }
+  td {
+    border: none !important;
+  }  
+  
 ---
 <script type="module">
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
@@ -67,41 +75,41 @@ You can use it to run workloads, virtual machines, and services in a private or 
 ---
 # Why Ceph + OpenStack
 
-- Unified storage for cloud services — Ceph supplies block (RBD), object (RGW), and file (CephFS) storage that OpenStack services (Cinder, Glance, Nova, Swift) can all use, simplifying architecture and operations.
+- **Unified storage** for cloud services — Ceph supplies block (RBD), object (RGW), and file (CephFS) storage that OpenStack services (Cinder, Glance, Nova, Swift) can all use, simplifying architecture and operations.
 
-- Scalability — both projects scale horizontally: add compute nodes for OpenStack and add OSDs/nodes for Ceph to grow capacity and throughput without major rework.
-
----
-# Why Ceph + OpenStack
-
-- High availability and resilience — Ceph’s replication/erasure coding and self‑healing ensure data stays available if disks or nodes fail, so OpenStack VMs and volumes remain reliable.
-
-- Operational efficiency — one converged storage platform reduces the number of different storage systems to manage, lowering operational overhead and troubleshooting surface.
+- **Scalability** — both projects scale horizontally: add compute nodes for OpenStack and add OSDs/nodes for Ceph to grow capacity and throughput without major rework.
 
 ---
 # Why Ceph + OpenStack
 
-- Performance and flexibility — Ceph can be tuned per workload (replication, erasure coding, cache tiers), letting you match cost/performance for VM disks, images, and object workloads.
+- **High availability and resilience** — Ceph’s replication/erasure coding and self‑healing ensure data stays available if disks or nodes fail, so OpenStack VMs and volumes remain reliable.
 
-- Automation and integration — both expose APIs and integrate well with automation tools (cephadm, Ansible, OpenStack APIs), enabling repeatable deploys, upgrades, and CI/CD workflows.
+- **Operational efficiency** — one converged storage platform reduces the number of different storage systems to manage, lowering operational overhead and troubleshooting surface.
 
 ---
 # Why Ceph + OpenStack
 
-- Cost control and openness — open‑source stack running on commodity hardware reduces licensing costs and avoids vendor lock‑in; you can choose hardware and optimizations that fit your budget.
+- **Performance and flexibility** — Ceph can be tuned per workload (replication, erasure coding, cache tiers), letting you match cost/performance for VM disks, images, and object workloads.
 
-- Feature synergy — Ceph features (RBD snapshots/clones, RGW S3 semantics, CephFS shared storage) enable OpenStack features like fast volume provisioning, image storage, backups, and shared file systems for cloud apps.
+- **Automation and integration** — both expose APIs and integrate well with automation tools (cephadm, Ansible, OpenStack APIs), enabling repeatable deploys, upgrades, and CI/CD workflows.
 
-- OpenStack and Ceph are both part of the OpenInfra ecosystem — built to work together for best interoperability and community-driven integration.
+---
+# Why Ceph + OpenStack
+
+- **Cost control and openness** — open‑source stack running on commodity hardware reduces licensing costs and avoids vendor lock‑in; you can choose hardware and optimizations that fit your budget.
+
+- **Feature synergy** — Ceph features (RBD snapshots/clones, RGW S3 semantics, CephFS shared storage) enable OpenStack features like fast volume provisioning, image storage, backups, and shared file systems for cloud apps.
+
+- **OpenStack and Ceph** are both part of the **OpenInfra ecosystem** — built to work together for best interoperability and community-driven integration.
 
 ---
 # Course roadmap
 
-* Day 1: Architecture, Preparations and Setup, Ceph Deployment
-* Day 2: Ceph Operations, Scale Out, Monitroing, Troubleshootint
-* Day 3: OpenStack Deployment
-* Day 4: OpenStack Operations, Scale Out, Mounitoring Troubleshooting
-* Day 5: Backup and Recovery, Automation, Best Practices
+* **Day 1**: Architecture, Preparations and Setup, Ceph Deployment
+* **Day 2**: Ceph Operations, Scale Out, Monitroing, Troubleshootint
+* **Day 3**: OpenStack Deployment
+* **Day 4**: OpenStack Operations, Scale Out, Mounitoring Troubleshooting
+* **Day 5**: Backup and Recovery, Automation, Best Practices
 
 ---
 # Basic concepts
@@ -129,11 +137,11 @@ You can use it to run workloads, virtual machines, and services in a private or 
 ---
 # Ceph Core Components
 
-- MON (monitor)
-- OSD (object storage daemon)
-- MGR (manager)
-- MDS (metadata server)
-- RGW (object gateway).
+- **MON** - monitor
+- **OSD** - object storage daemon
+- **MGR** - manager
+- **MDS** - metadata server
+- **RGW** - object gateway
 
 
 ---
@@ -148,17 +156,25 @@ You can use it to run workloads, virtual machines, and services in a private or 
 
 ---
 # Workshop
+<style scoped>
+table, thead, tbody, tr, th, td {
+  background-color: transparent !important;
+  border: none !important;
+}
+</style>
 
-- 🛠️ Hands-on     - Everyone builds their own environment
-- 🚀 Autonomous   - Everyone gains their own practical experience
-- 🌐 Open         - All slides, labs and code are available online
-- 🔁 Reproducible - Applicable to any (standard) hardware
-- 🧩 Adaptable    - Content can be adjusted for skill level and environment.
+| | |
+| :--- | :--- |
+| 🛠️ Hands-on     | Everyone builds their own environment                   |
+| 🚀 Autonomous   | Everyone gains their own practical experience           |
+| 🌐 Open         | All slides, labs and code are available online          |
+| 🔁 Reproducible | Applicable to any (standard) hardware                   |
+| 🧩 Adaptable    | Content can be adjusted for skill level and environment |
 
 ---
 # Guidelines
 
-- 45/15 Split: 45m sessions | 15m coffee & catch-up
-- Questions - please raise your hand to ask questions
-- Punctuality - please return promptly after breaks
-- Applied Learning - Practice over Theory
+* **45/15 Split** - 45m sessions | 15m coffee & catch-up
+* **Punctuality** - please return promptly after breaks
+* **Questions** - please raise your hand to ask questions
+* **Applied Learning** - Practice over Theory

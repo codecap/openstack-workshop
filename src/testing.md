@@ -29,4 +29,30 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 
 # Testing
+
+--- 
+# Why?
+- Changes
+- Regression
+- Impact of outside events (Network, Storage)
+- Monitoring (over time)
+- Confifance (I have a working environment)
+- Recognition of patential problems (in advance)
+
 ---
+# Challenges
+- my specific configuration
+- my specific implementation / deployment / infra
+- networking
+- changes outside of my environment ( BGP, Storage, Object Storage, DNS)
+
+---
+# Tempest
+
+---
+# Ansible / Terraform
+
+---
+# Scripts
+
+https://github.com/SovereignCloudStack/openstack-health-monitor

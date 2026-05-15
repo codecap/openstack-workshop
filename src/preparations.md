@@ -72,46 +72,37 @@ baremetal machine)
 servers as VMs and additianally an instance for deployment.
 - **Hybrid** - some baremetal nodes to virtualize servers (controllers, network, inrastructure) and some to use to deliver performance (compute, ceph osd nodes)
 
-**Baremetal** and **Hybrid** aproaches can be used as production environments
+**Baremetal** and **Hybrid** aproaches can be used for production environments
 
 
 ---
 # Hyperconverged Environments
 **Advantages**:
 - simple and fast
-- Single baremetal node
-- All listed servers backed by VMs
-- All listed networks backed by OpenVSwitch / Linux Bridges
-- No physical switch needed
+- single baremetal node needed
+- all listed servers backed by VMs
+- all listed networks backed by OpenVSwitch / Linux Bridges
+- no physical switch needed
 
 **Disadvantages**:
 - less insights into networking
-- less performance
+- less performance possible
 
 
 ---
 # Aproaches to create hyperconverged environment
-we will need at least a single baremetal node with of installed:
-- KVM
+we will need at least a single baremetal node with either:
+- KVM | libvirt
 - singlenode openstack environment
 - singlenode proxmox environment
 - singlenode incus environment
 ...
 
 ---
-# Node Groups
-- Deployment node
-- Infrastructure: registry, proxy, dns
-- OpenStack Nodes
-- Ceph Nodes
-
-
----
 # Configuration
 ![bg right:45% 25%](https://api.iconify.design/file-icons:config.svg)
 [Link](https://github.com/codecap/openstack-workshop/blob/main/conf/env.yaml)
 ```yaml
-##############################################################################
 resolve_conf:
   nameservers:
     - 10.14.0.10
@@ -131,14 +122,33 @@ network_conf:
   services:
     iface:   srvc0
     addr:    10.34.10.0/24
-
+...
+##############################################################################
+server_conf:
+  - hostname:    "dns"
+...
 ```
 
 ---
 # Scripts
-**create-vm** - creates a new vm defined by paramters
-**print-create-env-commands** - reads `conf/env.yaml` file and prints commands needed to create full environment
-**print-destroy-env-commands** - reads `conf/env.yaml` file, queries the current state and prints commands needed to desroy whole environment
+
+<style scoped>
+table, thead, tbody, tr, th, td {
+  background-color: transparent !important;
+  border: none !important;
+}
+td:first-child {
+  white-space: nowrap !important;
+  vertical-align: top; 
+}
+</style>
+
+| | |
+| :--- | :--- |
+| ⚙️ **create-vm**    | creates a new vm defined by paramters                    |
+| ⚙️ **print-create-env-commands**  | reads `conf/env.yaml` file and prints commands needed to create full environment  |
+| ⚙️ **print-destroy-env-commands** | reads `conf/env.yaml` file, queries the current state and prints commands needed to desroy whole environment |
+
 
 ```bash
 create-vm --id 10 --name dns.wrx.sckt.net --cpu 1 --ram 4096 --disks '[8]' --netconf '{"mgmt0": {"ip": "10.14.0.10/24", "macaddr": "bc:24:11:99:04:0a"}, "srvc0": {"ip": "10.34.10.10/24", "macaddr": "bc:24:11:99:06:0a"}}'

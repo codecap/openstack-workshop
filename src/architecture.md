@@ -38,7 +38,7 @@ graph LR
 ---
 # OpenStack Distrubutions
 
-[//]: # (TODO:)
+[//]: # (TODO: https://www.openstack.org/marketplace/distros/)
 
 ---
 # Architecture - OpenStack
@@ -131,6 +131,12 @@ architecture-beta
 [//]: # (cephadm)
 [//]: # (ansible)
 
+---
+# Node Groups
+- Deployment node
+- Infrastructure: registry, proxy, dns
+- OpenStack Nodes
+- Ceph Nodes
 
 ---
 # Air-Gapped Environment
