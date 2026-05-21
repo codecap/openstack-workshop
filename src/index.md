@@ -51,6 +51,22 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 1. [Automation](automation.html)
 1. [Testing](testing.html)
 
+
+---
+# Links
+
+- [Harbor - Registry](http://registry.wrx.sckt.net/)
+- [Ara - Recorder](http://registry.wrx.sckt.net/)
+- [Ceph - Dashboard](https://cephmon01.strg.wrx.sckt.net:8443)
+- [Ceph - Grafana/Monitoring](https://cephgra01.strg.wrx.sckt.net:3000)
+- [Ceph - Prometheus/Monitroing](https://cephgra01.strg.wrx.sckt.net:9095)
+- [Ceph - Alertmanager](https://cephgra01.strg.wrx.sckt.net:9093)
+- [OpenStack - Hirizon/Dashboard](http://int.os.wrx.sckt.net)
+- [OpenStack - Skyline/Dashboard](http://int.os.wrx.sckt.net:9999)
+- [OpenStack - Grafana/Monitoring](http://int.os.wrx.sckt.net:3000)
+- [OpenStack - Prometheus/Monitoring](http://int.os.wrx.sckt.net:9091)
+- [OpenStack - Alertmanager](http://int.os.wrx.sckt.net:9093)
+
 ---
 # Author
 

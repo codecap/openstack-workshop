@@ -63,7 +63,7 @@ architecture-beta
 </div>
 
 ---
-# Deployment Aproaches
+# Deployment Models
 
 - **Baremetal** - all servers listed are baremetal machines, at least a single
 switch to interconnect and a instance for deployment (VM, laptop, a small
@@ -97,6 +97,21 @@ we will need at least a single baremetal node with either:
 - singlenode proxmox environment
 - singlenode incus environment
 ...
+
+
+---
+# Let's GO!
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+```bash
+git clone https://github.com/codecap/openstack-workshop.git
+
+ln -s ~/openstack-workshop/cephadm       ~/ceph
+ln -s ~/openstack-workshop/kolla-ansible ~/openstack
+
+cd openstack-workshop
+./scripts/print-ssh-config  >> ~/.ssh/config
+```
 
 ---
 # Configuration
@@ -145,16 +160,17 @@ td:first-child {
 
 | | |
 | :--- | :--- |
-| ⚙️ **create-vm**    | creates a new vm defined by paramters                    |
-| ⚙️ **print-create-env-commands**  | reads `conf/env.yaml` file and prints commands needed to create full environment  |
-| ⚙️ **print-destroy-env-commands** | reads `conf/env.yaml` file, queries the current state and prints commands needed to desroy whole environment |
+| ⚙️ **create-vm**    | creates a new VM defined by parameters                    |
+| ⚙️ **print-create-env-commands**  | reads `conf/env.yaml` file and prints the commands required to create the full environment  |
+| ⚙️ **print-destroy-env-commands** | reads `conf/env.yaml` file, queries the current state, and prints the commands required to destroy the entire environment |
 
 
 ```bash
-create-vm --id 10 --name dns.wrx.sckt.net --cpu 1 --ram 4096 --disks '[8]' --netconf '{"mgmt0": {"ip": "10.14.0.10/24", "macaddr": "bc:24:11:99:04:0a"}, "srvc0": {"ip": "10.34.10.10/24", "macaddr": "bc:24:11:99:06:0a"}}'
-create-vm --id 16 --name deployment.wrx.sckt.net --cpu 1 --ram 4096 --disks '[8]' --netconf '{"mgmt0": {"ip": "10.14.0.16/24", "macaddr": "bc:24:11:99:04:10"}, "cpln0": {"ip": "10.20.8.16/24", "macaddr": "bc:24:11:99:00:10"}, "strg0": {"ip": "10.20.21.16/24", "macaddr": "bc:24:11:99:07:10"}}'
-create-vm --id 17 --name registry.wrx.sckt.net --cpu 1 --ram 4096 --disks '[128]' --netconf '{"mgmt0": {"ip": "10.14.0.17/24", "macaddr": "bc:24:11:99:04:11"}, "srvc0": {"ip": "10.34.10.17/24", "macaddr": "bc:24:11:99:06:11"}}'
-create-vm --id 18 --name recorder.wrx.sckt.net --cpu 1 --ram 4096 --disks '[8]' --netconf '{"mgmt0": {"ip": "10.14.0.18/24", "macaddr": "bc:24:11:99:04:12"}, "srvc0": {"ip": "10.34.10.18/24", "macaddr": "bc:24:11:99:06:12"}}'
+create-vm --id 10 --name dns.wrx.sckt.net --cpu 1 --ram 4096 --disks '[8]' --netconf '
+     {
+       "mgmt0": {"ip": "10.14.0.10/24", "macaddr": "bc:24:11:99:04:0a"},
+      "srvc0": {"ip": "10.34.10.10/24", "macaddr": "bc:24:11:99:06:0a"}
+     }'
 ```
 ---
 # How to use scripts
@@ -177,7 +193,7 @@ print-destroy-env-commands | bash
 - single proxmox node
 - run post-pve-install.sh
 - create bridges accoding `network_conf`
-- install ubuntu image, prepate a new template for VMS
+- install ubuntu image, prepare a new template for VMS
 - create VMs for the workshop
 ```bash
 print-create-env-commands | bash
@@ -186,3 +202,12 @@ print-create-env-commands | bash
 ```bash
 # TBD
 ```
+
+---
+# Prepare proxy to access environment
+[//]: # ( FIXME
+putty generate a new key
+create a config for hypervisor
+create a config for deployment host
+configure firefox to use socks5 proxy
+)

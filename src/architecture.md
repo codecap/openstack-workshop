@@ -25,6 +25,19 @@ style: |
 <script type="module">
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 mermaid.initialize({ startOnLoad: true, theme: 'default' });
+// Register the "logos" pack (contains AWS, GCP, tech logos)
+// https://icones.js.org/collection/logos
+// https://icones.js.org/collection/mdi
+  mermaid.registerIconPacks([
+    {
+      name: 'logos:laptop',
+      loader: () => fetch('https://unpkg.com/@iconify-json/logos@1/icons.json').then(res => res.json()),
+    },
+    {
+      name: 'mdi',
+      loader: () => fetch('https://unpkg.com/@iconify-json/mdi@1/icons.json').then(res => res.json()),
+    }
+  ]);
 </script>
 
 
@@ -37,19 +50,39 @@ graph LR
 
 ---
 # OpenStack Distrubutions
+[Catalog](https://www.openstack.org/marketplace/distros/)
 
-[//]: # (TODO: https://www.openstack.org/marketplace/distros/)
+
+- [OSISM](https://www.openstack.org/marketplace/distros/distribution/osism/osism-distro)
+- [Mirantis](https://www.openstack.org/marketplace/distros/distribution/mirantis/mirantis-openstack-for-kubernetes)
+- [Canonical](https://www.openstack.org/marketplace/distros/distribution/canonical/canonical-openstack)
+- [RedHat](https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/18.0/html/planning_your_deployment/assembly_red-hat-openstack-services-on-openshift-overview#con_alternate-topo-rhoso_rhoso-overview)
+- [FishOS](https://www.openstack.org/marketplace/distros/distribution/sardina-systems/fishos)
+
+
 
 ---
 # Architecture - OpenStack
+![w:900 ](https://www.openstack.org/static/000588f8b89d94da80eba6101f72ff7a/openstack-map-v20240401.png)
+
+---
+# Architecture - OpenStack
+[//]: # (how does it look like in our simple environment?)
 
 
 ---
 # Architecture - Ceph
+![](https://www.ironnetworks.com/sites/default/files/products/CEPH-graphic.png)
+
+---
+# Architecture - Ceph
+[//]: # (how does it look like in our simple environment?)
 
 
 ---
 # Integration - OpenStack and Ceph
+
+![w:700](https://www.redhat.com/rhdc/managed-files/sysadmin/2021-08/Ceph-storage-cluster-%28RADOS%29.png)
 
 
 ---
@@ -64,24 +97,52 @@ graph LR
 
 ---
 # Ceph Deployment Aproaches
-- cephadm (official)
-- ceph-ansible
-- rook
-...
+- [cephadm (official)](https://docs.ceph.com/en/reef/cephadm/install/#cephadm-deploying-new-cluster)
+- [rook](https://rook.io/)
+
+<hr/>
+
+- [ceph-ansible](https://docs.ceph.com/projects/ceph-ansible/en/latest/)
+- [ceph-salt](https://github.com/ceph/ceph-salt)
+- [ceph-deploy (deprecated)](https://docs.ceph.com/projects/ceph-deploy/en/latest/)
+- [juju](jaas.ai/ceph-mon)
+- [manually](https://docs.ceph.com/en/reef/install/index_manual/#install-manual)
 
 ---
 # OpenStack Environment
 
 <div class="mermaid">
-architecture-beta
-    group api(cloud)[API]
-    service db(database)[Database] in api
-    service disk1(disk)[Storage] in api
-    service disk2(disk)[Storage] in api
-    service server(server)[Server] in api
-    db:L -- R:server
-    disk1:T -- B:server
-    disk2:T -- B:db
+---
+config:
+ layout: fixed
+---
+flowchart TB
+subgraph Controllers["Controllers"]
+   direction LR
+       C1["controller01"]
+       C2["controller02"]
+       C3["controller03"]
+end
+subgraph NetworkNodes["NetworkNodes"]
+   direction LR
+       N1["network01"]
+       N2["network02"]
+       N3["network03"]
+end
+subgraph ComputeNodes["ComputeNodes"]
+   direction LR
+       CMP1["compute01"]
+       CMP2["compute02"]
+       CMP3["compute03"]
+end
+NetworkNodes --> Controllers
+ComputeNodes --> Controllers
+C1 <-.-> C2
+C2 <-.-> C3
+C3 <-.-> C1
+N1 <-.-> N2
+N2 <-.-> N3
+N3 <-.-> N1
 </div>
 
 ---
@@ -94,6 +155,12 @@ architecture-beta
     service server(server)[Server] in api
     service disk1(disk)[Storage] in api
     service disk2(disk)[Storage] in api
+    group cephmon01(server)[cephmon01]
+      service mon01(database)[mon01] in cephmon01
+    group cephmon02(server)[cephmon02]
+      service mon02(database)[mon01] in cephmon02
+    group cephmon03(server)[cephmon03]
+      service mon03(database)[mon03] in cephmon03
     group cephosd01(server)[cephosd01]
     service nvme11(disk)[nvme01] in cephosd01
     service nvme12(disk)[nvme02] in cephosd01
@@ -106,30 +173,15 @@ architecture-beta
     service nvme31(disk)[nvme01] in cephosd03
     service nvme32(disk)[nvme02] in cephosd03
     service nvme33(disk)[nvme03] in cephosd03
+    mon01{group}:R -- L:mon02{group}
+    mon02{group}:R -- L:mon03{group}
+    nvme11{group}:T -- B:mon01{group}
+    nvme21{group}:T -- B:mon02{group}
     db:L -- R:server
     disk1:T -- B:server
-    disk2:T -- B:db    
+    disk2:T -- B:db  
+
 </div>
-
-
----
-# Infrastructure
-[//]: # (registry:)
-[//]: # (dns:)
-[//]: # (proxy:)
-[//]: # (reccorder:)
-
----
-# Deployment Node
-[//]: # (kolla-ansible:)
-[//]: # (cephadm:)
-[//]: # (ansible:)
-
----
-# Baremetal Node and VMs on it
-[//]: # (kolla-ansible)
-[//]: # (cephadm)
-[//]: # (ansible)
 
 ---
 # Node Groups
@@ -139,4 +191,72 @@ architecture-beta
 - Ceph Nodes
 
 ---
+# Infrastructure
+<div class="mermaid">
+graph LR
+    internet[Internet <img src="https://www.svgrepo.com/show/243037/clouds-cloud.svg" width="60"/>]
+    subgraph Infrastructure
+        direction TB
+        registry("Registry\n(Harbor)")
+        dns("DNS\n(dnsmasq)")
+        proxy("Proxy\n(squid)")
+        recorder("Recorder\n(ansible/ara)")
+    end
+    subgraph Environment
+        direction TB
+        os(OpenStack)
+        ceph(Ceph)
+    end
+    %% Connections
+    registry --> internet
+    proxy --> internet
+    Environment --> Infrastructure
+    %%registry --> os
+</div>
+
+---
+# Deployment Node
+<div class="mermaid">
+architecture-beta
+    group deploy(cloud)[Deployment]
+      service ansible(database)[ansible]             in deploy
+      service kolla-ansible(server)["kolla-ansible"] in deploy
+      service cephadm(server)[cephadm]               in deploy
+</div>
+
+---
+# Baremetal Node and VMs on it
+
+<div class="mermaid">
+graph LR
+  subgraph Controllers
+     direction LR
+     ni01["dns"]
+     ni02["registry"]
+     ni03["proxy"]
+     ni04["recorder"]
+     ni05["deployment"]
+     no01["controller01"]
+     no02["controller02"]
+     no03["controller03"]
+     no04["controller01"]
+     no05["controller02"]
+     no06["controller03"]
+     no07["compute01"]
+     no08["compute02"]
+     no09["compute03"]
+     no10["monitor"]
+     no11["testing"]
+     nc01["cephmon01"]
+     nc02["cephmon02"]
+     nc03["cephmon03"]
+     nc04["cephgra01"]
+     nc05["cephosd01"]
+     nc06["cephosd02"]
+     nc07["cephosd03"]
+  end
+</div>
+
+---
 # Air-Gapped Environment
+![width:600](https://upload.wikimedia.org/wikipedia/commons/d/da/Air_gap_network.png)

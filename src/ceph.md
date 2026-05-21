@@ -28,65 +28,802 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 </script>
 
 # Ceph
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
 [//]: # (https://dev.to/prianshu-dev/ceph-explained-the-distributed-storage-backbone-powering-modern-infrastructure-44nc) 
 [//]: # (https://docs.ceph.com/en/latest/architecture/)
 [//]: # (https://fabreur.medium.com/ceph-an-overview-e971c00ded93)
 [//]: # (https://documentation.suse.com/de-de/ses/7.1/html/ses-all/cha-storage-about.html)
 [//]: # (https://ubuntu.com/ceph/what-is-ceph)
+[//]: # (https://trilio.io/openstack-training/openstack-and-ceph/)
 [//]: # (https://docs.redhat.com/en/documentation/red_hat_ceph_storage/5/html-single/architecture_guide/index)
 
+
 ---
-# Archtecture
+# Architecture
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ![image](https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F2au17xy0419hsx797qe0.png)
 
 ---
-# Archtecture
-![image](https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F1c42zy6mdke05ii4zgay.webp)
+# Architecture
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![image](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_1920/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F581ff61d-ceph-chart-2.png)
+
+---
+# Architecture
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![image](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_1800/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F3522db7e-ceph-chart-1.png)
+
+---
+# Users
+![bg right:75% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_239/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F57c722c5-cern-logo.png)
+![bg right:75% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_313/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F60fd1f45-deutsche-telekom.png)
+![bg right:75% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_313/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F1e543d4d-Bloomberg-Logo.png)
+![bg right:75% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_189/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2Fc3382d32-cisco-logo.png)
+![bg right:75% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_433/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F6ec58036-dreamhost-logo.png)
+![bg right:75% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_463/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F39eef9bb-digitalocean-logo.png)
+
+---
+# Contributors
+![bg right:60% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_348/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F1c72c15a-canonical-logo.png)
+![bg right:60% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_239/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F57c722c5-cern-logo.png)
+![bg right:60% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_189/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2Fc3382d32-cisco-logo.png)
+![bg right:60% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_220/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F14ee306c-fujitsu-logo.png)
+![bg right:60% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_121/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F2141954b-intel-new-logo.png)
+![bg right:60% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_382/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F5f1090ca-redhat-logo.png)
+![bg right:60% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_247/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2Ffac75dd0-sanndisk-logo.png)
 
 ---
 # Deploy Ceph with Cephadm
-
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-##############################################################################
-# preps
-git clone https://github.com/codecap/openstack-workshop.git
+CEPH_VERSION="19.2.0"
+sudo apt install cephadm=${CEPH_VERSION}* ceph-common=${CEPH_VERSION}* python3-jinja2 -y
 
-ln -s ~/openstack-workshop/cephadm       ~/ceph
-ln -s ~/openstack-workshop/kolla-ansible ~/openstack
-
-cd openstack-workshop
-./scripts/print-ssh-config  >> ~/.ssh/config
+# distribute the ssh keys
+for i in cephmon0{1..3} cephosd0{1..3} cephgra01
+do
+  ssh -i ~/.ssh/id $i 'sudo sed -i /root/.ssh/authorized_keys -e "/deploy@wrx.sckt.net/d"'
+  ssh -i ~/.ssh/id $i 'echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEYZl8sqrmFQsjEZG7yJkLVuAY3AZQogLCK86EZPVCeB deploy@wrx.sckt.net" \
+  | sudo tee -a /root/.ssh/authorized_keys'
+done
 ```
 
 ---
-# Monitoring
+# Deploy Ceph with Cephadm
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+CEPH_VERSION="19.2.0"                                                       📋
+CEPH_FSID="1959570b-e2e3-4017-a5dc-c7606c5068fd"
+CONFIG="~/ceph/initial-ceph.conf"
+SPEC="~/ceph/spec.yaml"
+SSH_DIR="~/.ssh"
+CEPH_IMAGE="registry.services.wrx.sckt.net/quay/ceph/ceph:v$CEPH_VERSION"
+
+#ceph cephadm generate-key
+#ceph cephadm get-pub-key > ceph.pub
+#ssh-copy-id -f -i ceph.pub root@daisy
+
+cd ~/ceph
+sudo cephadm --image "$CEPH_IMAGE"                 \
+  bootstrap                                        \
+    --fsid $CEPH_FSID                              \
+    --config $CONFIG                               \
+    --apply-spec $SPEC                             \
+    --mon-ip 10.20.21.16                           \
+    --cluster-network 10.20.22.0/24                \
+    --ssh-private-key $SSH_DIR/id                  \
+    --ssh-public-key  $SSH_DIR/id.pub              \
+    --initial-dashboard-password  p@ssw0rd         \
+    --dashboard-password-noupdate                  \
+    --allow-fqdn-hostname                          \
+    --skip-firewalld
+
+until ceph -s | grep -q HEALTH_OK; do ceph -s; sleep 30; done
+```
+
 
 ---
-# Praxis
+# Deploy Ceph with Cephadm
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+**Set crush rules**
+```bash
+                                                                            📋
+ceph osd crush rule create-replicated replicated_rule_nvme default host nvme
+ceph osd pool ls | while read p
+do
+  ceph osd pool set $p crush_rule replicated_rule_nvme
+done
+ceph osd crush rule rm replicated_rule
+```
+
+---
+# Deploy Ceph with Cephadm
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+### Create client keys for openstack services
+```bash
+# On the deployment node, create the .keyring files
+cat > /etc/ceph/ceph.client.glance.keyring <<EOF
+[client.glance]
+        key = AQBqB/JpuJQKDRAACBv/LtaMfeBa4cG3s/5WCg==
+        caps mon = "profile rbd"
+        caps osd = "profile rbd pool=volumes, profile rbd pool=images"
+EOF
+cat > /etc/ceph/ceph.client.cinder.keyring <<EOF
+[client.cinder]
+        key = AQB6B/JpY78nKRAA9esk98rCEzyNbCPga83DOQ==
+        caps mon = "profile rbd"
+        caps osd = "profile rbd pool=volumes, profile rbd pool=vms, profile rbd pool=images"
+EOF
+cat > /etc/ceph/ceph.client.cinder-backup.keyring <<EOF
+[client.cinder-backup]
+        key = AQCMB/JprCiDDRAAPWyW0wv/yQ2UQrf4M+7zZA==
+        caps mon = "profile rbd"
+        caps osd = "profile rbd pool=backups"
+EOF
+cat > /etc/ceph/ceph.client.nova.keyring <<EOF
+[client.nova]
+        key = AQCgB/JpjgdbKRAA3bYIrDC+PnmvojeEpXClrg==
+        caps mon = "profile rbd"
+        caps osd = "profile rbd pool=volumes, profile rbd pool=vms, profile rbd pool=images"
+EOF
+cat > /etc/ceph/ceph.client.openstack.keyring <<EOF
+[client.openstack]
+        key = AQCvB/JpqAKsLRAAJHTMBMMNpIwD9DbOFx4e/g==
+        caps mon = "profile rbd"
+        caps osd = "profile rbd pool=images, profile rbd pool=vms, profile rbd pool=volumes, profile rbd pool=backups"
+EOF
+# Import the .keyring clients
+for f in glance cinder cinder-backup nova openstack
+do
+  chown 0600           /etc/ceph/ceph.client.${f}.keyring
+  sudo ceph  auth import -i /etc/ceph/ceph.client.${f}.keyring
+done
+```
+
+
+---
+# Prepare for OpenStack
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+**Create pools for openstack services**
+
+```bash
+                                                                            📋
+for p in volumes images vms backups
+do
+  ceph osd pool create $p
+  ceph osd pool application enable $p rbd
+  ceph osd pool set $p crush_rule replicated_rule
+done
+```
+
+---
+# Prepare for OpenStack
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+**Configure ceph to be used as backend for OpenStack Swift (Object Storage)**
+
+```bash
+for r in $(ceph config dump | grep rgw_frontends | awk '{print $1}')
+do
+  # Docs: https://docs.ceph.com/en/latest/radosgw/config-ref/#keystone-settings
+  #       https://documentation.suse.com/ses/7/html/ses-all/cha-ceph-configuration.html#id-1.4.8.2.8.3.6
+  # ceph config set $r rgw_keystone_verify_ssl     "false"
+  ceph config set $r rgw_keystone_url              "https://keystone.os.svc.wrx.sckt.net"
+  ceph config set $r rgw_keystone_api_version      "3"
+  ceph config set $r rgw_keystone_admin_user       "ceph_rgw"
+  ceph config set $r rgw_keystone_admin_password   "Sm4ptI0bz49bQ4gTLt87zBitpf7Fam4HjgIHEDGt"
+  ceph config set $r rgw_keystone_admin_project    "service"
+  ceph config set $r rgw_keystone_admin_domain     "default"
+  ceph config set $r rgw_keystone_accepted_roles   "member, _member_, admin"
+  ceph config set $r rgw_keystone_implicit_tenants "true"
+  ceph config set $r rgw_enable_apis               "s3, swift"
+  ceph config set $r rgw_swift_account_in_url      "true"
+  ceph config set $r rgw_swift_versioning_enabled  "true"
+  ceph config set $r rgw_s3_auth_use_keystone      "true"
+  ceph config set $r rgw_dns_name                  "s3.svc.wrx.sckt.net"
+done
+
+sleep 5;
+ceph orch restart rgw.default
+```
+
+---
+# Test
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# On deployment node (as root or with sude)                                 📋
+ceph orch ls
+ceph orch host ls
+ceph orch ps
+ceph orch device ls
+
+ceph -s
+ceph osd tree
+```
+
+---
+# State Overview
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+- [Ceph/Dashboard](https://cephmon01.strg.wrx.sckt.net:8443)
+- [Grafana/Monitoring](https://cephgra01.strg.wrx.sckt.net:3000)
+- [Prometheus/Monitroing](https://cephgra01.strg.wrx.sckt.net:9095)
+- [Alertmanager](https://cephgra01.strg.wrx.sckt.net:9093)
+
+
+---
+# Ceph Basics
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+---
+# Crush
+- map
+- rules
+- rulesets
+
+---
+# Placement Groups
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![image](https://access.redhat.com/webassets/avalon/d/Red_Hat_Ceph_Storage-5-Architecture_Guide-en-US/images/08af4a1fab18995fda3aad1c3ede873e/arc-04.png)
+
+---
+# Object Storage Daemon (OSD)
+![bg right:30% 50%](https://trilio.io/wp-content/uploads/2025/06/image3.jpg)
+
+**Ceph OSDs** store data on behalf of Ceph clients. Additionally, Ceph OSDs utilize the CPU, memory and networking of Ceph nodes to perform data replication, erasure coding, rebalancing, recovery, monitoring and reporting functions.
 
 ---
 # Pools
 
----
-# RBD Volumes
 
 ---
-# Filesystems
+# Interfaces
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![width:600](https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F3e114eiq560vyc74l24x.webp)
+
+[//]: # (RBD)
+[//]: # (CephFS)
+[//]: # (Object Storage / S3)
 
 ---
-# RadosGW / S3
+# How OpenStack uses ceph
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![width:600](https://www.redhat.com/rhdc/managed-files/sysadmin/2021-08/Ceph-storage-cluster-%28RADOS%29.png)
+
+---
+# Replication
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![image](https://docs.ceph.com/en/latest/_images/ditaa-cbefbab082db946a072d6a1761a5df6f49e3c227.png)
+
+---
+# Erasure Coding
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![image width:600](https://access.redhat.com/webassets/avalon/d/Red_Hat_Ceph_Storage-5-Architecture_Guide-en-US/images/7d449de6b0ccbe0d9283291d1756474d/arc-06.png)
+
+---
+# Cluster Components
+**Monitor** — daemon responsible for maintaining a master copy of the cluster map. Quorum of 3 at least needed to ensure high availability .
+
+**OSD (Object Storage Daemon)** — daemon that does all data storage, replication and data recovery operations.
+
+**Rados Gateway** – The rados gateway delivers an api for S3 or Swift to connect directly with Ceph.
+
+**Metadata Server** — MDS handles all file operations and uses RADOS objects to store data and file system attributes.
+
+**Ceph Manager** —  runs alongside the monitor daemons, to provide additional monitoring and interfaces to external monitoring and management systems.
+
+---
+# Cluster Map
+Ceph maintains all cluster topology, which includes five maps called the “Cluster Map”:
+
+**Monitor Map**: Contains the fsid of the cluster, the position, the name of the address and the port of each monitor. It also indicates the current time, when the map was created and the last time it was changed. To view a map of the monitor, run ceph mon dump.
+
+**OSD Map**: contains the cluster fsid, when the map was last created and modified, a list of pools, replica sizes, PG numbers, a list of OSDs and their status (for example, up, in and down). To view an OSD map, run ceph osd dump .
+
+**PG Map**: Contains the PG version, its time stamp, the last epoch of the OSD map, the complete proportions and details of each positioning group, such as PG ID, Up Set, Active, PG status (for example, active + clean) and data usage statistics for each pool.
+
+**CRUSH Map**: Contains a list of storage devices, the fault domain hierarchy (for example, device, host, rack, line, room, etc.) and rules for going through the hierarchy when storing data.
+You can view the decompiled map in a text editor.
+
+**MDS Map (CEPHFS)**: Contains the current time of the MDS map, when the map was created and the last time it was changed. It also contains the pool to store metadata, a list of metadata servers and which metadata servers are active and available. To view an MDS map, run ceph mds dump
+
+---
+# Authentication
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+Ceph uses a **cephx authentication system** similar to Kerberos to authenticate users and daemons, both the clients and the monitors in the cluster have a copy of the client’s secret key.
+
+
+
+```bash
+[client.cinder]
+        key = AQB6B/JpY78nKRAA9esk98rCEzyNbCPga83DOQ==
+        caps mon = "profile rbd"
+        caps osd = "profile rbd pool=volumes, profile rbd pool=vms, profile rbd pool=images"
+```
+
+---
+# Review the cluster
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# Cluster status                                                            📋
+ceph -s
+ceph -w
+ceph health [detail]
+
+# cephadm status
+ceph orch ls
+ceph orch ps
+ceph orch ls osd --export
+ceph orch host ls
+
+# Versions used
+ceph tell mon.* version
+ceph tell osd.* version
+ceph tell mgr.* version
+```
+
+---
+# OSDs
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+                                                                            📋
+ceph osd status
+ceph osd tree
+ceph osd df
+ceph osd info osd.5
+ceph osd crush class ls
+ceph osd versions
+```
+---
+# Pools
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+                                                                            📋
+ceph osd pool ls
+ceph osd pool get noautoscale
+ceph osd pool get-quota volumes
+ceph osd pool stats     volumes
+
+ceph osd pool rename ...
+
+ceph osd pool repair [POOL]
+ceph osd pool scrub  [POOL]
+
+ceph osd pool get {POOL} size
+ceph osd pool get {POOL} crush_rule
+ceph osd pool set ...
+```
+---
+# Placement Groups
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+                                                                            📋
+ceph pg ls
+ceph pg ls-by-pool vms
+ceph pg dump
+ceph pg dump_stuck unclean
+```
 
 ---
 # Clients
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# List all entities                                                         📋
+ceph auth ls
+
+ceph auth get-or-create client.testuser \
+  mon 'allow r' \
+  osd 'allow rw pool=test'
+
+ceph auth get-key client.testuser
+
+ceph auth get client.testuser
+
+ceph auth rm client.testuser
+```
+
 
 ---
-# Operations
+# RBD Volumes
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# Create a pool named 'vms' for our block devices                           📋   
+ceph osd pool create test 32 32
+
+# Enable the RBD application on that pool
+ceph osd pool application enable test rbd
+
+# Create a 10 Gigabyte RBD volume named 'demo-disk'
+rbd create test/demo-disk --size 10G
+rbd ls test/
+
+# Inspect
+rbd info test/demo-disk
+rbd map  test/demo-disk
+rbd device list
+lsblk
+
+# Use
+ls -lh /dev/rbd0  /dev/rbd/test/demo-disk
+mkfs.ext4 /dev/rbd/test/demo-disk
+mount     /dev/rbd/test/demo-disk /mnt/
+echo "Hello from Ceph RBD Storage!" > /mnt/test.txt
+```
+
+---
+# RBD Snaphots
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# Create a new snapshot                                                     📋
+rbd snap create test/demo-disk@snap1
+rbd snap list test/demo-disk
+rm /mnt/test.txt
+
+# Unmount and unmap the disk to safely rollback
+umount /mnt
+rbd unmap /dev/rbd/test/demo-disk
+ls -lh /dev/rbd*
+
+# Rollback the volume to the snapshot state
+rbd snap rollback test/demo-disk@snap1
+
+# Remap and mount to verify the data is back
+rbd map test/demo-disk
+mount /dev/rbd/test/demo-disk /mnt/
+cat /mnt/test.txt
+
+# Unmount, unmap
+umount /mnt
+rbd unmap /dev/rbd/test/demo-disk
+```
+
+---
+# Filesystems
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# Create the metadata pool (needs high-speed disks like SSDs if possible)   📋
+ceph osd pool create testfs_metadata 32 32
+
+# Create the data pool (where your files actually sit)
+ceph osd pool create testfs_data 32 32
+
+# Create newfs
+ceph fs new testfs testfs_metadata testfs_data
+ceph fs status
+
+# Create a user named 'client.guest' with read-write access
+ceph auth get-or-create \
+  client.guest mon 'allow r' mds 'allow rws' osd 'allow rw pool=testfs_data' \
+  -o /etc/ceph/ceph.client.guest.keyring
+ceph auth get client.guest
+
+# Mount
+ceph-fuse -n client.guest -k /etc/ceph/ceph.client.guest.keyring /mnt/ --client_mds_namespace=testfs
+
+```
+
+---
+# Filesystems and Snapshots
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# Create a working project folder                                           📋
+mkdir -p /mnt/project1
+
+# Add a sample document
+echo "Version 1.0 - Stable Build" > /mnt/project1/document.txt
+
+# Take a Snapshot (The mkdir Trick)
+mkdir /mnt/project1/.snap/snapshot_backup_v1
+cat   /mnt/project1/.snap/snapshot_backup_v1
+
+# Overwrite our working live file
+echo "Version 2.0 - Broken Build!" > /mnt/project1/document.txt
+
+# Add junk data
+echo "Temporary junk" > /mnt/project1/garbage.txt
+
+# Restore the file from snapshot
+cp /mnt/project1/.snap/snapshot_backup_v1/document.txt /mnt/project1/document.txt
+
+# Remove the snapshot
+rm -rf  /mnt/cephfs/project1/.snap/snapshot_backup_v1
+```
+
+---
+# RadosGW / S3
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# Create a user to access s3                                                📋
+radosgw-admin user create --uid=demo-user --display-name="Demo S3 User"
+
+# Search for access_key and secret_key in the output
+radosgw-admin user list
+radosgw-admin user info --uid  demo-user
+```
+
+---
+# aws-cli example
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# Install and Configre awscli                                               📋
+pip3 install awscli awscli-plugin-endpoint
+
+mkdir ~/.aws
+cat > ~/.aws/config <<EOF
+[plugins]
+endpoint = awscli_plugin_endpoint
+[profile default]
+s3 =
+  endpoint_url = http://s3.strg.wrx.sckt.net
+  signature_version = s3v4
+  addressing_style = auto
+s3api =
+  endpoint_url = http://s3.strg.wrx.sckt.net
+EOF
+
+cat > ~/.aws/credentials <<EOF
+[default]
+aws_access_key_id = {ACCESS_KEY}
+aws_secret_access_key = {SECRET_KEY}
+EOF
+
+# Create a new bucket
+aws s3 mb s3://demo-bucket
+
+# Upload a file
+echo "This is object data stored in Ceph RGW." > test.txt
+aws s3 cp test.txt s3://demo-bucket/project1/test.txt
+
+# Review
+aws s3 ls s3://demo-bucket/
+aws s3 ls s3://demo-bucket/project1/
+
+# Download
+aws s3 cp s3://demo-bucket/project1/test.txt /tmp/test.txt
+cat  /tmp/test.txt
+```
+
+---
+# mc example
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# Install and Configre mc client                                            📋
+sudo curl --proxy proxy.wrx.sckt.net:3128            \
+ -o /usr/local/bin/mc -L                             \
+ https://dl.min.io/client/mc/release/linux-amd64/mc
+sudo chmod 755 /usr/local/bin/mc
+
+# Configure
+mc alias set s3 http://s3.strg.wrx.sckt.net {ACCESS_KEY} {SECRET_KEY}
+mc alias ls
+mc --autocompletion
+source ~/.bashrc
+
+# Test
+mc ls  s3
+mc cat s3/demo-bucket/project1/test.txt
+```
+
+---
+# Operations - Update system packages and reboot
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+```bash
+# Stop ceph services on cephosd03 as root                                   📋
+docker ps
+systemctl status ceph.target
+docker ps
+
+# Check status on deplyoment as root
+ceph status
+ceph health detail
+ceph osd tree
+ceph pg dump
+ceph pg dump_stuck
+ceph pg dump_stuck unclean
+
+# On cephosd03, start ceph services
+systemctl start  ceph.target
+docker ps
+
+# On deployment check the status
+ceph status
+ceph health detail
+ceph osd tree
+ceph pg dump_stuck
+```
+
+---
+# Operations - Upgrade
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+[//]: # (FIXME:)
+
+```bash
+VERSION="18.2.4"
+# check
+ceph health
+
+# order 
+# mgr -> mon -> crash -> osd -> mds -> rgw -> rbd-mirror -> cephfs-mirror -> ceph-exporter -> iscsi -> nfs -> nvmeof
+
+# List available versions
+ceph orch upgrade ls
+
+# start an upgrade mgr,mon
+ceph orch upgrade start --image registry.mgmt.tst.sckt.net/ceph/ceph:v$VERSION --daemon-types mgr,mon
+
+# status
+ceph orch upgrade status
+ceph -W cephadm
+
+# stop / continuer
+ceph orch upgrade stop
+# will pull quay.io/ceph/ceph:v18.2.4
+ceph orch upgrade start --ceph-version $VERSION
+
+# continue to upgrade crash
+ceph orch upgrade start --image registry.mgmt.tst.sckt.net/ceph/ceph:v$VERSION --daemon-types crash
+
+# continue to upgrade osd
+ceph orch upgrade start --image registry.mgmt.tst.sckt.net/ceph/ceph:v$VERSION --daemon-types osd
+# status
+ceph -s
+ceph health
+ceph orch upgrade status
+
+# contunue with the rest
+ceph orch upgrade start --image registry.mgmt.tst.sckt.net/ceph/ceph:$VERSION
+
+# on all cephmon nodes upgrade rpms
+RPM_VERSION=$(dnf list ceph-common --showduplicates | grep $VERSION | awk '{print $2}')
+dnf install -y cephadm-$VERSION ceph-common-$VERSION
+```
+
+---
+# Operations - Scale-Out
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+
+```
+
+---
+# Replace a Controller node
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+
+```
 
 ---
 # Replace an OSD
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+[//]: # (FIXME:)
+
+
+
+```bash
+##############################################################################
+# Prepare
+ceph config get osd osd_crush_initial_weight
+ceph config set osd osd_crush_initial_weight 0
+
+# Disable Recovery
+# TODO: rm --zap is waiting for drain, which can not be done with nobackfill
+#       there should be one more possibility not waiting for backfile
+#       out + down for osd ?
+# ceph osd set nobackfill
+# ceph osd set norecover
+# ceph osd set norebalance
+
+##############################################################################
+# Start
+
+ceph orch ls osd
+# remove db devices in the spec
+
+# apply the spec
+ ceph orch apply -i config.yaml
+
+# ensure the change
+ceph orch ls osd --export
+
+# set-unmanged
+ceph orch set-unmanaged   osd.ssd
+ceph orch ls osd
+
+ceph osd tree
+
+# remove ssd based OSD on a host,
+# repeat for every sshd based OSD
+ceph orch osd rm --zap [OSD_NR] --force
+ceph orch osd rm status
+
+# On the OSD Host ensure ensure SSD devies became available
+cephadm shell
+ceph-volume inventory
+
+# start to rebuild ssd bease OSDs
+ceph orch set-managed   osd.ssd
+ceph orch ls osd
+
+# check status
+ceph osd tree
+ceph device ls
+
+# review cephadm logs on OSD host
+tail -f /var/log/ceph/cephadm.log
+
+# wait till new OSDs become up
+ceph osd tree
+ceph -s
+
+# set waits
+# crush_weight = size_in_bytes / 1,099,511,627,776
+ceph osd crush reweight [OSD] [WEIGHT]
+ceph pg dump_stuck unclean
+
+##############################################################################
+# Finish
+# Set initial weight for osds
+ceph config set osd osd_crush_initial_weight -1
+ceph config get osd osd_crush_initial_weight
+
+# Enable Recovery
+# ceph osd unset norebalance
+# ceph osd unset norecover
+# ceph osd unset nobackfill
+# check
+```
 
 ---
 # Replace an OSD Node
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+
+```
 
 ---
-# Replance a Controller node
+# Benchmarking
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+[//]: # (FIXME:)
+
+```bash
+# benchmark specific osd
+ceph tell osd.2 bench
+ceph --format plain tell osd.0 bench
+# benchmark all osds
+ceph tell osd.* bench
+ceph --format plain tell osd.* bench
+
+# benchmark on newly created pool + cleanup
+ceph osd pool create benchmark 64
+rados bench -p benchmark 30 write
+rados -p benchmark bench -b 4096 30 write # object size 4096
+# read benchmartk
+rados -p benchmark bench 30 write --no-cleanup
+rados -p benchmark bench 30 rand
+ceph tell mon.\* injectargs '--mon-allow-pool-delete=true'
+ceph osd pool delete benchmark benchmark --yes-i-really-really-mean-it
+
+# bechmark on a newly created volume + cleanup
+rbd create  --size 1024 test/benchmark
+rbd bench-write test/benchmark --io-size 1048576  --io-threads 16 --io-pattern rand
+rbd rm  test/benchmark
+
+# bechmark on a newly created volume + cleanup
+rbd create  --size 1024 test/benchmark
+fio --size=100M --ioengine=rbd --invalidate=0 --direct=1 --numjobs=10 --rw=write --name=fiojob --blocksize_range=4K-512k --iodepth=1 --pool=test --rbdname=benchmark
+rbd rm  test/benchmark
+
+```
+
+---
+# Performance tests
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+
+```
