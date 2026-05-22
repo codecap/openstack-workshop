@@ -29,19 +29,20 @@ fi
 # args
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --id)      ID="$2";           shift 2 ;;
-        --name)    NAME="$2";         shift 2 ;;
-        --domain)  DOMAIN="$2";       shift 2 ;;
-        --cpu)     CPU="$2";          shift 2 ;;
-        --ram)     RAM="$2";          shift 2 ;;
-        --disks)   DISKS_JSON="$2";   shift 2 ;;
-        --netconf) NETCONF_JSON="$2"; shift 2 ;;
+        --id)        ID="$2";           shift 2 ;;
+        --name)      NAME="$2";         shift 2 ;;
+        --cpu)       CPU="$2";          shift 2 ;;
+        --ram)       RAM="$2";          shift 2 ;;
+        --disks)     DISKS_JSON="$2";   shift 2 ;;
+        --netconf)   NETCONF_JSON="$2"; shift 2 ;;
+        --airgapped) AIRGAPPED="$2";    shift 2 ;;
         *) echo "Unknown parameter: $1"; exit 1 ;;
     esac
 done
 
 VMID=$(($ID_START_FROM + ID))
-
+DOMAIN=${NAME#*.}
+SEARCHDOMAIN="$SEARCHDOMAIN $DOMAIN"
 
 ##############################################################################
 # go
@@ -51,9 +52,101 @@ VENDOR_FILE="$SNIPPET_DIR/vm-${VMID}-vendor.yaml"
 qm clone $TEMPLATE_ID $VMID --name "$NAME" --full
 qm set $VMID --ciuser $CIUSER --cipassword $CIPASS --cores "$CPU" --memory "$RAM"
 
+
 cat <<EOF > "$VENDOR_FILE"
 #cloud-config
-packages_udpate: true
+bootcmd:
+EOF
+
+if [ "$AIRGAPPED" = "true" ]
+  then
+  cat <<EOF >> "$VENDOR_FILE"
+  - |
+    cat > /etc/profile.d/proxy.sh <<EOF
+    export http_proxy="http://proxy.wrx.sckt.net:3128"
+    export https_proxy="http://proxy.wrx.sckt.net:3128"
+    export no_proxy="localhost,127.0.0.1,.wrx.sckt.net,169.254.169.254"
+    export HTTP_PROXY="http://proxy.wrx.sckt.net:3128"
+    export HTTPS_PROXY="http://proxy.wrx.sckt.net:3128"
+    export NO_PROXY="localhost,127.0.0.1,.wrx.sckt.net,169.254.169.254"
+    EOF
+  - |
+    cat > /etc/netplan/60-eth0-override.yaml <<EOF
+    network:
+      version: 2
+      ethernets:
+        eth0:
+          activation-mode: off
+    EOF
+EOF
+fi
+
+#
+# NOTE: at this stage we only create netplan config file to rename interfaces
+#       it remains deactivated and will be applied later
+#
+cat <<EOF >> "$VENDOR_FILE"
+  - |
+    cat > /etc/netplan/70-wrx-rename-ifaces.yaml.off <<EOF
+    network:
+      version: 2
+      ethernets:
+EOF
+
+# Iterate through the requested network interfaces
+while IFS=$'\t' read -r NET_NAME MACADDR IP GW MTU; do
+
+  # Get slot ID
+  NEXT_ID=0
+  while qm config "$VMID" | grep -q "net$NEXT_ID:"; do
+      ((NEXT_ID++))
+  done
+
+  # Lookup 'iface' dynamically from the JSON we got via yq
+  HEX_OCTET=$(echo "$MACADDR" | cut -d':' -f5)
+  IDX=$((16#$HEX_OCTET))
+  NET_KEY=$(echo "$IFACE_DATA_JSON" | jq -r "to_entries | sort_by(.key) | .[$IDX].key")
+
+  TARGET_IFACE=$(echo "$IFACE_DATA_JSON" | jq -r ".\"$NET_KEY\".iface // \"\"")
+
+  qm set $VMID --net$NEXT_ID "$NCARD_MODEL,bridge=br$NET_NAME,macaddr=$MACADDR${MTU:+,mtu=$MTU}"
+  if [ -n "$IP" ]; then
+      qm set $VMID --ipconfig$NEXT_ID "ip=${IP}${GW:+,gw=$GW}"
+  fi
+
+  if [[ -n "$TARGET_IFACE" && -n "$MACADDR" ]]; then
+      cat <<EOF >> "$VENDOR_FILE"
+        eth${NEXT_ID}:
+          match:
+            macaddress: "${MACADDR,,}"
+          set-name: "$TARGET_IFACE"
+          dhcp4: false
+          dhcp6: false
+          link-local: []
+EOF
+    fi
+done < <(echo "$NETCONF_JSON" | jq -r 'to_entries[] | "\(.key)\t\(.value.macaddr // "")\t\(.value.ip // "")\t\(.value.gw // "")\t\(.value.mtu // "")"')
+
+cat <<EOF >> "$VENDOR_FILE"
+    EOF
+  - chmod 600 /etc/netplan/*.yaml
+  - netplan generate
+  - systemctl restart systemd-networkd
+EOF
+
+if [ "$AIRGAPPED" = "true" ]
+  then
+  cat <<EOF >> "$VENDOR_FILE"
+proxy:       http://proxy.wrx.sckt.net:3128
+https_proxy: http://proxy.wrx.sckt.net:3128
+no_proxy:    localhost,127.0.0.1,.wrx.sckt.net,169.254.169.254
+apt:
+  proxy: http://proxy.wrx.sckt.net:3128
+EOF
+fi
+
+cat <<EOF >> "$VENDOR_FILE"
+package_udpate: true
 packages:
   - curl
   - docker-ce
@@ -73,12 +166,11 @@ packages:
   - yq
 manage_etc_hosts: true
 runcmd:
-  # TODO: workaround for DNS
-  - mv /etc/netplan/60-dns.yaml.off /etc/netplan/60-dns.yaml
-  - netplan apply
   - growpart  /dev/sda  1
   - resize2fs /dev/sda1
   - touch /etc/cloud/cloud-init.disabled
+  - mv /etc/netplan/70-wrx-rename-ifaces.yaml.off /etc/netplan/70-wrx-rename-ifaces.yaml
+  - netplan apply
 fs_setup:
   - device:     /dev/sdb
     filesystem: ext4
@@ -95,7 +187,7 @@ write_files:
     permissions: '0644'
     content: |
       {
-        "insecure-registries": ["registry.services.wrx.sckt.net", "reg.svc.sckt.net"]
+        "insecure-registries": ["registry.services.wrx.sckt.net",   "registry.wrx.sckt.net"]
       }
   - path:        /etc/apt/keyrings/docker.asc
     owner:       root:root
@@ -167,8 +259,6 @@ write_files:
     owner:       root:root
     permissions: '0644'
     content: |
-      # Ansible managed
-
       Types: deb
       URIs: https://download.docker.com/linux/ubuntu
       Suites: noble
@@ -185,61 +275,7 @@ write_files:
       Package: docker-ce-cli
       Pin: version 5:28.*
       Pin-Priority: 1001
-  - path:        /etc/netplan/60-dns.yaml.off
-    owner:       root:root
-    permissions: '0600'
-    content: |
-      network:
-        version: 2
-        ethernets:
-          eth0:
-            dhcp4: true
-            dhcp4-overrides:
-              use-dns: false
-              use-domains: false
-  - path:        /etc/netplan/70-wrx-rename-ifaces.yaml
-    owner:       root:root
-    permissions: '0600'
-    content: |
-      network:
-        version: 2
-        ethernets:
 EOF
-
-# Iterate through the requested network interfaces
-while IFS=$'\t' read -r NET_NAME MACADDR IP GW MTU; do
-
-    # Get slot ID
-    NEXT_ID=0
-    while qm config "$VMID" | grep -q "net$NEXT_ID:"; do
-        ((NEXT_ID++))
-    done
-
-    # Lookup 'iface' dynamically from the JSON we got via yq
-    HEX_OCTET=$(echo "$MACADDR" | cut -d':' -f5)
-    IDX=$((16#$HEX_OCTET))
-    NET_KEY=$(echo "$IFACE_DATA_JSON" | jq -r "to_entries | sort_by(.key) | .[$IDX].key")
-
-    TARGET_IFACE=$(echo "$IFACE_DATA_JSON" | jq -r ".\"$NET_KEY\".iface // \"\"")
-
-    qm set $VMID --net$NEXT_ID "$NCARD_MODEL,bridge=br$NET_NAME,macaddr=$MACADDR${MTU:+,mtu=$MTU}"
-    if [ -n "$IP" ]; then
-        qm set $VMID --ipconfig$NEXT_ID "ip=${IP}${GW:+,gw=$GW}"
-    fi
-
-    if [[ -n "$TARGET_IFACE" && -n "$MACADDR" ]]; then
-        cat <<EOF >> "$VENDOR_FILE"
-          eth${NEXT_ID}:
-            match:
-              macaddress: "${MACADDR,,}"
-            set-name: "$TARGET_IFACE"
-            dhcp4: false
-            dhcp6: false
-            link-local: []
-EOF
-    fi
-
-done < <(echo "$NETCONF_JSON" | jq -r 'to_entries[] | "\(.key)\t\(.value.macaddr // "")\t\(.value.ip // "")\t\(.value.gw // "")\t\(.value.mtu // "")"')
 
 qm set $VMID --cicustom "vendor=${SNIPPET_STORAGE}:snippets/$(basename $VENDOR_FILE)"
 qm cloudinit update $VMID
@@ -263,6 +299,7 @@ qm set $VMID --searchdomain "$SEARCHDOMAIN"
 # ssh keys
 qm set $VMID --sshkeys <(
   cat ~/.ssh/authorized_keys;
+  # FIXME: read the key from a file
   echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEYZl8sqrmFQsjEZG7yJkLVuAY3AZQogLCK86EZPVCeB deploy@wrx.sckt.net"
 )
 

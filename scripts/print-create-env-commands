@@ -43,6 +43,7 @@ for server in server_list:
     hostname       = server.get('hostname')
     domain         = server.get('domain')
     netaddr_config = server.get('netaddr', "auto")
+    airgapped      = server.get('airgapped', "false")
 
     netconf_obj = {}
 
@@ -101,7 +102,8 @@ for server in server_list:
         "--cpu",     str(server.get('cpu', 1)),
         "--ram",     str(server.get('ram', 2048)),
         "--disks",   "'" + json.dumps(server.get('disks', [])) + "'",
-        "--netconf", "'" + netconf_json + "'"
+        "--netconf", "'" + netconf_json + "'",
+        "--airgapped", "'" + str(airgapped).lower() + "'"
     ]
 
     print(" ".join(command))
