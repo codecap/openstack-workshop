@@ -98,7 +98,9 @@ CEPH_FSID="1959570b-e2e3-4017-a5dc-c7606c5068fd"
 CONFIG="~/ceph/initial-ceph.conf"
 SPEC="~/ceph/spec.yaml"
 SSH_DIR="~/.ssh"
+# FIXME
 CEPH_IMAGE="registry.services.wrx.sckt.net/quay/ceph/ceph:v$CEPH_VERSION"
+# CEPH_IMAGE="registry.wrx.sckt.net/quay/ceph/ceph:v$CEPH_VERSION"
 
 #ceph cephadm generate-key
 #ceph cephadm get-pub-key > ceph.pub
@@ -613,7 +615,7 @@ mc cat s3/demo-bucket/project1/test.txt
 ```bash
 # Stop ceph services on cephosd03 as root                                   📋
 docker ps
-systemctl status ceph.target
+systemctl stop ceph.target
 docker ps
 
 # Check status on deplyoment as root
@@ -624,6 +626,8 @@ ceph pg dump
 ceph pg dump_stuck
 ceph pg dump_stuck unclean
 
+ceph osd set noout
+
 # On cephosd03, start ceph services
 systemctl start  ceph.target
 docker ps
@@ -633,6 +637,8 @@ ceph status
 ceph health detail
 ceph osd tree
 ceph pg dump_stuck
+
+ceph osd unset noout
 ```
 
 ---
@@ -700,89 +706,91 @@ dnf install -y cephadm-$VERSION ceph-common-$VERSION
 # Replace an OSD
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
-[//]: # (FIXME:)
-
-
-
 ```bash
-##############################################################################
-# Prepare
-ceph config get osd osd_crush_initial_weight
-ceph config set osd osd_crush_initial_weight 0
-
-# Disable Recovery
-# TODO: rm --zap is waiting for drain, which can not be done with nobackfill
-#       there should be one more possibility not waiting for backfile
-#       out + down for osd ?
-# ceph osd set nobackfill
-# ceph osd set norecover
-# ceph osd set norebalance
-
-##############################################################################
-# Start
-
-ceph orch ls osd
-# remove db devices in the spec
-
-# apply the spec
- ceph orch apply -i config.yaml
-
-# ensure the change
-ceph orch ls osd --export
-
-# set-unmanged
-ceph orch set-unmanaged   osd.ssd
-ceph orch ls osd
-
+# List all the OSDs in cluster, take the last one, check the devices behind 📋
 ceph osd tree
+ceph osd metadata <OSD> | grep device
 
-# remove ssd based OSD on a host,
-# repeat for every sshd based OSD
-ceph orch osd rm --zap [OSD_NR] --force
-ceph orch osd rm status
+ceph osd set noout
+ceph osd set norecover
 
-# On the OSD Host ensure ensure SSD devies became available
-cephadm shell
-ceph-volume inventory
 
-# start to rebuild ssd bease OSDs
-ceph orch set-managed   osd.ssd
-ceph orch ls osd
+# Let's break it down, on cephosd03
+dd if=/dev/zero of=/dev/sde bs=1024 count=$((1024*10))
 
 # check status
 ceph osd tree
+ceph status
+ceph health detail
 ceph device ls
 
-# review cephadm logs on OSD host
-tail -f /var/log/ceph/cephadm.log
-
-# wait till new OSDs become up
+# repair
+ceph orch ls osd --export
+ceph orch set-unmanaged   osd.ssd
+ceph orch ls osd
 ceph osd tree
-ceph -s
 
-# set waits
-# crush_weight = size_in_bytes / 1,099,511,627,776
-ceph osd crush reweight [OSD] [WEIGHT]
-ceph pg dump_stuck unclean
-
-##############################################################################
-# Finish
-# Set initial weight for osds
-ceph config set osd osd_crush_initial_weight -1
-ceph config get osd osd_crush_initial_weight
-
-# Enable Recovery
-# ceph osd unset norebalance
-# ceph osd unset norecover
-# ceph osd unset nobackfill
-# check
+ceph orch osd rm --zap <OSD_NR> --force
+ceph orch osd rm status
+ceph status
+ceph health detail
 ```
 
 ---
-# Replace an OSD Node
+# Replace an OSD
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+```bash
+# Set  initial weight to 0  to control recovery                             📋
+ceph config get osd osd_crush_initial_weight
+ceph config set osd osd_crush_initial_weight 0
+
+ceph orch set-managed   osd.ssd
+ceph orch ls osd
+ceph osd tree
+ceph device ls
+
+ceph osd tree
+ceph osd df
+ceph pg ls-by-osd <OSD_NR>
+
+ceph osd crush reweight <OSD> <WEIGHT>
+
+ceph config set osd osd_crush_initial_weight -1
+ceph config get osd osd_crush_initial_weight
+ceph osd unset noout
+ceph osd unset norecover
+```
+
+---
+# Rebuild an OSD Node
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
+# Prepare the rebuild                                                       📋
+ceph osd set noout
+ceph osd set norecover
 
+ceph orch host drain <hostname>
+ceph orch host drain status
+ceph orch device ls  [hostname]
+ceph orch osd  rm --zap <OSD_NR> --force
+ceph orch host rm     <hostname> --force
+
+# join the cluster again
+ceph orch set-managed osd.ssd
+ceph orch apply -i spec.yaml
+
+# Rebuild the host
+# NOTE: add the ssh key for the ceph deployment in authorized_keys on the host
+
+# check the status
+ceph status
+ceph health detail
+
+# NOTE: you may want to control the recovery process, check available options
+
+ceph osd unset noout
+ceph osd unset norecover
 ```
 
 ---
@@ -825,5 +833,5 @@ rbd rm  test/benchmark
 # Performance tests
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-
+# fio                                                                       📋
 ```
