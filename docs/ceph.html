@@ -487,7 +487,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="47" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="deploy-ceph-with-cephadm-1">Deploy Ceph with Cephadm</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash">CEPH_VERSION=<span class="hljs-string">&quot;19.2.0&quot;</span>                                                       <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/1f4cb.svg" data-marp-twemoji=""/>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash">CEPH_VERSION=<span class="hljs-string">&quot;19.2.1&quot;</span>                                                       <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/1f4cb.svg" data-marp-twemoji=""/>
 CEPH_FSID=<span class="hljs-string">&quot;1959570b-e2e3-4017-a5dc-c7606c5068fd&quot;</span>
 CONFIG=<span class="hljs-string">&quot;~/ceph/initial-ceph.conf&quot;</span>
 SPEC=<span class="hljs-string">&quot;~/ceph/spec.yaml&quot;</span>
@@ -823,7 +823,7 @@ EOF</span>
   ceph config <span class="hljs-built_in">set</span> <span class="hljs-variable">$r</span> rgw_keystone_url              <span class="hljs-string">&quot;https://keystone.os.svc.wrx.sckt.net&quot;</span>
   ceph config <span class="hljs-built_in">set</span> <span class="hljs-variable">$r</span> rgw_keystone_api_version      <span class="hljs-string">&quot;3&quot;</span>
   ceph config <span class="hljs-built_in">set</span> <span class="hljs-variable">$r</span> rgw_keystone_admin_user       <span class="hljs-string">&quot;ceph_rgw&quot;</span>
-  ceph config <span class="hljs-built_in">set</span> <span class="hljs-variable">$r</span> rgw_keystone_admin_password   <span class="hljs-string">&quot;Sm4ptI0bz49bQ4gTLt87zBitpf7Fam4HjgIHEDGt&quot;</span>
+  ceph config <span class="hljs-built_in">set</span> <span class="hljs-variable">$r</span> rgw_keystone_admin_password   <span class="hljs-string">&quot;KEYSTONE_ADMIN_PASSWORD&quot;</span>
   ceph config <span class="hljs-built_in">set</span> <span class="hljs-variable">$r</span> rgw_keystone_admin_project    <span class="hljs-string">&quot;service&quot;</span>
   ceph config <span class="hljs-built_in">set</span> <span class="hljs-variable">$r</span> rgw_keystone_admin_domain     <span class="hljs-string">&quot;default&quot;</span>
   ceph config <span class="hljs-built_in">set</span> <span class="hljs-variable">$r</span> rgw_keystone_accepted_roles   <span class="hljs-string">&quot;member, _member_, admin&quot;</span>
@@ -2641,7 +2641,7 @@ ceph osd <span class="hljs-built_in">unset</span> noout
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="47" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="operations---upgrade">Operations - Upgrade</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash">VERSION=<span class="hljs-string">&quot;18.2.4&quot;</span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash">VERSION=<span class="hljs-string">&quot;19.2.1&quot;</span>
 <span class="hljs-comment"># check</span>
 ceph health
 
@@ -2652,7 +2652,7 @@ ceph health
 ceph orch upgrade <span class="hljs-built_in">ls</span>
 
 <span class="hljs-comment"># start an upgrade mgr,mon</span>
-ceph orch upgrade start --image registry.mgmt.tst.sckt.net/ceph/ceph:v<span class="hljs-variable">$VERSION</span> --daemon-types mgr,mon
+ceph orch upgrade start --image registry.wrx.sckt.net/ceph/ceph:v<span class="hljs-variable">$VERSION</span> --daemon-types mgr,mon
 
 <span class="hljs-comment"># status</span>
 ceph orch upgrade status

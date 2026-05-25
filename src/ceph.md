@@ -37,7 +37,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 [//]: # (https://ubuntu.com/ceph/what-is-ceph)
 [//]: # (https://trilio.io/openstack-training/openstack-and-ceph/)
 [//]: # (https://docs.redhat.com/en/documentation/red_hat_ceph_storage/5/html-single/architecture_guide/index)
-
+[//]: # (cephadm rm-cluster --fsid $CEPH_FSID --force)
 
 ---
 # Architecture
@@ -93,7 +93,7 @@ done
 # Deploy Ceph with Cephadm
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-CEPH_VERSION="19.2.0"                                                       📋
+CEPH_VERSION="19.2.1"                                                       📋
 CEPH_FSID="1959570b-e2e3-4017-a5dc-c7606c5068fd"
 CONFIG="~/ceph/initial-ceph.conf"
 SPEC="~/ceph/spec.yaml"
@@ -215,7 +215,7 @@ do
   ceph config set $r rgw_keystone_url              "https://keystone.os.svc.wrx.sckt.net"
   ceph config set $r rgw_keystone_api_version      "3"
   ceph config set $r rgw_keystone_admin_user       "ceph_rgw"
-  ceph config set $r rgw_keystone_admin_password   "Sm4ptI0bz49bQ4gTLt87zBitpf7Fam4HjgIHEDGt"
+  ceph config set $r rgw_keystone_admin_password   "KEYSTONE_ADMIN_PASSWORD"
   ceph config set $r rgw_keystone_admin_project    "service"
   ceph config set $r rgw_keystone_admin_domain     "default"
   ceph config set $r rgw_keystone_accepted_roles   "member, _member_, admin"
@@ -648,7 +648,7 @@ ceph osd unset noout
 [//]: # (FIXME:)
 
 ```bash
-VERSION="18.2.4"
+VERSION="19.2.1"
 # check
 ceph health
 
@@ -659,7 +659,7 @@ ceph health
 ceph orch upgrade ls
 
 # start an upgrade mgr,mon
-ceph orch upgrade start --image registry.mgmt.tst.sckt.net/ceph/ceph:v$VERSION --daemon-types mgr,mon
+ceph orch upgrade start --image registry.wrx.sckt.net/ceph/ceph:v$VERSION --daemon-types mgr,mon
 
 # status
 ceph orch upgrade status

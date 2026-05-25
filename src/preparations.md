@@ -211,3 +211,14 @@ create a config for hypervisor
 create a config for deployment host
 configure firefox to use socks5 proxy
 )
+
+---
+# Prepare ssh config on deplomyent node
+```bash
+cat >> ~/.ssh/config <<EOF
+Host *.mgmt.wrx.sckt.net
+  User                  deploy
+  StrictHostKeyChecking no
+  UserKnownHostsFile    /dev/null
+EOF
+```
