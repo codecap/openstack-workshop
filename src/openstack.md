@@ -37,7 +37,6 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 [//]: # (https://www.freecodecamp.org/news/openstack-tutorial-operate-your-own-private-cloud/)
 [//]: # (https://superuser.openinfra.org/articles/kolla-ansible-openstack-installation-ubuntu-24-04/)
 
-
 [//]: # (TODO: monitoring - node-exporter full)
 [//]: # (TODO: monitoring - cadvisor)
 [//]: # (TODO: monitoring - libvirt)
@@ -45,6 +44,9 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 [//]: # (TODO: monitoring - Alertmanager)
 [//]: # (TODO: monitoring - RabbitMQ)
 
+
+[//]: # (Architecture: https://pure-storage-openstack-docs.readthedocs.io/en/zed_a/_images/openstack_architecture.png )
+[//]: # (Architecture: https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_897/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F27493de3-Canonical%20OpenStack%20architecture%20diagram.png )
 
 ---
 # Architecture
@@ -55,15 +57,6 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 # Architecture
 
 ![ bg right:65% 80%](https://access.redhat.com/webassets/avalon/d/Red_Hat_OpenStack_Platform-9-Architecture_Guide-en-US/images/fce6394275bd3444892c5d3a91ccf17c/RHEL_OSP_arch_347192_1015_JCS_01_Interface-Overview.png)
-
----
-# Architecture
-
-![ bg right:65% 80%](https://pure-storage-openstack-docs.readthedocs.io/en/zed_a/_images/openstack_architecture.png)
-
----
-# Architecture
-![ bg right:65% 80%](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_897/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2F27493de3-Canonical%20OpenStack%20architecture%20diagram.png)
 
 
 ---
@@ -127,7 +120,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 ---
 # Deploy OpenStack
 ![bg right:30% 90%](https://superuser.openinfra.org/wp-content/uploads/2025/01/1_q6dlalwfoVWwUqFmo4I-9g.png)
-```
+```bash
 # Prepare environment                                                       📋
 cat >> ~/.profile <<"EOF"
 ##############################################################################
@@ -135,8 +128,7 @@ cat >> ~/.profile <<"EOF"
 
 export OPENSTACK_DIR=~/openstack
 VENV_PATH=~/venv/2024.1
-KOLLA_ANSIBLE_RELEASE=18 # OS 2024.1
-# KOLLA_ANSIBLE_RELEASE=20 # OS 2025.1
+KOLLA_ANSIBLE_RELEASE=20 # OS 2025.1
 
 if [ -z "$VIRTUAL_ENV" ]
 then
@@ -164,22 +156,20 @@ EOF
 
 ```bash
 # Prepare python virtual environment                                        📋
-
-
-
 source ~/.profile
-
 python3 -m venv $VENV_PATH
 
 ln -s  $VENV_PATH ~/venv/openstack
 source $VENV_PATH/bin/activate
 
+# Install needed pip packages
 pip install -U pip
 pip install -r requirements.txt
 
-# Insall dependencie for kolla-ansible
+# Install dependencies for kolla-ansible
 kolla-ansible install-deps
-# NOTE: fix for prometheus 05.2026
+
+# ⚠️ NOTE: fix for prometheus 05.2026
 pip install "bcrypt<5.0.0"
 
 # Install additional dependencies
@@ -242,7 +232,7 @@ kolla-ansible bootstrap-servers    -i inventory/wrx
 kolla-ansible octavia-certificates -i inventory/wrx
 kolla-ansible prechecks            -i inventory/wrx
 
-# NOTE: this will take time
+# ⚠️ NOTE: this will take time
 kolla-ansible pull                 -i inventory/wrx
 ```
 
@@ -252,7 +242,7 @@ kolla-ansible pull                 -i inventory/wrx
 ```bash
 # Prepare the kolla-ansible deployment                                      📋
 
-# NOTE: it will take time
+# ⚠️ NOTE: it will take time
 kolla-ansible deploy               -i inventory/wrx
 
 # Post deployment steps
@@ -263,95 +253,298 @@ kolla-ansible check                -i inventory/wrx
 ---
 # Deploy OpenStack
 ![bg right:30% 90%](https://superuser.openinfra.org/wp-content/uploads/2025/01/1_q6dlalwfoVWwUqFmo4I-9g.png)
-```bash
-# Create a test deployment                                                  📋
 
-#FIXME: IPs
+[//]: # (FIXME: IPs)
+
+
+```bash
+# Create first basic test resources                                         📋
+
 KOLLA_CONFIG_PATH=~/openstack/custom-config/wrx/    \
 EXT_NET_CIDR=10.10.61.0/24                          \
 EXT_NET_GATEWAY=10.10.61.1                          \
 EXT_NET_RANGE="start=10.10.61.240,end=10.10.61.245" \
-~/venv/2024.1/share/kolla-ansible/init-runonce
+DEMO_NET_DNS=8.8.8.8                                \
+~/venv/openstack/share/kolla-ansible/init-runonce
 ```
 
 
 ---
-# Service Overview
+# Access
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+<style scoped>
+table, thead, tbody, tr, th, td {
+  background-color: transparent !important;
+  border: none !important;
+}
+</style>
+| | |
+| :--- | :--- |
+| Horizon     | [http://int.os.wrx.sckt.net](http://int.os.wrx.sckt.net/)      |
+| Skyline     | [http://int.os.wrx.sckt.net:9999](http://int.os.wrx.sckt.net/) |
+| CLI         | Command Line Interface                  |
 
----
-# Praxis
-![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
-- create a project / user
-- create networks
-- create router
-- create vms
-...
-- live migraions
+
+Check the following files to use with CLI:
+- custom-config/wrx/admin-openrc.sh
+- custom-config/wrx/clouds.yaml
 
 ---
 # Operations
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 
 ---
-# Replace a Compute Node
+# Service Overview
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Review the openstack environment                                          📋
+openstack service  list
+openstack endpoint list
+openstack catalog  list
+
+openstack compute       service list
+openstack volume        service list 
+openstack network       agent   list
+openstack orchestration service list
+```
 
 ---
 # Replace a Network Node
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# 🔍 Review data stored on the node. Is there anythins to backup ?          📋
+docker volume ls
+du -lhs /var/lib/docker/volumes/*
 
+# 💥 Break the network03 node
+apt remove  docker*  -y
+rm -rf  /etc/kolla /var/log/kolla  \
+        /etc/systemd/system/kolla* \
+        /etc/systemd/system/multi-user.target.wants/kolla-* \
+        /etc/docker/daemon.json
+umount /var/lib/docker;  wipefs /dev/sdb -a; mkfs.ext4 /dev/sdb
+reboot
+
+# 🚚 Redeploy opentack services on network03 from the deployment node
+kolla-ansible bootstrap-servers -i inventory/wrx --limit ~network03
+kolla-ansible prechecks         -i inventory/wrx --limit ~network03
+kolla-ansible pull              -i inventory/wrx --limit ~network03
+kolla-ansible reconfigure       -i inventory/wrx --limit ~network03
+```
 ---
 # Replace a Controller Node
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# 🔍 Review data stored on the node. Is there anythins to backup ?          📋
+docker volume ls
+du -lhs /var/lib/docker/volumes/*
+
+# 💥 Break the controller03 node
+systemctl stop kolla-* docker.service docker.socket
+apt remove  docker*  -y
+rm -rf  /etc/kolla /var/log/kolla  \
+        /etc/systemd/system/kolla* \
+        /etc/systemd/system/multi-user.target.wants/kolla-* \
+        /etc/docker/daemon.json
+umount /var/lib/docker;  wipefs /dev/sdb -a; mkfs.ext4 /dev/sdb
+reboot
+
+# 🚚 Redeploy opentack services on network03 from the deployment node
+kolla-ansible bootstrap-servers -i inventory/wrx --limit ~controller03
+kolla-ansible prechecks         -i inventory/wrx --limit ~controller03
+kolla-ansible pull              -i inventory/wrx --limit ~controller03
+
+# ⚠️ we have to start reconfigure for keystone aross all controller nodes ⚠️
+kolla-ansible reconfigure       -i inventory/wrx                       --tags      keystone
+
+# ☕ the rest works as usual
+kolla-ansible reconfigure       -i inventory/wrx --limit ~controller03 --skip-tags keystone
+```
 
 ---
-# Upgrades
+# Replace a Compute Node
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# 🔍 Review data stored on the node. Is there anythins to backup ?          📋
+docker volume ls
+du -lhs /var/lib/docker/volumes/*
+docker exec -ti nova_libvirt virsh list  --all
 
----
-# High Availbility
-![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+# 🚧 Drain the openstack compute host
+openstack server list --all       --host    compute03
+openstack compute service set     --disable compute03 nova-compute
+for vm in $(openstack server list --host    compute03 --all-projects -c ID -f value);
+do
+  echo "Evacuating VM: $vm"
+  openstack server migrate --live $vm
+done
+openstack server list --all       --host    compute03
+
+# 💥 Break the controller03 node
+systemctl stop kolla-* docker.service docker.socket
+apt remove  docker*  -y
+rm -rf  /etc/kolla /var/log/kolla  \
+        /etc/systemd/system/kolla* \
+        /etc/systemd/system/multi-user.target.wants/kolla-* \
+        /etc/docker/daemon.json
+cp -pr  /var/lib/docker/volumes ~/
+umount  /var/lib/docker;  wipefs /dev/sdb -a; mkfs.ext4 /dev/sdb
+reboot
+
+# 🚚 Redeploy opentack services on network03 from the deployment node
+kolla-ansible bootstrap-servers -i inventory/wrx --limit ~compute03
+kolla-ansible prechecks         -i inventory/wrx --limit ~compute03
+kolla-ansible pull              -i inventory/wrx --limit ~compute03
+kolla-ansible reconfigure       -i inventory/wrx --limit ~compute03
+```
 
 ---
 # Debugging
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# 🩺 check                                                                  📋
+openstack compute service list
+
+# 🔍 take a look at logs on compute03
+tail -f /var/log/kolla/nova/nova-compute.log
+
+# 🔍 compare files on nova_compute volume and in the backup
+ls -lh ~/volumes/nova_compute/_data/ /var/lib/docker/volumes/nova_compute/_data/
+
+# ⚙️ repair
+cp ~/volumes/nova_compute/_data/compute_id  /var/lib/docker/volumes/nova_compute/_data/
+
+# 🩺 check the status again and test
+openstack compute service list
+openstack compute service set --enable compute03 nova-compute
+openstack server migrate --live --host compute03 <SERVER_ID> 
+openstack server list    --all  --long
+```
+---
+# Scale-out
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+* How to scale out controllers ?
+* How to scale out network nodes ?
+* How to scale out compute nodes ?
+
+---
+# Add a New Compute Host
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# 📝 Modify inventory, put the new compute host into the hypervisor section 📋
+vim inventory/wrx/20_openstack
+
+# 🩺 check the new host
+
+# 🚚 Deploy opentack services on network03 from the deployment node
+kolla-ansible bootstrap-servers -i inventory/wrx --limit ~compute11
+kolla-ansible prechecks         -i inventory/wrx --limit ~compute11
+kolla-ansible pull              -i inventory/wrx --limit ~compute11
+kolla-ansible deploy            -i inventory/wrx --limit ~compute11
+
+# 🩺 check the new host
+openstack compute service list
+openstack server  migrate --live --host compute11 <SERVER_ID> 
+
+docker exec -ti nova_libvirt virsh list  --all # on the host
+```
+
+---
+# Upgrades
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# FIXME
+```
+---
+# High Availbility
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+* Keepalived & HAProxy (controllers)
+* Stateless API Services
+* MariaDB Galera Cluster as State Store
+* Message Broker(RabbitMQ)
+* Multiple nodes of each type
+---
+# Debugging RabbitMQ
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 
 ```bash
+# Some commands to debug rabbitmq errors                                    📋
 rabbitmqctl list_queues name,messages,messages_ready,messages_unacknowledged
 rabbitmqctl list_bindings 
 
-rabbitmqctl purge_queue <QUEUE_NAME>
+rabbitmqctl purge_queue   <QUEUE_NAME>
 
-rabbitmqctl delete_queue  <QUEUE_NAME>cinder-scheduler
-
-
-grep -r [RESOUCE_ID] /var/log/kolla/
-
-
-virsh list
-
-ip netns
-
+rabbitmqctl delete_queue  <QUEUE_NAME>
 ```
+---
+# Debugging Common
+```bash
+grep -r [RESOUCE_ID] /var/log/kolla/
+```
+
 ---
 # Backup and Recovery
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
-- OpenStack environment
-- An environment within openstack
+* MySQL   Backup
+* Config  Backup (can be restored by kolla)
+* Volumes Backup (can be ⚠️partially restored )
+* Message Queues (are recreated if lost)
 
+---
+# Database backup and recovery
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# create a new backup                                                       📋
+kolla-ansible mariadb-backup -i inventory/wrx
+
+# check on the controller
+ls -lh /var/lib/docker/volumes/mariadb_backup/_data/
+
+# to restore
+gunzip -c <BACKUP_FILE> | docker exec -i mariadb mysql -u root -p
+
+# if the db cluster can not create a quorum
+kolla-ansible mariadb-recovery -i inventory/wrx
+```
 ---
 # Monitoring / Logging
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+<style scoped>
+table, thead, tbody, tr, th, td {
+  background-color: transparent !important;
+  border: none !important;
+}
+</style>
 * Ceilometer / Gnochi / Aodh (for Billing)
-* Prmetheus / Alertmanager / Grafana (for general monitoring)
+* Prometheus / Alertmanager / Grafana
 * Central Logging (OpenSearch)
+
+| | |
+| :--- | :--- |
+| Grafana     | [http://int.os.wrx.sckt.net:3000](http://int.os.wrx.sckt.net:3000) |
+| Prometheus  | [http://int.os.wrx.sckt.net:9091](http://int.os.wrx.sckt.net:9091) |
+| Alermanager | [http://int.os.wrx.sckt.net:9095](http://int.os.wrx.sckt.net:9091) | 
+
+[//]: # (FIXME: debug)
+
+---
+# Central Logging
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# FIXME
+
+```
+
+---
+# Using OpenStack
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+
 
 ---
 # Images
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# Download and install some images                                          📋
+# Prepare Images                                                            📋
 mkdir -p  ~/cloud-images/
 
 ALMA_VERSION="10.1"
@@ -380,7 +573,7 @@ DEBIAN_LINK="https://cloud.debian.org/images/cloud/trixie/latest/$DEBIAN_IMG_NAM
 # Images
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-#                                                                           📋
+# Download Images                                                           📋
 for i in  alma~$ALMA_VERSION~$ALMA_LINK       \
           rocky~$ROCKY_VERSION~$ROCKY_LINK    \
           ubuntu~$UBUNTU_VERSION~$UBUNTU_LINK \
@@ -396,11 +589,11 @@ do
   curl --output-dir ~/cloud-images -L -O $link
 
   echo "Uploading $name-$version image into OpenStack"
-  openstack image create "$name-$version" \
-      --file             "$filepath" \
-      --disk-format       qcow2 \
-      --container-format  bare \
-      --property          os_distro="$name" \
+  openstack image create "$name-$version"       \
+      --file             "$filepath"            \
+      --disk-format       qcow2                 \
+      --container-format  bare                  \
+      --property          os_distro="$name"     \
       --property          os_version="$version" \
       --public
 done
@@ -413,13 +606,14 @@ openstack image list --long
 # Authentication / Authorization
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
+# Set permissions                                                           📋
 PRJ_NAME=workshop
 USR_NAME=workshop
 USR_PASS=workshop
 
 # create project
-openstack project create                                 $PRJ_NAME
-openstack quota set --instances 32 --cores 64            $PRJ_NAME
+openstack project create                             $PRJ_NAME
+openstack quota set --instances 32 --cores 64        $PRJ_NAME
 
 # create user
 openstack user create --password $USR_PASS --project $PRJ_NAME $USR_NAME
@@ -433,6 +627,31 @@ openstack quota show $PRJ_NAME
 ```
 
 ---
+# How to athenticate with for CLI
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Prepare an openrc file to be used with openstack CLI                      📋
+cp  custom-config/wrx/admin-openrc.sh  custom-config/wrx/workshop-openrc.sh
+
+sed  -e "s/OS_PROJECT_NAME=.*/OS_PROJECT_NAME=$PRJ_NAME/" -i custom-config/wrx/workshop-openrc.sh
+sed  -e "s/OS_TENANT_NAME=.*/OS_TENANT_NAME=$PRJ_NAME/"   -i custom-config/wrx/workshop-openrc.sh
+sed  -e "s/OS_PASSWORD=.*/OS_PASSWORD=$USR_PASS/"         -i custom-config/wrx/workshop-openrc.sh
+sed  -e "s/OS_USERNAME=.*/OS_USERNAME=$USR_NAME/"         -i custom-config/wrx/workshop-openrc.sh
+
+# review
+cat    custom-config/wrx/workshop-openrc.sh
+
+# activate
+source custom-config/wrx/workshop-openrc.sh
+
+# use
+openstack network list
+openstack router  list
+openstack server  list
+```
+
+
+---
 # Networking
 ![bg right:65% 80%](https://firstcloud.pl/assets/images/posts/2025/4-tenant-provider-net.svg)
 * OpenVSWitch
@@ -444,9 +663,12 @@ openstack quota show $PRJ_NAME
 * Network Namespaces
 * FloatingIPs
 * LoadBalancers
+```bash
+# FIXME
+```
 
 ---
-# Networking - external networks
+# Networking - External Network
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 
 ```bash
@@ -457,25 +679,23 @@ EXT_NET_CIDR='10.30.10.0/24'
 EXT_NET_RANGE='start=10.30.10.192,end=10.30.10.254'
 EXT_NET_GATEWAY='10.30.10.1'
 
-
-openstack network create       $EXT_NET_NAME  \
-   --provider-physical-network physnet3       \
-   --provider-network-type     vlan           \
-   --provider-segment          $EXT_NET_VLAN  \
+openstack network create       ${EXT_NET_NAME}  \
+   --provider-physical-network physnet3         \
+   --provider-network-type     vlan             \
+   --provider-segment          ${EXT_NET_VLAN}  \
    --external
 
-openstack subnet create  $EXT_NET_NAME-subnet \
-    --allocation-pool    ${EXT_NET_RANGE}     \
-    --network            $EXT_NET_NAME        \
-    --subnet-range       ${EXT_NET_CIDR}      \
-    --gateway            ${EXT_NET_GATEWAY}   \
+openstack subnet create  ${EXT_NET_NAME}-subnet \
+    --allocation-pool    ${EXT_NET_RANGE}       \
+    --network            ${EXT_NET_NAME}        \
+    --subnet-range       ${EXT_NET_CIDR}        \
+    --gateway            ${EXT_NET_GATEWAY}     \
     --no-dhcp
 ```
 
 ---
-# Networking - tenant networks
+# Networking - Project Network
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
-
 ```bash
 # Create external network (vxlan backed)                                    📋
 PRJ_NAME=workshop
@@ -492,41 +712,311 @@ openstack subnet create workshop-subnet \
 openstack router create workshop-router --project $PRJ_NAME
 openstack router add subnet workshop-router workshop-subnet
 openstack router set --external-gateway shared3010 workshop-router
+```
 
-# Create a new instance
+---
+# Networking - Virtual Machines
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Create first instances                                                    📋
 IMAGE_NAME=ubuntu-24.04
 # IMAGE_NAME=alma-10.1
 # IMAGE_NAME=rocky-10.1
-# IMAGE_NAME=debina-13
-openstack server create     \
-  --project  $PRJ_NAME      \
-  --image   ${IMAGE_NAME}   \
-  --flavor   m1.medium      \
-  --key-name mykey          \
-  --nic net-id=workshop-net \
+# IMAGE_NAME=debian-13
+
+openstack server create          \
+  --image    ${IMAGE_NAME}       \
+  --flavor   m1.small            \
+  --key-name mykey               \
+  --nic      net-id=workshop-net \
   vm0
+
+openstack server create                  \
+  --image            ${IMAGE_NAME}       \
+  --flavor           m1.small            \
+  --key-name         mykey               \
+  --nic              net-id=workshop-net \
+  --boot-from-volume 10                  \
+  vm1
 ```
 
 
 ---
-# Block Devices
+# Networking - How to access ?
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
-* Volumes
-* Snapshots
-* Images
+```bash
+# Create a config for a vlan interface                                      📋
+# on the testing node as root
+myid=$(
+  ip -br a | grep mgmt0 | awk '{print $NF}' |\
+  awk -F '/' '{print $1}' | awk -F '.' '{print $NF}'
+)
+
+cat > /etc/netplan/80-vlan.yaml <<EOF
+network:
+  version: 2
+  vlans:
+    xtrn0.3010:
+      addresses:
+      - "10.30.10.${myid}/24"
+      dhcp4: false
+      dhcp6: false
+      id: 3010
+      link: xtrn0
+      link-local: []
+EOF
+
+chmod 600 /etc/netplan/80-vlan.yaml
+
+netplan apply
+```
+
+[//]: # (FIXME: picture)
 
 ---
-# User Config (Cloud-Init)
+# Networking - How to access ?
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# copy the ssh key from deployment to testing                               📋
+scp ~/.ssh/id_ecdsa testing.mgmt.wrx.sckt.net:~/.ssh/
+
+# assign  floating ips to vms
+openstack floating ip  create shared3010
+openstack server add floating ip vm0 <IP>
+
+openstack floating ip  create shared3010
+openstack server add floating ip vm1 <IP>
+
+# You shold be able to connect to VMs from the testing node
+ping -c 3 <IP>
+ssh -i ~/.ssh/id_ecdsa ubuntu@<IP>
+```
+
+
+---
+# Networking - Debugging
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Check VMs and IPs assigned to them                                        📋
+openstack server list --long
+
+# Check  the state of network services
+openstack network agent list
+
+# Check the router has connectivity to the external network
+# Check thr router has IPs from the tenant network assigned 
+openstack router show workshop-router
+
+# On network nodes check if there are network namespaces created for the router
+# qrouter-<ROUTER_ID>
+# snat-<ROUTER_ID>
+# fip-<FLOATING_IP_NETWORK_ID>
+ip netns
+# check if ip addresses are assinged
+ip netns exec <NETWORK_NAMESPACE_ID> ip a
+
+# On compute nodes check if there are network namespaces created for the router
+ip netns
+```
+[//]: # (FIXME: picture for network namespaces)
+
+
+---
+# User Config with Cloud-Init
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Create user-data.yaml                                                     📋
+cat > user-data.yaml <<EOF
+#cloud-config
+runcmd:
+  - mkdir -p /var/lib/data/test
+  - echo "<h1>Hello from write_files</h1>" > /var/lib/data/test/hello.html
+fs_setup:
+  - device:     /dev/vdb
+    filesystem: ext4
+    overwrite:  true
+mounts:
+  - [ /dev/vdb, /var/lib/data, "ext4", "defaults,nofail", "0", "2" ]
+write_files:
+  - path:        /var/lib/data/index.html
+    owner:       root:root
+    permissions: '0644'
+    content: |
+      <h1>Hello from write_files</h1>
+EOF
+```
+
+---
+# User Config with Cloud-Init
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Create a new VM with an additional volume                                 📋
+root_uuid=$(
+  openstack volume create \
+    --image "${IMAGE_NAME}" --size 10 -c Id -f value vm2-root
+)
+data_uuid=$(openstack volume create --size 10 -c Id -f value vm2-data )
+
+openstack volume list
+
+openstack server create \
+  --flavor m1.small \
+  --key-name mykey \
+  --nic net-id=workshop-net \
+  --block-device uuid=$root_uuid,source_type=volume,destination_type=volume,boot_index=0 \
+  --block-device uuid=$data_uuid,source_type=volume,destination_type=volume,boot_index=-1 \
+  --user-data ./user-data.yaml \
+  vm2
+
+
+# inspect
+openstack server show vm2 -fyaml
+openstack volume list
+
+# create a new floating ip and attach it to the server
+vm2_ip=$(openstack floating ip create -f value -c floating_ip_address shared3010)
+openstack server add floating ip vm2 $vm2_ip
+```
+---
+# User Config - Inspect the created VM
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Log in from testing node                                                  📋
+ssh -i ~/.ssh/id_ecdsa ubuntu@<FLOATING_IP>
+
+cat /etc/fstab
+mount | grep vdb
+
+cat /var/lib/data/index.html
+cat /var/lib/data/test/hello.html
+```
+
+---
+# Debugging
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Inspect the instance                                                      📋
+openstack server show vm2
+
+# Inspect VM wirh libvirt on the compute host
+docker exec -ti nova_libvirt virsh list
+docker exec -ti nova_libvirt virsh dumpxml    <INSTANCE_NAME>
+docker exec -ti nova_libvirt virsh console    <INSTANCE_NAME> # ctrl+5 to exit
+docker exec -ti nova_libvirt virsh domblklist <INSTANCE_NAME>
+docker exec -ti nova_libvirt virsh domiflist  <INSTANCE_NAME>
+
+# Inspect volumes backed by ceph on the compute host
+docker exec -ti nova_compute ls /etc/ceph/
+docker exec -ti nova_compute ceph -s
+docker exec -ti nova_compute ceph --id cinder -s
+docker exec -ti nova_compute ceph --id cinder osd pool ls
+docker exec -ti nova_compute rbd  --id cinder ls images
+docker exec -ti nova_compute rbd  --id cinder ls vms
+docker exec -ti nova_compute rbd  --id cinder ls volumes
+
+# Inspect network interface on the compute host
+docker exec -ti openvswitch_vswitchd ovs-vsctl show
+
+# within the instance
+cloud-init status
+cloud-init status --long
+```
+
+---
+# Block Devices
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# How many VMs are running? How many volumes should we see?                 📋
+openstack volume list
+
+# Create a new volume and attach it
+openstack volume create  --size 1 vm1-data
+openstack server add volume   vm1 vm1-data
+openstack volume attachment list
+
+# Inspect it within the VM from the testing node
+lsblk
+
+# Create some data on it
+mkfs.ext4 /dev/vdb
+echo "$(date) Hello from vm1"
+
+# Take a snapshot on the deployment node
+openstack volume snapshot create --volum vm1-data vm1-data-snap1 [--force]
+openstack volume snapshot list
+
+# Change the data 
+echo "Let'us add a new line into the file after snapshot was created"  >> /mnt/test
+cat  /mnt/test
+```
+---
+# Block Devices - Revert a Volume
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Restore from the snapshot                                                 📋
+openstack server stop   vm1
+openstack server list;  openstack volume list;
+openstack volume snapshot list --volume vm1-data
+
+openstack server remove volume vm1 vm1-data
+openstack volume revert            vm1-data-snap1
+openstack server add    volume vm1 vm1-data
+openstack server start         vm1
+```
+
+---
+# Block Devices - More Operations
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Create a volume from an image                                             📋
+openstack volume create --image cirros --size 1 vm1-cirros
+
+# Create a volume from a snapshot
+openstack volume snapshot create --volume vm2-root vm2-root-snap1 [--force]
+openstack volume create --snapshot vm2-root-snap1 ubuntu-24.04-from-vm2
+
+# Create an image from a Volume
+openstack image create  --volume ubuntu-24.04-from-vm2 ubuntu-24.04-custom 
+openstack image list 
+```
 
 ---
 # Resource Segregation
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
-
----
-# Host Aggregates
-![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+- Projects
+- Host Aggregates
+- Volume Backends
+- Network Agents
+- Availability zones
 
 ---
 # Availalbility Zones
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+is a human-readable label that represents a **physically isolated slice of data center infrastructure**. It is the primary tool used to group hardware into separate **fault domains** so that a single physical failure does not take down an entire cloud application.
+
+---
+# Availalbility Zones
+* Power Distribution Unit
+* Data Center (Room)
+* Cooling Domain
+* Top-of-Rack (ToR) Switch Domain
+* Storage Backend
+ 
+```bash
+# FIXME: how to use / configre
+# FIXME: picture
+```
+
+---
+# Host Aggregates
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+openstack aggregate create gpu-pool
+# FIXME
+```
+
+---
+# Links
+- [infraguide.org](https://infraguide.org)
+- [OpenStack Docs](https://docs.openstack.org/2026.1/configuration/)
+- [Cloud-Init Docs](https://docs.cloud-init.io/en/latest/reference/examples.html)
