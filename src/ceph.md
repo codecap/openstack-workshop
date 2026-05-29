@@ -8,7 +8,7 @@ image:
 backgroundImage: url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg)
 transition: cover
 paginate: true
-footer: Questions or need a guided workshop? → ping@socket.de
+footer: "[infraguide.org](https://infraguide.org) | Questions or need a guided workshop? → ping@socket.de"
 style: |
   footer {
     font-size: 7px;
@@ -98,9 +98,7 @@ CEPH_FSID="1959570b-e2e3-4017-a5dc-c7606c5068fd"
 CONFIG="~/ceph/initial-ceph.conf"
 SPEC="~/ceph/spec.yaml"
 SSH_DIR="~/.ssh"
-# FIXME
-CEPH_IMAGE="registry.services.wrx.sckt.net/quay/ceph/ceph:v$CEPH_VERSION"
-# CEPH_IMAGE="registry.wrx.sckt.net/quay/ceph/ceph:v$CEPH_VERSION"
+CEPH_IMAGE="registry.wrx.sckt.net/quay/ceph/ceph:v$CEPH_VERSION"
 
 #ceph cephadm generate-key
 #ceph cephadm get-pub-key > ceph.pub
@@ -609,8 +607,9 @@ mc cat s3/demo-bucket/project1/test.txt
 ```
 
 ---
-# Operations - Update system packages and reboot
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+# Operations
+## Update system packages and reboot
+![bg right:55% 25%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
 ```bash
 # Stop ceph services on cephosd03 as root                                   📋
@@ -642,50 +641,61 @@ ceph osd unset noout
 ```
 
 ---
-# Operations - Upgrade
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
-
-[//]: # (FIXME:)
+# Operations
+## Upgrade
+![bg right:55% 25%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
 ```bash
-VERSION="19.2.1"
+# Upgrade ceph cluster                                                      📋
+VERSION="19.2.3"
+IMAGE=registry.wrx.sckt.net/quay/ceph/ceph:v$VERSION
+
 # check
 ceph health
 
 # order 
 # mgr -> mon -> crash -> osd -> mds -> rgw -> rbd-mirror -> cephfs-mirror -> ceph-exporter -> iscsi -> nfs -> nvmeof
 
+# Review versions installed
+ceph versions
+
 # List available versions
 ceph orch upgrade ls
 
 # start an upgrade mgr,mon
-ceph orch upgrade start --image registry.wrx.sckt.net/ceph/ceph:v$VERSION --daemon-types mgr,mon
+ceph orch upgrade start --image $IMAGE --daemon-types mgr,mon
 
 # status
 ceph orch upgrade status
 ceph -W cephadm
+ceph versions
 
-# stop / continuer
-ceph orch upgrade stop
-# will pull quay.io/ceph/ceph:v18.2.4
-ceph orch upgrade start --ceph-version $VERSION
+# stop / continue
+# ceph orch upgrade stop
+# ceph orch upgrade start --ceph-version $VERSION
+
+# wait for 'in_progress' becomes 'false'
+ceph orch upgrade status
 
 # continue to upgrade crash
-ceph orch upgrade start --image registry.mgmt.tst.sckt.net/ceph/ceph:v$VERSION --daemon-types crash
+ceph orch upgrade start --image $IMAGE --daemon-types crash
+
+# wait for 'in_progress' becomes 'false'
+ceph orch upgrade status
 
 # continue to upgrade osd
-ceph orch upgrade start --image registry.mgmt.tst.sckt.net/ceph/ceph:v$VERSION --daemon-types osd
+ceph orch upgrade start --image $IMAGE --daemon-types osd
 # status
 ceph -s
 ceph health
 ceph orch upgrade status
 
 # contunue with the rest
-ceph orch upgrade start --image registry.mgmt.tst.sckt.net/ceph/ceph:$VERSION
+ceph orch upgrade start --image $IMAGE
 
-# on all cephmon nodes upgrade rpms
-RPM_VERSION=$(dnf list ceph-common --showduplicates | grep $VERSION | awk '{print $2}')
-dnf install -y cephadm-$VERSION ceph-common-$VERSION
+# Check available Upgrade ceph version for ceph packages
+apt-cache policy ceph-common
+apt install -y cephadm-<VERSION> ceph-common-<VERSION>
 ```
 
 ---
@@ -835,3 +845,9 @@ rbd rm  test/benchmark
 ```bash
 # fio                                                                       📋
 ```
+
+---
+# Links
+- [Ceph Docs](https://docs.ceph.com/)
+- [Cephadm Guide](https://docs.ceph.com/en/latest/cephadm/install/)
+- [Ceph Releases](https://docs.ceph.com/en/latest/releases/)

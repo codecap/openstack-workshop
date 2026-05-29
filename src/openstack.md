@@ -8,7 +8,7 @@ image:
 backgroundImage: url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg)
 transition: cover
 paginate: true
-footer: Questions or need a guided workshop? → ping@socket.de
+footer: "[infraguide.org](https://infraguide.org) | Questions or need a guided workshop? → ping@socket.de"
 style: |
   footer {
     font-size: 7px;
@@ -50,19 +50,15 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 ---
 # Architecture
-
 ![ bg right:65% 80%](https://www.openstack.org/static/000588f8b89d94da80eba6101f72ff7a/openstack-map-v20240401.png)
 
 ---
 # Architecture
-
 ![ bg right:65% 80%](https://access.redhat.com/webassets/avalon/d/Red_Hat_OpenStack_Platform-9-Architecture_Guide-en-US/images/fce6394275bd3444892c5d3a91ccf17c/RHEL_OSP_arch_347192_1015_JCS_01_Interface-Overview.png)
-
 
 ---
 # Architecture
 ![ bg right:65% 80%](https://access.redhat.com/webassets/avalon/d/Red_Hat_OpenStack_Platform-9-Architecture_Guide-en-US/images/c6afcf33c1422e761f467c40b6980396/RHEL_OSP_arch_347192_1015_JCS_Ex-Basic-Arch.png)
-
 
 ---
 # Architecture
@@ -251,12 +247,8 @@ kolla-ansible check                -i inventory/wrx
 ```
 
 ---
-# Deploy OpenStack
+# Bootstrap a Test Environment
 ![bg right:30% 90%](https://superuser.openinfra.org/wp-content/uploads/2025/01/1_q6dlalwfoVWwUqFmo4I-9g.png)
-
-[//]: # (FIXME: IPs)
-
-
 ```bash
 # Create first basic test resources                                         📋
 
@@ -450,10 +442,92 @@ docker exec -ti nova_libvirt virsh list  --all # on the host
 ```
 
 ---
-# Upgrades
+# Upgrade
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+
+---
+# SLURP Model
+![bg right:50% 90%](https://releases.openstack.org/_images/slurp.png)
+
+---
+# Rollout the Next Release
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# FIXME
+# 📝 Update kolla-ansible                                                   📋
+CUR_KA_VER=$(pip list | grep kolla | awk '{print $NF}' | awk -F . '{print $1}')
+
+echo $VIRTUAL_ENV
+deactivate
+python3  -m venv ~/venv/kolla-ansible-$((CUR_KA_VER+1)) 
+source  ~/venv/kolla-ansible-$((CUR_KA_VER+1))/bin/activate
+
+pip install -U pip
+pip install -r requirements.txt
+pip install "kolla-ansible<$((CUR_KA_VER + 2)).0"
+kolla-ansible install-deps
+# ⚠️ NOTE: fix for prometheus 05.2026
+# pip install "bcrypt<5.0.0"
+
+```
+
+---
+# Rollout the Next Release
+## Inventory
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Update inventory                                                          📋
+mv inventory/multinode inventory/multinode.old
+cp $VIRTUAL_ENV/share/kolla-ansible/ansible/inventory/multinode inventory/
+crudini --del inventory/multinode control
+crudini --del inventory/multinode network
+crudini --del inventory/multinode compute
+crudini --del inventory/multinode monitoring
+crudini --del inventory/multinode storage
+crudini --del inventory/multinode loadbalancer:children
+
+# Review the differences
+diff -y --suppress-common-lines  inventory/multinode  inventory/multinode.old
+```
+
+---
+# Rollout the Next Release
+## Passwords
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Update passwords                                                          📋
+mv custom-config/wrx/passwords.yml custom-config/wrx/passwords.yml.old
+cp $VIRTUAL_ENV/share/kolla-ansible/etc_examples/kolla/passwords.yml \
+    custom-config/wrx/passwords.yml
+kolla-genpwd -p custom-config/wrx/passwords.yml
+kolla-mergepwd \
+  --old   custom-config/wrx/passwords.yml.old \
+  --new   custom-config/wrx/passwords.yml     \
+  --final custom-config/wrx/passwords.yml
+
+# Review the differences
+diff -y --suppress-common-lines  custom-config/wrx/passwords.yml custom-config/wrx/passwords.yml.old
+```
+
+---
+# Rollout the Next Release
+## Go
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+# Create config backups                                                     📋
+ansible  all -b -m ansible.builtin.shell -a \
+  "mkdir -p ~/backup; cp  -r /etc/kolla ~/backup/$(date +%y%m%d%H%M%S)_kolla" 
+
+# force to collect facts
+ansible all -m ansible.builtin.setup
+
+# Check
+kolla-ansible prechecks -i inventory/wrx
+
+# Pull images
+kolla-ansible pull      -i inventory/wrx
+
+# Upgrade
+kolla-ansible upgrade   -i inventory/wrx
 ```
 ---
 # High Availbility
@@ -469,17 +543,47 @@ docker exec -ti nova_libvirt virsh list  --all # on the host
 
 ```bash
 # Some commands to debug rabbitmq errors                                    📋
+
+rabbitmqctl status
+rabbitmqctl cluster_status
+
+rabbitmq-plugins list
+rabbitmq-plugins disable <PLUGIN>
+rabbitmq-plugins enable  <PLUGIN>
+
 rabbitmqctl list_queues name,messages,messages_ready,messages_unacknowledged
 rabbitmqctl list_bindings 
 
 rabbitmqctl purge_queue   <QUEUE_NAME>
-
 rabbitmqctl delete_queue  <QUEUE_NAME>
 ```
 ---
 # Debugging Common
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-grep -r [RESOUCE_ID] /var/log/kolla/
+# Some useful commands for debugging                                        📋
+grep -r [RESOUCE_ID] /var/log/kolla/[SERVICE]
+
+# FIXME
+docker ps  | grep unhealthy
+
+df -Ph
+
+
+tail mysql
+
+tail rabbitmq
+
+
+openstack compute service list
+
+openstack volume  service list
+
+openstack network agent   list
+
+# check haproxy
+
+# check HA IP
 ```
 
 ---
@@ -507,7 +611,7 @@ gunzip -c <BACKUP_FILE> | docker exec -i mariadb mysql -u root -p
 kolla-ansible mariadb-recovery -i inventory/wrx
 ```
 ---
-# Monitoring / Logging
+# Monitoring
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 <style scoped>
 table, thead, tbody, tr, th, td {
@@ -517,7 +621,6 @@ table, thead, tbody, tr, th, td {
 </style>
 * Ceilometer / Gnochi / Aodh (for Billing)
 * Prometheus / Alertmanager / Grafana
-* Central Logging (OpenSearch)
 
 | | |
 | :--- | :--- |
@@ -525,15 +628,28 @@ table, thead, tbody, tr, th, td {
 | Prometheus  | [http://int.os.wrx.sckt.net:9091](http://int.os.wrx.sckt.net:9091) |
 | Alermanager | [http://int.os.wrx.sckt.net:9095](http://int.os.wrx.sckt.net:9091) | 
 
-[//]: # (FIXME: debug)
-
 ---
+# Expand / Deploy a new service
 # Central Logging
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# FIXME
+# 🔌 Enable central logging                                                 📋
+cat custom-config/wrx/globals.d/logging.yml
+sed -e 's/enable_central_logging:.*/enable_central_logging: "yes"/' \
+    -i custom-config/wrx/globals.d/logging.yml
+cat custom-config/wrx/globals.d/logging.yml
 
+# 🚚 Deploy the new service
+kolla-ansible pull          -i inventory/wrx --tags opensearch
+kolla-ansible deploy        -i inventory/wrx --tags opensearch
+kolla-ansible reconfigure   -i inventory/wrx --tags common
 ```
+
+Visit: 
+- http://int.os.wrx.sckt.net:5601
+- visualize, create an index pattern
+- discover
+
 
 ---
 # Using OpenStack
@@ -649,23 +765,16 @@ openstack network list
 openstack router  list
 openstack server  list
 ```
-
-
 ---
 # Networking
-![bg right:65% 80%](https://firstcloud.pl/assets/images/posts/2025/4-tenant-provider-net.svg)
-* OpenVSWitch
-* SDN-Networks:
+![bg right:40% 90%](../assets/openstack/bootstrap-test-environment.svg)
+* Networks:
   * flat
-  * vxlan
   * vlan
+  * vxlan
 * Routers
-* Network Namespaces
 * FloatingIPs
 * LoadBalancers
-```bash
-# FIXME
-```
 
 ---
 # Networking - External Network
@@ -742,8 +851,9 @@ openstack server create                  \
 
 
 ---
-# Networking - How to access ?
-![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+# Networking - How to access?
+![bg right:35% 90%](../assets/openstack/networking-how-to-access.svg)
+
 ```bash
 # Create a config for a vlan interface                                      📋
 # on the testing node as root
@@ -770,8 +880,6 @@ chmod 600 /etc/netplan/80-vlan.yaml
 
 netplan apply
 ```
-
-[//]: # (FIXME: picture)
 
 ---
 # Networking - How to access ?
@@ -818,8 +926,10 @@ ip netns exec <NETWORK_NAMESPACE_ID> ip a
 # On compute nodes check if there are network namespaces created for the router
 ip netns
 ```
-[//]: # (FIXME: picture for network namespaces)
 
+---
+# Network Namespaces
+![bg right:50% 90%](https://www.funtoo.org/images/thumb/c/ce/2host-4vm.png/733px-2host-4vm.png)
 
 ---
 # User Config with Cloud-Init
@@ -990,24 +1100,6 @@ openstack image list
 - Availability zones
 
 ---
-# Availalbility Zones
-![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
-is a human-readable label that represents a **physically isolated slice of data center infrastructure**. It is the primary tool used to group hardware into separate **fault domains** so that a single physical failure does not take down an entire cloud application.
-
----
-# Availalbility Zones
-* Power Distribution Unit
-* Data Center (Room)
-* Cooling Domain
-* Top-of-Rack (ToR) Switch Domain
-* Storage Backend
- 
-```bash
-# FIXME: how to use / configre
-# FIXME: picture
-```
-
----
 # Host Aggregates
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
@@ -1016,7 +1108,29 @@ openstack aggregate create gpu-pool
 ```
 
 ---
+# Availalbility Zones
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+is a human-readable label that represents a **physically isolated slice of data center infrastructure**. It is the primary tool used to group hardware into separate **fault domains** so that a single physical failure does not take down an entire cloud application.
+
+---
+# Availalbility Zones
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+* Power Distribution Unit
+* Data Center (Room)
+* Cooling Domain
+* Top-of-Rack (ToR) Switch Domain
+* Storage Backend
+```bash
+# FIXME: how to use / configre
+```
+
+---
+# Host Aggragates vs. Availalbility Zones
+![bg right:50% 90%](https://web-assets.dd-static.net/42588/1776303838-openstack-host-aggregates-flavors-availability-zones-aggregates1.png?format=auto&fit=bounds&quality=75&disable=upscale&width=1026&dpr=1)
+
+---
 # Links
-- [infraguide.org](https://infraguide.org)
-- [OpenStack Docs](https://docs.openstack.org/2026.1/configuration/)
+- [OpenStack Docs](https://docs.openstack.org)
+- [OpenStack Configuration Guides](https://docs.openstack.org/latest/configuration/)
+- [OpenStack Releases](https://releases.openstack.org/)
 - [Cloud-Init Docs](https://docs.cloud-init.io/en/latest/reference/examples.html)

@@ -8,7 +8,7 @@ image:
 transition: cover
 backgroundImage: url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg)
 paginate: true
-footer: Questions or need a guided workshop? → ping@socket.de
+footer: "[infraguide.org](https://infraguide.org) | Questions or need a guided workshop? → ping@socket.de"
 style: |
   footer {
     font-size: 7px;

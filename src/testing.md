@@ -8,7 +8,7 @@ image:
 transition: cover
 backgroundImage: url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg)
 paginate: true
-footer: Questions or need a guided workshop? → ping@socket.de
+footer: "[infraguide.org](https://infraguide.org) | Questions or need a guided workshop? → ping@socket.de"
 style: |
   footer {
     font-size: 7px;
@@ -36,15 +36,15 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 - Regression
 - Impact of outside events (Network, Storage)
 - Monitoring (over time)
-- Confifance (I have a working environment)
-- Recognition of patential problems (in advance)
+- Confidance (I have a working environment)
+- Recognition of potential problems (in advance)
 
 ---
 # Challenges
-- my specific configuration
-- my specific implementation / deployment / infra
-- networking
-- changes outside of my environment ( BGP, Storage, Object Storage, DNS)
+- My specific configuration
+- My specific implementation / deployment / infra
+- Networking
+- Changes outside of my environment ( BGP, Storage, Object Storage, DNS)
 
 ---
 # Tempest
