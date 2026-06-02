@@ -41,6 +41,8 @@ jobs:
           cp -r ./docs/. _site/workshops/openstack/
           cp -r ./assets _site/workshops/openstack/assets
           echo '<meta http-equiv="refresh" content="0; URL=workshops/openstack/">' > _site/index.html
+          cp ./docs/CNAME _site/CNAME
+          touch _site/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
