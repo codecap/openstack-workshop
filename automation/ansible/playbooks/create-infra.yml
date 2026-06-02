@@ -1,0 +1,99 @@
+---
+- name: Provision Test OpenStack Infrastructure
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  tasks:
+
+    - name: Create project resources using the new user's credentials
+      vars:
+        # scoped_auth:
+        #   auth_url:            "{{ lookup('env', 'OS_AUTH_URL') }}"
+        #   username:            "{{ project_user }}"
+        #   password:            "{{ project_pass }}"
+        #   project_name:        "{{ project_name }}"
+        #   project_domain_name: "Default"
+        #   user_domain_name: "Default"
+      block:
+
+        - name: Create the private network
+          openstack.cloud.network:
+            name:    "{{ network_name }}"
+            state: present
+
+        - name: Create the private subnet
+          openstack.cloud.subnet:
+            name:         "{{ subnet_name }}"
+            network_name: "{{ network_name }}"
+            cidr:         "{{ subnet_cidr }}"
+            state: present
+
+        - name: Create a router and connect it to the public gateway
+          openstack.cloud.router:
+            name:    "{{ router_name }}"
+            network: "{{ public_network }}"
+            interfaces:
+              - "{{ subnet_name }}"
+            state: present
+
+        - name: Create a Security Group
+          openstack.cloud.security_group:
+            name: "{{sec_group_name}}"
+            state: present
+
+        - name: Allow SSH Inbound
+          openstack.cloud.security_group_rule:
+           security_group:   "{{sec_group_name}}"
+           protocol:         tcp
+           port_range_min:   22
+           port_range_max:   22
+           remote_ip_prefix: "0.0.0.0/0"
+           state: present
+
+        - name: Allow ICMP Inbound
+          openstack.cloud.security_group_rule:
+            security_group:   "{{sec_group_name}}"
+            protocol:         icmp
+            remote_ip_prefix: "0.0.0.0/0"
+            state: present
+
+        - name: Upload local ECDSA public key to OpenStack project
+          openstack.cloud.keypair:
+            name:            "{{ key_name }}"
+            public_key_file: "{{ local_key_path }}"
+            state:           present
+
+        - name: Launch the server instance
+          openstack.cloud.server:
+            name:     "{{ server_name }}"
+            image:    "{{ image_name }}"
+            flavor:   "{{ flavor_name }}"
+            key_name: "{{ key_name }}"
+            network:  "{{ network_name }}"
+            security_groups: ["{{sec_group_name}}"]
+            state:    present
+
+        - name: Create a persistent block volume
+          openstack.cloud.volume:
+            name: "{{ volume_name }}"
+            size: "{{ volume_size }}"
+            state: present
+
+        - name: Attach the volume to the server
+          openstack.cloud.server_volume:
+            server: "{{ server_name }}"
+            volume: "{{ volume_name }}"
+            device: "/dev/vdb"
+            state: present
+
+        - name: Allocate and assign a floating IP to the server
+          openstack.cloud.floating_ip:
+            network:             "{{ public_network }}"
+            server:              "{{ server_name }}"
+            # floating_ip_address: "{{fip_addr}}"
+            state: present
+          register: fip_output
+
+        - name: Display Instance Connection Details
+          ansible.builtin.debug:
+            msg: "Server '{{ server_name }}' is up. Floating IP: {{ fip_output.floating_ip.floating_ip_address }}"

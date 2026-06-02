@@ -1,0 +1,16 @@
+ansible
+openstacksdk
+osc-placement
+pytest-testinfra
+python-designateclient
+python-glanceclient
+python-heatclient
+python-ironicclient
+python-magnumclient
+python-masakariclient
+python-neutronclient
+python-openstackclient
+python-swiftclient
+python-troveclient
+python-octaviaclient
+pytest-testinfra

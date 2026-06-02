@@ -1,5 +1,5 @@
 ---
-title:       Architecture
+title:       Testing
 description: OpenStack & Ceph
 author:      Vladislav Nazarenko (vnazarenko@📯socket.de)
 keywords:    openstack,ceph,workshops,operations,troubleshoouting
@@ -36,7 +36,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 - Regression
 - Impact of outside events (Network, Storage)
 - Monitoring (over time)
-- Confidance (I have a working environment)
+- Confidence (I have a working environment)
 - Recognition of potential problems (in advance)
 
 ---

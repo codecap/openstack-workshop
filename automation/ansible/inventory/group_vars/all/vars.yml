@@ -1,0 +1,25 @@
+---
+ansible_python_interpreter: "{{ lookup('env', 'VIRTUAL_ENV') }}/bin/python"
+local_key_path: "{{ lookup('env', 'HOME') }}/.ssh/id_ecdsa.pub"
+
+
+project_name:        "automation"
+project_description: ""
+project_user:        "automation"
+project_pass:        "automation"
+user_roles:
+  - "member"
+
+network_name:        "ans-private"
+subnet_name:         "ans-private-subnet"
+subnet_cidr:         "192.168.10.0/24"
+router_name:         "ans-router"
+public_network:      "shared3010"
+sec_group_name:      "ans-simple"
+flavor_name:         "m1.small"
+image_name:          "ubuntu-24.04"
+key_name:            "ans-my_key"
+server_name:         "ans-server01"
+fip_addr:            "10.30.10.110"
+volume_name:         "ans-vol-server01"
+volume_size:         20

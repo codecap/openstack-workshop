@@ -1,0 +1,74 @@
+---
+- name: Destroy Test OpenStack Infrastructure
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  tasks:
+    - name: Clean up internal project resources using user credentials
+      vars:
+        # Reusable auth definition to authenticate as the project user
+        # scoped_auth:
+        #   auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
+        #   username: "{{ project_user }}"
+        #   password: "{{ project_pass }}"
+        #   project_name: "{{ project_name }}"
+        #   project_domain_name: "Default"
+        #   user_domain_name: "Default"
+      block:
+        - name: Get server info
+          openstack.cloud.server_info:
+            server: "{{ server_name }}"
+          register: server_lookup
+
+        # - debug:
+        #     msg: "{{server_lookup}}"
+
+        - name: Disassociate and release the server's floating IP
+          openstack.cloud.floating_ip:
+            floating_ip_address: "{{ server_lookup.servers[0].access_ipv4 }}"
+            state: absent
+          when:
+            - server_lookup.servers | length > 0
+            - server_lookup.openstack_servers[0].access_ipv4 | default('') != ''
+
+        - name: Detach volume from server
+          openstack.cloud.server_volume:
+            server: "{{ server_name }}"
+            volume: "{{ volume_name }}"
+            state: absent
+
+        - name: Delete the server instance
+          openstack.cloud.server:
+            name: "{{ server_name }}"
+            state: absent
+
+        - name: Delete the block volume
+          openstack.cloud.volume:
+            name: "{{ volume_name }}"
+            state: absent
+
+        - name: Remove Security Group
+          openstack.cloud.security_group:
+            name: "{{sec_group_name}}"
+            state: absent
+
+        - name: Remove router interfaces and delete router
+          openstack.cloud.router:
+            name: "{{ router_name }}"
+            interfaces:
+              - "{{ subnet_name }}"
+            state: absent
+
+        - name: Delete the private subnet
+          openstack.cloud.subnet:
+            name: "{{ subnet_name }}"
+            state: absent
+
+        - name: Delete the private network
+          openstack.cloud.network:
+            name: "{{ network_name }}"
+            state: absent
+
+        - name: Display Final Status
+          ansible.builtin.debug:
+            msg: "Infrastructure for project '{{ project_name }}' has been successfully cleaned up."

@@ -1,0 +1,29 @@
+---
+- name: Delete Project
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  tasks:
+
+    - name: Remove roles assigned to the user
+      openstack.cloud.role_assignment:
+        user: "{{ project_user }}"
+        project: "{{ project_name }}"
+        role: "{{ item }}"
+        state: absent
+      loop: "{{ user_roles }}"
+      ignore_errors: true
+
+    - name: Delete the project user
+      openstack.cloud.identity_user:
+        name: "{{ project_user }}"
+        state: absent
+
+    - name: Delete the OpenStack project wrapper
+      openstack.cloud.project:
+        name: "{{ project_name }}"
+        state: absent
+
+    - name: Display Final Status
+      ansible.builtin.debug:
+        msg: "Infrastructure, user '{{ project_user }}', and project '{{ project_name }}' have been successfully deleted."

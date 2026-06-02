@@ -518,16 +518,16 @@ ansible  all -b -m ansible.builtin.shell -a \
   "mkdir -p ~/backup; cp  -r /etc/kolla ~/backup/$(date +%y%m%d%H%M%S)_kolla" 
 
 # force to collect facts
-ansible all -m ansible.builtin.setup
+kolla-ansible gather-facts -i inventory/wrx
 
 # Check
-kolla-ansible prechecks -i inventory/wrx
+kolla-ansible prechecks    -i inventory/wrx
 
 # Pull images
-kolla-ansible pull      -i inventory/wrx
+kolla-ansible pull         -i inventory/wrx
 
 # Upgrade
-kolla-ansible upgrade   -i inventory/wrx
+kolla-ansible upgrade      -i inventory/wrx
 ```
 ---
 # High Availbility

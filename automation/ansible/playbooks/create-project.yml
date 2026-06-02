@@ -1,0 +1,27 @@
+---
+- name: Create Project
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  tasks:
+
+    - name: Create the OpenStack project
+      openstack.cloud.project:
+        name: "{{ project_name }}"
+        description: "{{ project_description }}"
+        state: present
+
+    - name: Create a new user for the project
+      openstack.cloud.identity_user:
+        name: "{{ project_user }}"
+        password: "{{ project_pass }}"
+        default_project: "{{ project_name }}"
+        state: present
+
+    - name: Assign roles to the new user in the project
+      openstack.cloud.role_assignment:
+        user: "{{ project_user }}"
+        project: "{{ project_name }}"
+        role: "{{ item }}"
+        state: present
+      loop: "{{ user_roles }}"

@@ -1,0 +1,4 @@
+---
+collections:
+  - name: openstack.cloud
+    # version: 8.1.0
