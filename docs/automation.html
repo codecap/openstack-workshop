@@ -103,7 +103,7 @@ ansible-galaxy collection install -r requirenments.yaml --force
 <span class="hljs-comment"># Clear any old environment that may conflict.</span>
 <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> $( <span class="hljs-built_in">set</span> | awk <span class="hljs-string">&#x27;{FS=&quot;=&quot;}  /^OS_/ {print $1}&#x27;</span> ); <span class="hljs-keyword">do</span> <span class="hljs-built_in">unset</span> <span class="hljs-variable">$key</span> ; <span class="hljs-keyword">done</span>
 
-<span class="hljs-built_in">export</span> OS_ENDPOINT_TYPE=internal
+<span class="hljs-built_in">export</span> OS_ENDPOINT_TYPE=internalURL
 <span class="hljs-built_in">export</span> OS_REGION_NAME=RegionOne
 <span class="hljs-built_in">export</span> OS_INTERFACE=internal
 <span class="hljs-built_in">export</span> OS_AUTH_PLUGIN=password

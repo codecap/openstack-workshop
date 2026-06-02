@@ -29,11 +29,14 @@ jobs:
 
       - name: Build site
         run: |
-          mkdir -p _site/workshops
-          cp -r ./docs/*.html _site/; 
-          cp -r ./assets _site/
-          cp -r ./docs/*.html _site/workshops/ 
-          cp -r ./assets _site/workshops/
+          mkdir -p _site/workshops/openstack
+          # cp -r ./docs/*.html _site/;
+          # cp -r ./assets _site/
+          # cp -r ./docs/*.html _site/workshops/openstack/
+          # cp -r ./assets _site/workshops/openstack/
+          cp -r ./docs/*.html _site/workshops/openstack/
+          cp -r ./assets _site/workshops/openstack/
+          echo '<meta http-to-equiv="refresh" content="0; URL=workshops/openstack/">' > _site/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4

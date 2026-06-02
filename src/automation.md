@@ -52,7 +52,7 @@ cat > ~/automation-openrc.sh<<"EOF"
 # Clear any old environment that may conflict.
 for key in $( set | awk '{FS="="}  /^OS_/ {print $1}' ); do unset $key ; done
 
-export OS_ENDPOINT_TYPE=internal
+export OS_ENDPOINT_TYPE=internalURL
 export OS_REGION_NAME=RegionOne
 export OS_INTERFACE=internal
 export OS_AUTH_PLUGIN=password

@@ -48,11 +48,76 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 ---
 # Tempest
+## Install
+![bg right:30% 50%](https://www.openstack.org/software/images/mascots/tempest.png)
+[Release Notes Tempest v45](https://docs.openstack.org/releasenotes/tempest/v45.0.0.html)
+
+```bash
+# Install tempest on testing node                                           📋
+sudo apt install build-essential python3.12-dev
+
+python3 -m venv ~/venv/tempest
+echo ""                                   >> ~/.profile
+echo "source ~/venv/tempest/bin/activate" >> ~/.profile
+source ~/.profile
+
+pip install -U pip
+
+pip3 install -r \
+  https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/requirenments.txt
+```
 
 ---
-# Ansible / Terraform
+# Tempest
+## Configuration
+![bg right:30% 50%](https://www.openstack.org/software/images/mascots/tempest.png)
+```bash
+# Source your openr(credentials) file                                       📋
+source ~/admin-openrc.sh
+
+# The configuration script
+CONF_SCRIPT=https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/configure.sh
+
+# Review
+curl $CONF_SCRIPT
+
+# Run
+curl $CONF_SCRIPT | bash
+
+```
 
 ---
 # Scripts
+[openstack-health-monitor](https://github.com/SovereignCloudStack/openstack-health-monitor)
+```bash
+mkdir testing
+git clone https://github.com/SovereignCloudStack/openstack-health-monitor.git
 
-https://github.com/SovereignCloudStack/openstack-health-monitor
+export IMG=ubuntu-24.04
+export JHIMG=$IMG
+export FLAVOR=m1.small
+export JHFLAVOR=$FLAVOR
+export ADDJHVOLSIZE=10
+
+source ~/venv/ansible/bin/activate
+
+source ~/automation-openrc.sh
+```
+---
+# Run
+
+```bash
+# -o    - translate nova/cinder/neutron/glance into openstack client commands
+# -C    - full Connectivity check: Every VM pings every other
+# -D    - create all VMs with one API call (implies -d -P)
+# -n 1  - number of VMs to create
+# -B    - measure TCP BW b/w VMs (iperf3)
+# -T    - assign tags to resources; use to clean up floating IPs
+# -s 10 - sends stats as well once per day (or every SH hours), not just alarms
+# -W 45 - sets error wait (VM only): 0-inf seconds or neg value for interactive wait
+
+./api_monitor.sh -o -C -D -n 1 -B -T -s 10 -W 45
+```
+
+---
+# Ansible / Terraform
