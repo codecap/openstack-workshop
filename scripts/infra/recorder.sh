@@ -6,7 +6,7 @@ apt update; apt install podman -y
 
 cat > /etc/containers/registries.conf  <<EOF
 [[registry]]
-location = "$REGISTRY:80"
+location = "$REGISTRY"
 insecure = true
 EOF
 
