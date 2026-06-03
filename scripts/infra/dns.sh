@@ -20,6 +20,7 @@ cat <<EOF > /etc/dnsmasq.conf
 domain-needed
 bogus-priv
 no-resolv
+no-hosts
 # Upstream DNS (Google)
 server=8.8.8.8
 # Listen on all interfaces
@@ -44,8 +45,8 @@ echo "Adding custom A records to /etc/hosts..."
 # We use a marker to make the script repeatable without duplicating lines
 mkdir -p /var/lib/dnsmasq/hosts.d
 
-cat > /var/lib/dnsmasq/hosts.d/hosts <<EOF
-# management
+cat > /var/lib/dnsmasq/hosts.d/hosts<<EOF
+# mgmt
 10.14.0.10   dns.mgmt.wrx.sckt.net
 10.14.0.16   deployment.mgmt.wrx.sckt.net
 10.14.0.17   registry.mgmt.wrx.sckt.net
@@ -71,7 +72,7 @@ cat > /var/lib/dnsmasq/hosts.d/hosts <<EOF
 10.14.0.128  cephmon01.mgmt.wrx.sckt.net
 10.14.0.146  cephosd03.mgmt.wrx.sckt.net
 
-# storage
+# strg
 10.20.21.128  cephmon01.strg.wrx.sckt.net
 10.20.21.129  cephmon02.strg.wrx.sckt.net
 10.20.21.130  cephmon03.strg.wrx.sckt.net
@@ -83,13 +84,13 @@ cat > /var/lib/dnsmasq/hosts.d/hosts <<EOF
 # strg services
 10.20.21.135  s3.strg.wrx.sckt.net
 
-# openstack
-# 10.20.8.35    master.api.wrx.sckt.net
+# api
+10.20.8.35    master.api.wrx.sckt.net
 10.20.8.35    int.os.wrx.sckt.net
 
 # services
 10.34.10.10   dns.services.wrx.sckt.net
-10.34.10.17   registry.services.wrx.sckt.net
+# 10.34.10.17   registry.services.wrx.sckt.net
 10.34.10.18   recorder.services.wrx.sckt.net
 10.34.10.35   dashboard.openstack.services.wrx.sckt.net
 10.34.10.35   keystone.os.svc.wrx.sckt.net
@@ -98,9 +99,10 @@ cat > /var/lib/dnsmasq/hosts.d/hosts <<EOF
 
 # infra nodes
 10.14.0.8     hypervisor.wrx.sckt.net
-10.14.0.17    dns.wrx.sckt.net
+10.14.0.10    dns.wrx.sckt.net
 10.14.0.17    registry.wrx.sckt.net
 10.14.0.18    recorder.wrx.sckt.net
+10.14.0.19    proxy.wrx.sckt.net
 EOF
 
 echo "Restarting Dnsmasq..."
