@@ -275,6 +275,19 @@ write_files:
       Package: docker-ce-cli
       Pin: version 5:28.*
       Pin-Priority: 1001
+  - path:        /etc/env.json
+    owner:       root:root
+    permissions: '0644'
+    content: |
+      {
+        id:        $VMID,
+        name:      "$NAME",
+        cpu:       $CPU,
+        ram:       $RAM,
+        disks:     $DISKS_JSON,
+        netconf:   $NETCONF_JSON,
+        airgapped: "$AIRGAPPED"
+      }
 EOF
 
 qm set $VMID --cicustom "vendor=${SNIPPET_STORAGE}:snippets/$(basename $VENDOR_FILE)"
