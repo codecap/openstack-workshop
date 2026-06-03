@@ -1,29 +1,29 @@
 # openstack-workshop
 
+This project is for learning OpenStack with Ceph in a test environment.
 
-## TODOs
-* Install packages
+This repository is used to:
+* Prepare Hypervisor for the test environment
+* Create the networks for the environment
+* Build the VM-based environment for the workshop
+* Create and publish the slides
+* Run the workshop using the slides
+
+## Network
+![img](https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/openstack-workshop.drawio.svg)
+
+## OpenStack
+![img](https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/openstack-environment.drawio.svg)
+
+## Ceph
+![img](https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/ceph-environment.drawio.svg)
+
+
+## How to create slides
 ```bash
-apt install -y \
- bind9-dnsutils \
- curl    \
- git     \
- htop \
- jq      \
- tcpdump \
- tmux    \
- vim     \
- yq
+marp  --bespoke.progress  -w
+
 ```
-* post-pve-install.sh
-* install ubuntu image
-* create template
-* create bridges according to network_conf
-* create vms according to server_conf
 
-
-## Open Points
-
-* IPs in INtranet - clarify with Saner
-we have ~19 VMs per Environment
-Each environment needs 8 Ips for Public Network
+## How to access slides
+[https://infraguide.org](https://infraguide.org)
