@@ -44,7 +44,11 @@ endpoint_type = internalURL
 
 [service_available]
 neutron = true
+swift = false
+load_balancer = false
 
+[image]
+endpoint_type = internalURL
 
 [compute]
 image_ref      = $test_image_id
@@ -71,6 +75,9 @@ endpoint_type = internalURL
 
 [volume-feature-enabled]
 multi_backend = true
+
+[load_balancer]
+endpoint_type = internalURL
 EOF
 
 #
