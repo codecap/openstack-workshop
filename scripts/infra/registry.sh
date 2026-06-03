@@ -12,11 +12,11 @@ cd harbor
 cp harbor.yml.tmpl harbor.yml
 
 # set admin password
-sed -i harbor.yml -e "s/^harbor_admin_password:.*/harbor_admin_password: $HARBOR_PASS/"
+sed -e "s/^harbor_admin_password:.*/harbor_admin_password: $HARBOR_PASS/" -i harbor.yml
 # change the hostname
-sed -i harbor.yml -e "s/^hostname:.*/hostname: registry.wrx.sckt.net/"
+sed -e "s/^hostname:.*/hostname: registry.wrx.sckt.net/" -i harbor.yml
 # switch off https
-sed -i harbor.yml '/^https:/,/private_key:/ s/^/#/'
+sed '/^https:/,/private_key:/ s/^/#/'                    -i harbor.yml
 
 # Install
 ./install.sh ; sleep 5;
