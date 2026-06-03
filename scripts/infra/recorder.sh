@@ -1,48 +1,20 @@
 #!/bin/bash
-
-# BASEDIR="/vagrant"
-# 
-# source "$BASEDIR/scripts/common.sh"
-# 
-# REGISTRY="registry.mgmt.tst.sckt.net"
-# 
-# ##############################################################################
-# #
-# # Disks
-# #
-# mkdir -p /var/lib/containers
-# mkfs.xfs /dev/vdb
-# echo "/dev/vdb /var/lib/containers/ xfs defaults 0 1" >> /etc/fstab
-# mount -a
-# 
-# 
-# 
-# ##############################################################################
-# #
-apt install podman -y
-
-REGISTRY=registry.services.wrx.sckt.net:80
-# TODO
+REGISTRY=registry.wrx.sckt.net:80
 IMAGE_NAME=$REGISTRY/quay/osism/ara-server:1.6.1
 
-
-#
-# podman run -d  --name=ara-server --env-file /etc/ara/environment \
-#   --publish 8000:8000  registry.mgmt.tst.sckt.net/osism/ara-server:1.6.1
-# podman generate systemd --new --files --name ara-server
+apt update; apt install podman -y
 
 cat > /etc/containers/registries.conf  <<EOF
 [[registry]]
-location = "registry.services.wrx.sckt.net:80"
+location = "$REGISTRY:80"
 insecure = true
 EOF
-
 
 podman volume create ara
 
 mkdir /etc/ara
 cat > /etc/ara/environment <<EOF
-ARA_ALLOWED_HOSTS=['127.0.0.1', 'loalhost', '10.14.0.18', 'ara.mgmt.wrx.sckt.net', 'ara.services.wrx.sckt.net', 'ara.wrx.sckt.net']
+ARA_ALLOWED_HOSTS=['127.0.0.1', 'loalhost', '10.14.0.25', 'recorder.services.wrx.sckt.net', 'recorder.wrx.sckt.net']
 # ARA_DEBUG=True
 ARA_API_CLIENT=http
 ARA_API_PASSWORD=P@ssword
@@ -98,6 +70,4 @@ WantedBy=default.target
 EOF
 
 systemctl daemon-reload
-systemctl enable ara.service
-systemctl start ara.service
-
+systemctl enable --now ara.service
