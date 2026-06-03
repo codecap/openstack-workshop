@@ -148,40 +148,11 @@ N3 <-.-> N1
 ---
 # Ceph Environment
 
-<div class="mermaid">
-architecture-beta
-    group api(cloud)[API]
-    service db(database)[Database] in api
-    service server(server)[Server] in api
-    service disk1(disk)[Storage] in api
-    service disk2(disk)[Storage] in api
-    group cephmon01(server)[cephmon01]
-      service mon01(database)[mon01] in cephmon01
-    group cephmon02(server)[cephmon02]
-      service mon02(database)[mon01] in cephmon02
-    group cephmon03(server)[cephmon03]
-      service mon03(database)[mon03] in cephmon03
-    group cephosd01(server)[cephosd01]
-    service nvme11(disk)[nvme01] in cephosd01
-    service nvme12(disk)[nvme02] in cephosd01
-    service nvme13(disk)[nvme03] in cephosd01
-    group cephosd02(server)[cephosd02]
-    service nvme21(disk)[nvme01] in cephosd02
-    service nvme22(disk)[nvme02] in cephosd02
-    service nvme23(disk)[nvme03] in cephosd02
-    group cephosd03(server)[cephosd03]
-    service nvme31(disk)[nvme01] in cephosd03
-    service nvme32(disk)[nvme02] in cephosd03
-    service nvme33(disk)[nvme03] in cephosd03
-    mon01{group}:R -- L:mon02{group}
-    mon02{group}:R -- L:mon03{group}
-    nvme11{group}:T -- B:mon01{group}
-    nvme21{group}:T -- B:mon02{group}
-    db:L -- R:server
-    disk1:T -- B:server
-    disk2:T -- B:db  
+    
 
-</div>
+
+![ ](../assets/archtecture/ceph-environment.svg)
+
 
 ---
 # Node Groups

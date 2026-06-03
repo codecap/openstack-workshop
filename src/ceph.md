@@ -804,6 +804,29 @@ ceph osd unset norecover
 ```
 
 ---
+# Add an OSD Node
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+
+```
+
+---
+# Remove an OSD Node
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+
+```
+
+
+---
+# Modify an activate a spec
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+
+```
+
+
+---
 # Benchmarking
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 

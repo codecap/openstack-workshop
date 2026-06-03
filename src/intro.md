@@ -50,7 +50,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 ---
 # Ceph
-Ceph is open-source, software-defined storage that runs on a cluster of standard servers and disks. It stores data in a distributed way, with automatic replication, so data remains safe if a server or disk fails.
+open-source, software-defined storage that runs on a cluster of standard servers and disks. It stores data in a distributed way, with automatic replication, so data remains safe if a server or disk fails.
 
 Ceph can present storage as:
 - Block storage (like virtual disks)
@@ -62,7 +62,7 @@ Scale out almost without limits by simply adding more servers and disks.
 ---
 # OpenStack
 
-OpenStack is open‑source cloud software that lets you build and manage your own cloud infrastructure (like AWS or Azure, but on your own servers).  It provides:
+open‑source cloud software that lets you build and manage your own cloud infrastructure (like AWS or Azure, but on your own servers).  It provides:
 - Compute (VMs, containers)
 - Storage (block, object)
 - Networking and security
@@ -70,7 +70,7 @@ OpenStack is open‑source cloud software that lets you build and manage your ow
 - Image and snapshot management
 - Orchestration and automation
 
-You can use it to run workloads, virtual machines, and services in a private or hybrid cloud.
+For virtual machines, and services in a private or hybrid cloud.
 
 ---
 # Why Ceph + OpenStack

@@ -98,6 +98,137 @@ we will need at least a single baremetal node with either:
 - singlenode incus environment
 ...
 
+---
+# Proxmox
+```bash
+# Install post-pve-install.sh
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/tools/pve/post-pve-install.sh)"
+
+# Prepare a new template for VMs
+# https://www.croit.io/blog/how-to-use-cloud-images-for-faster-vm-deployment-in-proxmox-ve
+
+TEMPL_ID=9000
+
+wget -O /tmp/noble-server-cloudimg-amd64.img \
+https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
+
+qm create $TEMPL_ID \
+--name ubuntu-2404-cloud-init \
+--description "Ubuntu 24.04 Cloud Init template" \
+--ostype l26 \
+--cpu cputype=host \
+--cores 1 \
+--sockets 1 \
+--memory 2048 \
+--scsihw virtio-scsi-pci \
+--net0 virtio,bridge=vmbr0
+
+qm importdisk $TEMPL_ID /tmp/noble-server-cloudimg-amd64.img local-lvm
+
+qm set $TEMPL_ID --scsi0 local-lvm:vm-$TEMPL_ID-disk-0
+qm set $TEMPL_ID--boot c --bootdisk scsi0
+
+qm set $TEMPL_ID --serial0 socket --vga serial0
+
+qm set $TEMPL_ID --ide2 local-lvm:cloudinit
+
+qm set $TEMPL_ID --ipconfig0 ip=dhcp
+qm cloudinit update $TEMPL_ID
+
+qm template $TEMPL_ID
+
+#Install Packages
+apt install -y \
+ bind9-dnsutils \
+ curl    \
+ git     \
+ htop \
+ jq      \
+ tcpdump \
+ tmux    \
+ tmuxp   \
+ crudini \
+ vim     \
+ yq
+
+# Create Birdges
+cat > /etc/network/interfaces.d/wrx
+auto cpln01
+iface cpln01 inet manual
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+auto dpln0
+iface dpln0 inet manual
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+auto brmgmt0
+iface brmgmt0 inet static
+        address 10.14.0.8/24
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+auto brsrvc0
+iface brsrvc0 inet static
+        address 10.34.10.8/24
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+auto brcpln0
+iface brcpln0 inet manual
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+auto brdpln0
+iface brdpln0 inet manual
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+auto brlmgt0
+iface brlmgt0 inet manual
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+auto brxtrn0
+iface brxtrn0 inet manual
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+auto brstrg0
+iface brstrg0 inet manual
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+auto brstrg1
+iface brstrg1 inet manual
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+# vimbr0 is used for public0
+EOF
+
+systemctl restart networking.service
+brctl show
+```
+
+---
+# Prepare a new Environment
+```bash
+
+# Create 
+```
+
 
 ---
 # Let's GO!
@@ -106,8 +237,8 @@ we will need at least a single baremetal node with either:
 ```bash
 git clone https://github.com/codecap/openstack-workshop.git
 
-ln -s ~/openstack-workshop/cephadm       ~/ceph
-ln -s ~/openstack-workshop/kolla-ansible ~/openstack
+# ln -s ~/openstack-workshop/cephadm       ~/ceph
+# ln -s ~/openstack-workshop/kolla-ansible ~/openstack
 
 cd openstack-workshop
 ./scripts/print-ssh-config  >> ~/.ssh/config
@@ -186,6 +317,24 @@ print-destroy-env-commands | bash
 # if you need to rebuild only a set or a single server, you can use grep with a matching filter
 
 ```
+
+---
+# Prepare
+
+```bash
+BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/main
+
+print-create-env-commands  | grep -E "dns"   | bash
+ssh -t dns "sudo bash -i -c 'curl -L $BASE_PATH/scripts/infra/dns.sh | bash'"
+
+print-create-env-commands  | grep -E "registry|proxy"   | bash
+ssh -t proxy    "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/proxy.sh | bash'"
+ssh -t registry "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/registry.sh | bash'"
+
+print-create-env-commands  | grep -E "deploy|recorder"   | bash
+ssh -t recorder "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/recorder.sh | bash'"
+```
+
 
 ---
 # Prepare a working environment

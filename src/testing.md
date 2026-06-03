@@ -64,7 +64,7 @@ source ~/.profile
 pip install -U pip
 
 pip3 install -r \
-  https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/requirenments.txt
+  https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/requirements.txt
 ```
 
 ---

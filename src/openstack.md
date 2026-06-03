@@ -442,6 +442,18 @@ docker exec -ti nova_libvirt virsh list  --all # on the host
 ```
 
 ---
+# Remove a Compute Host
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+
+---
+# Reboot a OpenStack Host
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+* How to scale out controllers ?
+* How to scale out network nodes ?
+* How to scale out compute nodes ?
+
+
+---
 # Upgrade
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 
