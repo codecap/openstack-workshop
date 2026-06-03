@@ -37,7 +37,7 @@ expand-hosts
 # Cache size
 cache-size=1000
 
-hostsdir=/var/lib/dnsmasq/hosts
+hostsdir=/var/lib/dnsmasq/hosts.d
 EOF
 
 # 4. Add your A records to /etc/hosts
@@ -45,12 +45,13 @@ echo "Adding custom A records to /etc/hosts..."
 # We use a marker to make the script repeatable without duplicating lines
 mkdir -p /var/lib/dnsmasq/hosts.d
 
-cat > /var/lib/dnsmasq/hosts.d/hosts<<EOF
+cat > /var/lib/dnsmasq/hosts.d/hosts <<EOF
 # mgmt
 10.14.0.10   dns.mgmt.wrx.sckt.net
-10.14.0.16   deployment.mgmt.wrx.sckt.net
 10.14.0.17   registry.mgmt.wrx.sckt.net
-10.14.0.18   ara.mgmt.wrx.sckt.net
+10.14.0.19   proxy.mgmt.wrx.sckt.net
+10.14.0.24   deployment.mgmt.wrx.sckt.net
+10.14.0.25   recorder.mgmt.wrx.sckt.net
 10.14.0.32   controller01.mgmt.wrx.sckt.net
 10.14.0.33   controller02.mgmt.wrx.sckt.net
 10.14.0.34   controller03.mgmt.wrx.sckt.net
@@ -84,14 +85,14 @@ cat > /var/lib/dnsmasq/hosts.d/hosts<<EOF
 # strg services
 10.20.21.135  s3.strg.wrx.sckt.net
 
-# api
-10.20.8.35    master.api.wrx.sckt.net
+# os services
 10.20.8.35    int.os.wrx.sckt.net
 
 # services
 10.34.10.10   dns.services.wrx.sckt.net
-# 10.34.10.17   registry.services.wrx.sckt.net
-10.34.10.18   recorder.services.wrx.sckt.net
+10.34.10.17   registry.services.wrx.sckt.net
+10.34.10.19   proxy.services.wrx.sckt.net
+10.34.10.25   recorder.services.wrx.sckt.net
 10.34.10.35   dashboard.openstack.services.wrx.sckt.net
 10.34.10.35   keystone.os.svc.wrx.sckt.net
 10.34.10.135  dashboard.ceph.services.wrx.sckt.net
@@ -101,8 +102,8 @@ cat > /var/lib/dnsmasq/hosts.d/hosts<<EOF
 10.14.0.8     hypervisor.wrx.sckt.net
 10.14.0.10    dns.wrx.sckt.net
 10.14.0.17    registry.wrx.sckt.net
-10.14.0.18    recorder.wrx.sckt.net
 10.14.0.19    proxy.wrx.sckt.net
+10.14.0.25    recorder.wrx.sckt.net
 EOF
 
 echo "Restarting Dnsmasq..."

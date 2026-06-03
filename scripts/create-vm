@@ -48,17 +48,15 @@ SEARCHDOMAIN="$SEARCHDOMAIN $DOMAIN"
 # go
 VENDOR_FILE="$SNIPPET_DIR/vm-${VMID}-vendor.yaml"
 
-
 qm clone $TEMPLATE_ID $VMID --name "$NAME" --full
 qm set $VMID --ciuser $CIUSER --cipassword $CIPASS --cores "$CPU" --memory "$RAM"
-
 
 cat <<EOF > "$VENDOR_FILE"
 #cloud-config
 bootcmd:
 EOF
 
-if [ "$AIRGAPPED" = "true" ]
+if [ "$AIRGAPPED" = "soft" ]
   then
   cat <<EOF >> "$VENDOR_FILE"
   - |
@@ -70,6 +68,12 @@ if [ "$AIRGAPPED" = "true" ]
     export HTTPS_PROXY="http://proxy.wrx.sckt.net:3128"
     export NO_PROXY="localhost,127.0.0.1,.wrx.sckt.net,169.254.169.254"
     EOF
+EOF
+fi
+
+if [[ "$AIRGAPPED" =~ ^(true|yes|soft)$ ]]
+  then
+  cat <<EOF >> "$VENDOR_FILE"
   - |
     cat > /etc/netplan/60-eth0-override.yaml <<EOF
     network:
@@ -136,6 +140,11 @@ EOF
 
 if [ "$AIRGAPPED" = "true" ]
   then
+  #
+  # NOTE: this is needed for cloud-init during provisioning to
+  #         - update OS
+  #         - install packages
+  #
   cat <<EOF >> "$VENDOR_FILE"
 proxy:       http://proxy.wrx.sckt.net:3128
 https_proxy: http://proxy.wrx.sckt.net:3128

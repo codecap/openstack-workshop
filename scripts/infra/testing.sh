@@ -40,8 +40,6 @@ workspace="$HOME/$workspace_name"
 
 tempest init $workspace
 
-source ~/admin-openrc.sh
-
 public_net_id=$(openstack network show public1 -f value -c id)
 volume_backend_names=$(openstack volume type list  -f value -c Name | xargs | tr "[ ]" "[,]")
 test_image_id=$(openstack image list -f value | grep cirros | sort -Vk 2 | tail -n1  | awk '{print $1}')
