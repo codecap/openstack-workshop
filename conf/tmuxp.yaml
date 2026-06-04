@@ -13,7 +13,7 @@ windows:
       - ssh -t network02.mgmt.wrx.sckt.net    sudo su -
       - ssh -t network03.mgmt.wrx.sckt.net    sudo su -
       - ssh -t monitor01.mgmt.wrx.sckt.net    sudo su -
-      - ssh -t testing.mgmt.wrx.sckt.net      "cd ~/tempest-* && bash"
+      - ssh -t testing.mgmt.wrx.sckt.net
       - cd  ~/openstack/
   - window_name: compute
     layout: tiled
@@ -48,10 +48,9 @@ windows:
     shell_command_before:
       - cd ~/
     panes:
-      - ssh -t dns.strg.wrx.sckt.net   sudo su -
+      - ssh -t dns.wrx.sckt.net        sudo su -
+      - ssh -t proxy.wrx.sckt.net      sudo su -
+      - ssh -t recorder.wrx.sckt.net   sudo su -
       - ssh -t registry.wrx.sckt.net   sudo su -
-      - ssh -t ara.wrx.sckt.net        sudo su -
-      - ssh -t ara.wrx.sckt.net        sudo su -
-      - ssh -t ara.wrx.sckt.net        sudo su -
-      - ssh -t hypervisor.wrx.sckt.net sudo su -
-
+      - ssh -t hypervisor.wrx.sckt.net
+      - ''
