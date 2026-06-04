@@ -51,7 +51,6 @@ skyline_console_external_fqdn:         "skyline-c.os.svc.{{external_domain}}"
 swift_external_fqdn:                   "{{ceph_rgw_external_fqdn}}"
 tacker_external_fqdn:                  "tacker.os.svc.{{external_domain}}"
 trove_external_fqdn:                   "trove.os.svc.{{external_domain}}"
-venus_external_fqdn:                   "venus.os.svc.{{external_domain}}"
 watcher_external_fqdn:                 "watcher.os.svc.{{external_domain}}"
 zun_external_fqdn:                     "zun.os.svc.{{external_domain}}"
 zun_wsproxy_external_fqdn:             "zun-w.os.svc.{{external_domain}}"
@@ -89,7 +88,6 @@ openstack_external_fqdns: |
     + ( enable_ceph_rgw_keystone                | bool | ternary([swift_external_fqdn],                   []) )
     + ( enable_tacker                           | bool | ternary([tacker_external_fqdn],                  []) )
     + ( enable_trove                            | bool | ternary([trove_external_fqdn],                   []) )
-    + ( enable_venus                            | bool | ternary([venus_external_fqdn],                   []) )
     + ( enable_watcher                          | bool | ternary([watcher_external_fqdn],                 []) )
     + ( enable_zun                              | bool | ternary([zun_external_fqdn],                     []) )
     + ( enable_zun                              | bool | ternary([zun_wsproxy_external_fqdn],             []) )

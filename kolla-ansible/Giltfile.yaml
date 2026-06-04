@@ -6,13 +6,7 @@
 # Gilt Docs: https://retr0h.github.io/gilt/configuration
 repositories:
   - git: https://github.com/osism/kolla-operations.git
-    # version: v0.20240319.0
-    # version: v0.20230407.0 # debugged, working
-    # version: v0.20240204.0 # working
-    # version: v0.20240221.0 # working
-    # version: v0.20240524.0 # broken
-    # version: v0.20240818.0 # broken
-    version: v0.20240221.0
+    version: v0.20250407.0
     sources:
       - src: "prometheus"
         dstDir: custom-config/wrx/config/prometheus
@@ -51,12 +45,12 @@ repositories:
          - custom-config/wrx/config/prometheus/prometheus-alertmanager.yml
       # remove conf files, we can not utilize
       - cmd: /usr/bin/rm
-        args: 
+        args:
           - custom-config/wrx/config/prometheus/prometheus.yml.d/51-ceph-nodeexporter.yml
           - custom-config/wrx/config/prometheus/prometheus.yml.d/50-ceph.yml
           - custom-config/wrx/config/prometheus/prometheus.yml.d/60-fluentd-aggregator.yml
       - cmd: /usr/bin/find
-        args: 
+        args:
           - custom-config/wrx/config/grafana/dashboards/ceph/
           - -not
           - '('

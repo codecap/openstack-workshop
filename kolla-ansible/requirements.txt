@@ -15,5 +15,4 @@ python-troveclient
 python-octaviaclient
 python-gilt
 munch
-tmuxp
 redis

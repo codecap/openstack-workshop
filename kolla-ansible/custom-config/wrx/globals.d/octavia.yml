@@ -1,5 +1,9 @@
 ---
 enable_octavia: "yes"
 octavia_provider_drivers: amphora:Amphora
-# Redis must be enabled when using octavia jobboard (Amphora)
-enable_redis: "yes"
+# 2025.1
+enable_redis:   "yes"
+enable_valkey:  "no"
+# 2025.2
+enable_redis:   "no"
+enable_valkey:  "yes"
