@@ -128,7 +128,7 @@ qm create $TEMPL_ID \
 qm importdisk $TEMPL_ID /tmp/noble-server-cloudimg-amd64.img local-lvm
 
 qm set $TEMPL_ID --scsi0 local-lvm:vm-$TEMPL_ID-disk-0
-qm set $TEMPL_ID--boot c --bootdisk scsi0
+qm set $TEMPL_ID --boot c --bootdisk scsi0
 
 qm set $TEMPL_ID --serial0 socket --vga serial0
 
@@ -312,7 +312,7 @@ print-create-env-commands  | grep <NODE_FILTER> | bash
 
 ```bash
 BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/main
-
+PROXY=http://proxy.wrx.sckt.net:3128
 INFRA_NODES="dns|proxy|registry"
 DEPLOY_NODES="deployment|recorder"
 
@@ -324,17 +324,11 @@ ssh -t registry "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/registry.sh |
 
 # Deployment Nodes
 print-create-env-commands  | grep -E "$DEPLOY_NODES" | bash
-ssh -t recorder "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/recorder.sh | bash'"
-
-# Environment Nodes
-print-create-env-commands  | grep -E "$INFRA_NODES|$DEPLOY_NODES"   | bash
-
-# copy the ssh keys to deployment, so the node can be used as jump host
+ssh -t recorder "sudo -i bash -c 'curl --proxy $PROXY -L $BASE_PATH/scripts/infra/recorder.sh | bash'"
 scp /root/.ssh/id_rsa* deployment:/home/deploy/.ssh
 
-
-# FIXME: disks on cephosd nodes 100Gb should be available for OSDs 
-
+# Environment Nodes
+print-create-env-commands  | grep -v -E "$INFRA_NODES|$DEPLOY_NODES"   | bash
 ```
 
 ---
