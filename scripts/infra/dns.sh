@@ -103,6 +103,7 @@ cat > /var/lib/dnsmasq/hosts.d/hosts <<EOF
 10.14.0.10    dns.wrx.sckt.net
 10.14.0.17    registry.wrx.sckt.net
 10.14.0.19    proxy.wrx.sckt.net
+10.14.0.24    deployment.wrx.sckt.net
 10.14.0.25    recorder.wrx.sckt.net
 EOF
 

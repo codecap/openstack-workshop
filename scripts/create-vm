@@ -181,13 +181,20 @@ runcmd:
   - touch /etc/cloud/cloud-init.disabled
   - mv /etc/netplan/70-wrx-rename-ifaces.yaml.off /etc/netplan/70-wrx-rename-ifaces.yaml
   - netplan apply
+  - systemctl restart systemd-timesyncd
 fs_setup:
   - device:     /dev/sdb
     filesystem: ext4
     overwrite:  true
 mounts:
-  - [ /dev/sdb, /var/lib/docker, "ext4", "defaults,nofail", "0", "2" ]
+  - [ /dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1, /var/lib/docker, "ext4", "defaults,nofail", "0", "2" ]
 write_files:
+  - path:        /etc/systemd/timesyncd.conf
+    owner:       root:root
+    permissions: '0644'
+    content: |
+      [Time]
+      NTP=10.14.0.19
   - path:        /etc/vim/vimrc.local
     owner:       root:root
     permissions: '0644'
@@ -290,13 +297,14 @@ write_files:
     permissions: '0644'
     content: |
       {
-        id:        $VMID,
-        name:      "$NAME",
-        cpu:       $CPU,
-        ram:       $RAM,
-        disks:     $DISKS_JSON,
-        netconf:   $NETCONF_JSON,
-        airgapped: "$AIRGAPPED"
+        "id":        $ID,
+        "vmid":      $VMID,
+        "name":      "$NAME",
+        "cpu":       $CPU,
+        "ram":       $RAM,
+        "disks":     $DISKS_JSON,
+        "netconf":   $NETCONF_JSON,
+        "airgapped": "$AIRGAPPED"
       }
 EOF
 
