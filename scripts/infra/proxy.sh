@@ -1,11 +1,11 @@
 #!/bin/bash
 neplan apply
 
+apt update
+apt install squid -y
 mkdir     /etc/squid/conf.d
 chmod 644 /etc/squid/conf.d
 echo "http_access allow localnet" > /etc/squid/conf.d/70-wrx-allow-localnet.conf
-apt update
-apt install squid -y
 systemctl enable  squid
 systemctl restart squid
 
