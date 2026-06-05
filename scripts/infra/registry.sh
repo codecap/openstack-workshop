@@ -18,7 +18,7 @@ cp harbor.yml.tmpl harbor.yml
 # set admin password
 sed -e "s/^harbor_admin_password:.*/harbor_admin_password: $HARBOR_PASS/" -i harbor.yml
 # change default data path
-sed -e "s/^data_volume:.*/data_volume: $HARBOR_DATA_PATH/" -i harbor.yml
+sed -e "s#^data_volume:.*#data_volume: $HARBOR_DATA_PATH#" -i harbor.yml
 # change the hostname
 sed -e "s/^hostname:.*/hostname: registry.wrx.sckt.net/"   -i harbor.yml
 # switch off https
