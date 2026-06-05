@@ -1156,8 +1156,40 @@ is a human-readable label that represents a **physically isolated slice of data 
 * Cooling Domain
 * Top-of-Rack (ToR) Switch Domain
 * Storage Backend
+
+---
+# Availalbility Zones
+![bg right:50% 30%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# FIXME: how to use / configre
+openstack aggregate create hw-type-A
+openstack aggregate create hw-type-B
+openstack aggregate create windows
+openstack aggregate create gpu
+
+openstack aggregate create --zone az1 prd-az1
+openstack aggregate create --zone az2 prd-az2
+
+openstack aggregate add host prd-az1 compute01
+openstack aggregate add host prd-az1 compute02
+openstack aggregate add host prd-az1 compute03
+
+openstack aggregate add host hw-type-A compute01
+openstack aggregate add host hw-type-A compute02
+openstack aggregate add host hw-type-A compute03
+openstack aggregate add host hw-type-B compute11
+
+openstack aggregate add host windows compute01
+openstack aggregate add host windows compute11
+
+openstack aggregate add host gpu compute11
+
+openstack aggregate show windows
+openstack aggregate show prd-az1
+openstack aggregate show prd-az2
+
+openstack availability zone list --compute
+openstack availability zone list --network
+openstack availability zone list --volume
 ```
 
 ---

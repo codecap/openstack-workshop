@@ -212,7 +212,11 @@ iface brstrg1 inet manual
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-# vimbr0 is used for public0
+auto brpblc0
+iface brpblc0 inet manual
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
 EOF
 
 systemctl restart networking.service

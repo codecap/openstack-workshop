@@ -42,11 +42,6 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 
 # Architecture
-<div class="mermaid">
-graph LR
-    A[User] --> B[OpenStack]
-    B --> C[Ceph]
-</div>
 
 ---
 # OpenStack Distrubutions
