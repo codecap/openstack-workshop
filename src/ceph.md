@@ -77,49 +77,60 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 # Deploy Ceph with Cephadm
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-CEPH_VERSION="19.2.0"
-sudo apt install cephadm=${CEPH_VERSION}* ceph-common=${CEPH_VERSION}* python3-jinja2 -y
+sudo apt install cephadm ceph-common python3-jinja2 -y
 
 # distribute the ssh keys
 for i in cephmon0{1..3} cephosd0{1..3} cephgra01
 do
-  ssh -i ~/.ssh/id $i 'sudo sed -i /root/.ssh/authorized_keys -e "/deploy@wrx.sckt.net/d"'
-  ssh -i ~/.ssh/id $i 'echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEYZl8sqrmFQsjEZG7yJkLVuAY3AZQogLCK86EZPVCeB deploy@wrx.sckt.net" \
+  # remove keys
+  ssh -i ~/.ssh/id $i.mgmt 'sudo sed -i /root/.ssh/authorized_keys -e "/command=/d"'
+  # add keys
+  ssh -i ~/.ssh/id $i.mgmt 'echo "'$(cat ~/.ssh/id_rsa.pub)'" \
   | sudo tee -a /root/.ssh/authorized_keys'
 done
 ```
 
 ---
 # Deploy Ceph with Cephadm
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-CEPH_VERSION="19.2.1"                                                       📋
+#                                                                           📋
+CEPH_VERSION="19.2.1"
 CEPH_FSID="1959570b-e2e3-4017-a5dc-c7606c5068fd"
-CONFIG="~/ceph/initial-ceph.conf"
-SPEC="~/ceph/spec.yaml"
-SSH_DIR="~/.ssh"
+CEPH_CONFIG="$HOME/ceph/initial-ceph.conf"
+CEPH_SPEC="$HOME/ceph/spec.yaml"
+CEPH_MON_IP=$(ip -br a | grep strg0 | awk '{print $NF}' | cut -d / -f 1)
+CEPH_PUBLIC_NET="10.20.21.0/24"
+CEPH_CLUSTER_NET="10.20.22.0/24"
 CEPH_IMAGE="registry.wrx.sckt.net/quay/ceph/ceph:v$CEPH_VERSION"
+SPEC="$HOME/ceph/spec.yaml"
+SSH_DIR="$HOME/.ssh"
 
 #ceph cephadm generate-key
 #ceph cephadm get-pub-key > ceph.pub
 #ssh-copy-id -f -i ceph.pub root@daisy
 
 cd ~/ceph
-sudo cephadm --image "$CEPH_IMAGE"                 \
-  bootstrap                                        \
-    --fsid $CEPH_FSID                              \
-    --config $CONFIG                               \
-    --apply-spec $SPEC                             \
-    --mon-ip 10.20.21.16                           \
-    --cluster-network 10.20.22.0/24                \
-    --ssh-private-key $SSH_DIR/id                  \
-    --ssh-public-key  $SSH_DIR/id.pub              \
-    --initial-dashboard-password  p@ssw0rd         \
-    --dashboard-password-noupdate                  \
-    --allow-fqdn-hostname                          \
-    --skip-firewalld
+sudo cephadm --image "$CEPH_IMAGE"                    \
+  bootstrap                                           \
+    --fsid                        $CEPH_FSID          \
+    --config                      $CEPH_CONFIG        \
+    --mon-ip                      $CEPH_MON_IP        \
+    --cluster-network             $CEPH_CLUSTER_NET   \
+    --ssh-private-key             $SSH_DIR/id_rsa     \
+    --ssh-public-key              $SSH_DIR/id_rsa.pub \
+    --initial-dashboard-password  p@ssw0rd            \
+    --dashboard-password-noupdate                     \
+    --allow-fqdn-hostname                             \
+    --skip-firewalld                                  \
+    --single-host-defaults
 
-until ceph -s | grep -q HEALTH_OK; do ceph -s; sleep 30; done
+# wait a moment
+until sudo ceph -s | grep -q HEALTH_OK; do sudo ceph -s; sleep 5; done
+
+# continue
+sudo ceph orch apply -i $CEPH_SPEC
+
 ```
 
 
@@ -142,7 +153,7 @@ ceph osd crush rule rm replicated_rule
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ### Create client keys for openstack services
 ```bash
-# On the deployment node, create the .keyring files
+# On the deployment node, create the .keyring files                         📋
 cat > /etc/ceph/ceph.client.glance.keyring <<EOF
 [client.glance]
         key = AQBqB/JpuJQKDRAACBv/LtaMfeBa4cG3s/5WCg==
@@ -177,7 +188,7 @@ EOF
 for f in glance cinder cinder-backup nova openstack
 do
   chown 0600           /etc/ceph/ceph.client.${f}.keyring
-  sudo ceph  auth import -i /etc/ceph/ceph.client.${f}.keyring
+  ceph  auth import -i /etc/ceph/ceph.client.${f}.keyring
 done
 ```
 
@@ -248,8 +259,8 @@ ceph osd tree
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 - [Ceph/Dashboard](https://cephmon01.strg.wrx.sckt.net:8443)
 - [Grafana/Monitoring](https://cephgra01.strg.wrx.sckt.net:3000)
-- [Prometheus/Monitroing](https://cephgra01.strg.wrx.sckt.net:9095)
-- [Alertmanager](https://cephgra01.strg.wrx.sckt.net:9093)
+- [Prometheus/Monitroing](http://cephgra01.strg.wrx.sckt.net:9095)
+- [Alertmanager](http://cephgra01.strg.wrx.sckt.net:9093)
 
 
 ---
@@ -321,10 +332,16 @@ Ceph maintains all cluster topology, which includes five maps called the “Clus
 
 **OSD Map**: contains the cluster fsid, when the map was last created and modified, a list of pools, replica sizes, PG numbers, a list of OSDs and their status (for example, up, in and down). To view an OSD map, run ceph osd dump .
 
+---
+# Cluster Map
+
 **PG Map**: Contains the PG version, its time stamp, the last epoch of the OSD map, the complete proportions and details of each positioning group, such as PG ID, Up Set, Active, PG status (for example, active + clean) and data usage statistics for each pool.
 
 **CRUSH Map**: Contains a list of storage devices, the fault domain hierarchy (for example, device, host, rack, line, room, etc.) and rules for going through the hierarchy when storing data.
 You can view the decompiled map in a text editor.
+
+---
+# Cluster Map
 
 **MDS Map (CEPHFS)**: Contains the current time of the MDS map, when the map was created and the last time it was changed. It also contains the pool to store metadata, a list of metadata servers and which metadata servers are active and available. To view an MDS map, run ceph mds dump
 
@@ -391,8 +408,8 @@ ceph osd pool rename ...
 ceph osd pool repair [POOL]
 ceph osd pool scrub  [POOL]
 
-ceph osd pool get {POOL} size
-ceph osd pool get {POOL} crush_rule
+ceph osd pool get <POOL> size
+ceph osd pool get <POOL> crush_rule
 ceph osd pool set ...
 ```
 ---
@@ -545,7 +562,7 @@ radosgw-admin user info --uid  demo-user
 
 ---
 # aws-cli example
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
 # Install and Configre awscli                                               📋
 pip3 install awscli awscli-plugin-endpoint
@@ -587,7 +604,7 @@ cat  /tmp/test.txt
 
 ---
 # mc example
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
 # Install and Configre mc client                                            📋
 sudo curl --proxy proxy.wrx.sckt.net:3128            \
@@ -706,10 +723,37 @@ apt install -y cephadm-<VERSION> ceph-common-<VERSION>
 ```
 
 ---
-# Replace a Controller node
+# Replace a Mon Node
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
+# 🚧 on deployment cephmon03 from the cluster                               📋
+for l in _admin mds mgr mon nfs rbd-mirror rgw
+do
+  ceph orch host label rm cephmon03 $l
+done
+ceph orch host drain cephmon03
+# wait a bit
+ceph -s
+ceph orch host rm cephmon03
 
+# 🚧 on cephmon03
+systemctl stop ceph.target
+rm -rf  /etc/ceph/ /var/lib/ceph/* /var/log/ceph/* /etc/systemd/system/ceph*
+systemctl daemon-reload
+docker image ls | awk '{print $3}' | xargs docker rmi
+
+# 🩺 check status on deployment node
+ceph -s
+ceph orch host ls
+ceph orch ls
+ceph orch ps
+
+# 🚚 Redeploy
+ceph orch apply -i spec.yaml
+
+# 🩺 check status on deployment nodw
+ceph -s
+ceph orch ps
 ```
 
 ---
@@ -725,16 +769,16 @@ ceph osd set noout
 ceph osd set norecover
 
 
-# Let's break it down, on cephosd03
+# 💥 Let's break it down, on cephosd03
 dd if=/dev/zero of=/dev/sde bs=1024 count=$((1024*10))
 
-# check status
+# 🩺 check status
 ceph osd tree
 ceph status
 ceph health detail
 ceph device ls
 
-# repair
+# 🚧 Rebuild
 ceph orch ls osd --export
 ceph orch set-unmanaged   osd.ssd
 ceph orch ls osd
@@ -751,19 +795,22 @@ ceph health detail
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
 ```bash
-# Set  initial weight to 0  to control recovery                             📋
+# 🚧 Set  initial weight to 0  to control recovery                          📋
 ceph config get osd osd_crush_initial_weight
 ceph config set osd osd_crush_initial_weight 0
 
+# 🚚 Redeploy
 ceph orch set-managed   osd.ssd
 ceph orch ls osd
 ceph osd tree
 ceph device ls
 
+# 🩺 Check 
 ceph osd tree
 ceph osd df
 ceph pg ls-by-osd <OSD_NR>
 
+# 🚚 Allow data distrubution again
 ceph osd crush reweight <OSD> <WEIGHT>
 
 ceph config set osd osd_crush_initial_weight -1
@@ -780,6 +827,7 @@ ceph osd unset norecover
 ceph osd set noout
 ceph osd set norecover
 
+# 🚧 Drain the openstack compute host
 ceph orch host drain <hostname>
 ceph orch host drain status
 ceph orch device ls  [hostname]
@@ -791,13 +839,13 @@ ceph orch set-managed osd.ssd
 ceph orch apply -i spec.yaml
 
 # Rebuild the host
-# NOTE: add the ssh key for the ceph deployment in authorized_keys on the host
+# ⚠️ add the ssh key for the ceph deployment in authorized_keys on the host
 
-# check the status
+# 🩺 check the status
 ceph status
 ceph health detail
 
-# NOTE: you may want to control the recovery process, check available options
+# ⚠️ you may want to control the recovery process, check available options
 
 ceph osd unset noout
 ceph osd unset norecover
@@ -817,14 +865,12 @@ ceph osd unset norecover
 
 ```
 
-
 ---
-# Modify an activate a spec
+# Modify and activate a spec
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
 
 ```
-
 
 ---
 # Benchmarking
@@ -864,9 +910,91 @@ rbd rm  test/benchmark
 
 ---
 # Performance tests
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![bg right:45% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+### **Simple - Standard tests with dd**
 ```bash
-# fio                                                                       📋
+# Big file
+dd if=/dev/random of=./testfile bs=1G count=1 oflag=direct
+# Many small files
+dd if=/dev/zero of=./testfile bs=512 count=1000 oflag=dsync
+```
+
+
+---
+# Performance tests
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+### **Sequential Throughput (1MB)**
+*Simulates: Large file transfers, VM migrations, backups.*
+```bash
+# dd if=/dev/zero of=testfile bs=1M count=2048 oflag=direct
+fio                  \
+--name=baseline_seq  \
+--ioengine=libaio    \
+--direct=1           \
+--bs=1M              \
+--size=2G            \
+--rw=write           \
+--iodepth=8          \
+--numjobs=1          \
+--group_reporting    \
+--runtime=60
+```
+---
+# Performance tests
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+### **Random IOPS (4KB)**
+*Simulates: General OS responsiveness and small metadata operations.*
+```bash
+# dd if=testfile of=/dev/null bs=4k count=262144 iflag=direct
+fio                  \
+--name=baseline_iops \
+--ioengine=libaio    \
+--direct=1           \
+--bs=4k              \
+--size=1G            \
+--rw=randrw          \
+--rwmixread=100      \
+--iodepth=32         \
+--numjobs=1          \
+--group_reporting    \
+--runtime=60
+```
+
+---
+# Performance tests
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+### **PostgreSQL (8KB Blocks)**
+```bash
+fio                \
+--name=db_postgres \
+--ioengine=libaio  \
+--direct=1         \
+--bs=8k            \
+--size=2G          \
+--rw=randrw        \
+--rwmixread=70     \
+--iodepth=16       \
+--numjobs=2        \
+--group_reporting  \
+--runtime=120
+```
+---
+# Performance tests
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+### **MySQL/MariaDB (16KB Blocks)**
+```bash
+fio               \
+--name=db_mysql   \
+--ioengine=libaio \
+--direct=1        \
+--bs=16k          \
+--size=2G         \
+--rw=randrw       \
+--rwmixread=70    \
+--iodepth=16      \
+--numjobs=2       \
+--group_reporting \
+--runtime=120
 ```
 
 ---

@@ -48,41 +48,58 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 ---
 # Tempest
-## Install
-![bg right:30% 50%](https://www.openstack.org/software/images/mascots/tempest.png)
+## **Install**
+![bg right:50% 30%](https://www.openstack.org/software/images/mascots/tempest.png)
 [Release Notes Tempest v45](https://docs.openstack.org/releasenotes/tempest/v45.0.0.html)
 
 ```bash
 # Install tempest on testing node                                           📋
-sudo apt install build-essential python3.12-dev
+sudo apt install build-essential python3.12-dev -y
 
 python3 -m venv ~/venv/tempest
 echo ""                                   >> ~/.profile
 echo "source ~/venv/tempest/bin/activate" >> ~/.profile
 source ~/.profile
 
-pip install -U pip
+pip install -U pip --proxy http://proxy.wrx.sckt.net:3128
 
-pip3 install -r \
+pip install --proxy http://proxy.wrx.sckt.net:3128 -r \
   https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/requirements.txt
 ```
 
 ---
 # Tempest
-## Configuration
-![bg right:30% 50%](https://www.openstack.org/software/images/mascots/tempest.png)
+## **Configuration**
+![bg right:50% 30%](https://www.openstack.org/software/images/mascots/tempest.png)
 ```bash
-# Source your openr(credentials) file                                       📋
+# Copy admin-openrc.sh file from deployment to testing node                 📋
+scp ~/openstack/custom-config/wrx/admin-openrc.sh testing.mgmt:~/
+
+# On testing node source your openr(credentials) file
 source ~/admin-openrc.sh
 
 # The configuration script
 CONF_SCRIPT=https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/configure.sh
 
 # Review
-curl $CONF_SCRIPT
+curl --proxy http://proxy.wrx.sckt.net:3128 -L $CONF_SCRIPT
 
 # Run
-curl $CONF_SCRIPT | bash
+curl --proxy http://proxy.wrx.sckt.net:3128 -L $CONF_SCRIPT | bash
+
+# Review generated config
+cd  ~/tempest-45
+cat etc/tempest.conf
+
+# Create a list of available tests
+stestr list > tests-available.list
+# Create a list of smoketests
+cat tests-available.list | grep smoke > smoke-tests.list
+
+# How to run
+tempest run --load-list smoke-tests.list  --regex tempest.api.network.test_security_groups.SecGroupTest.test_list_security_groups
+
+  
 
 ```
 
@@ -118,6 +135,3 @@ source ~/automation-openrc.sh
 
 ./api_monitor.sh -o -C -D -n 1 -B -T -s 10 -W 45
 ```
-
----
-# Ansible / Terraform

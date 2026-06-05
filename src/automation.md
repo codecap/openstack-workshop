@@ -31,21 +31,32 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 ---
 # Ansible
+![bg right:30% 50%](https://www.svgrepo.com/show/373429/ansible.svg)
+
 ```bash
+# On Testing node                                                           📋
 python3 -m venv ~/venv/ansible
 source  ~/venv/ansible/bin/activate
 
+# Clone openstack-workshop git repository
+git clone -c http.proxy="http://proxy.wrx.sckt.net:3128"  \
+          -c https.proxy="http://proxy.wrx.sckt.net:3128" \
+          https://github.com/codecap/openstack-workshop.git
 
-git clone https://github.com/codecap/openstack-workshop.git
-cd  openstack-workshop/ansible
-pip install -U pip
-pip install -r requirenments.txt
+# Install dependencies for ansible
+cd  openstack-workshop/automation/ansible
+pip install --proxy=http://proxy.wrx.sckt.net:3128 -U pip
+pip install --proxy=http://proxy.wrx.sckt.net:3128 -r requirenments.txt
 
-ansible-galaxy collection install -r requirenments.yaml --force
+# Install dependencies via ansible-galaxy
+http_proxy=http://proxy.wrx.sckt.net:3128  \
+https_proxy=http://proxy.wrx.sckt.net:3128 \
+ansible-galaxy collection install -r requirenments.yml --force
 ```
 
 ---
 # Credentials
+![bg right:30% 50%](https://www.svgrepo.com/show/529035/key-minimalistic-square-3.svg)
 ```bash
 cat > ~/automation-openrc.sh<<"EOF"
 
@@ -65,7 +76,11 @@ export OS_PROJECT_NAME=automation
 export OS_PASSWORD=automation
 export OS_IDENTITY_API_VERSION=3
 EOF
-
+```
+---
+# Credentials
+![bg right:30% 50%](https://www.svgrepo.com/show/529035/key-minimalistic-square-3.svg)
+```bash
 cat > clouds.yml <<EOF
 ---
 clouds:
@@ -86,55 +101,62 @@ EOF
 
 ---
 # Run
+![bg right:30% 50%](https://www.svgrepo.com/show/373429/ansible.svg)
 ```bash
-
+# Create automation project
+source ~/admin-openrc.sh 
 ansible-playbook playbooks/create-project.yml
 
+# Create Test Infra in automation project
+source ~/automation-openrc.sh 
 ansible-playbook playbooks/create-infra.yml
 
+# Destroy Test Infra
 ansible-playbook playbooks/destroy-infra.yml
-
-
 ```
 
 
 
 ---
 # Terraform
-
+![bg right:50% 30%](https://www.svgrepo.com/show/354447/terraform-icon.svg)
 
 ```bash
-# Preparations
+# Install terraform on testing node                                         📋
+KEYRING_PATH=/usr/share/keyrings/hashicorp-archive-keyring.gpg
 
-curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+curl -fsSL https://apt.releases.hashicorp.com/gpg \
+  --proxy http://proxy.wrx.sckt.net:3128          \
+  | sudo gpg --dearmor -o $KEYRING_PATH
+
+echo "deb [signed-by=$KEYRING_PATH] https://apt.releases.hashicorp.com $(lsb_release -cs) main" \
+  | sudo tee /etc/apt/sources.list.d/hashicorp.list
 sudo apt-get update && sudo apt-get install terraform
 
+cd ../terraform
 terraform --version
 
-cd automation/terraform
+# Download providers
+http_proxy=http://proxy.wrx.sckt.net:3128  \
+https_proxy=http://proxy.wrx.sckt.net:3128 \
 terraform init
 
 ls -la
 cat .terraform.lock.hcl
 terraform providers 
 
-
-
-
+# Run
 TF_VAR_os_password=$OS_PASSWORD terraform plan
-
 TF_VAR_os_password=$OS_PASSWORD terraform apply -auto-approve
-
-
 ```
 
 
 
 ---
 # Testinfra
+![bg right:50% 30%](https://testinfra.readthedocs.io/en/latest/_static/logo.svg)
 
 ```bash
-
+cd ../testinfra/
 py.test  --hosts=ssh://ubuntu@<SERVER_IP> server.py -v
 ```

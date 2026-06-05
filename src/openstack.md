@@ -123,8 +123,8 @@ cat >> ~/.profile <<"EOF"
 # openstack vars
 
 export OPENSTACK_DIR=~/openstack
-VENV_PATH=~/venv/2024.1
 KOLLA_ANSIBLE_RELEASE=20 # OS 2025.1
+VENV_PATH=~/venv/kolla-ansible-$KOLLA_ANSIBLE_RELEASE
 
 if [ -z "$VIRTUAL_ENV" ]
 then
@@ -141,7 +141,6 @@ fi
 
 export PATH=~/openstack/bin/:$PATH
 export PS1="[\u@\h \W|\[\e[1;32m\]\$OS_USERNAME.\$OS_PROJECT_NAME\[\e[m\]]\$"
-alias wrx-stack='tmuxp load -y ~/openstack-workshop/conf/tmuxp.yaml'
 source <(openstack complete)
 EOF
 ```
@@ -152,7 +151,10 @@ EOF
 
 ```bash
 # Prepare python virtual environment                                        📋
+cd ~/openstack/
 source ~/.profile
+# Some error are expected here
+
 python3 -m venv $VENV_PATH
 
 ln -s  $VENV_PATH ~/venv/openstack
@@ -166,7 +168,7 @@ pip install -r requirements.txt
 kolla-ansible install-deps
 
 # ⚠️ NOTE: fix for prometheus 05.2026
-pip install "bcrypt<5.0.0"
+# pip install "bcrypt<5.0.0"
 
 # Install additional dependencies
 gilt overlay
@@ -251,8 +253,9 @@ kolla-ansible check                -i inventory/wrx
 ![bg right:30% 90%](https://superuser.openinfra.org/wp-content/uploads/2025/01/1_q6dlalwfoVWwUqFmo4I-9g.png)
 ```bash
 # Create first basic test resources                                         📋
-
+# FIXME:
 KOLLA_CONFIG_PATH=~/openstack/custom-config/wrx/    \
+ENABLE_EXT_NET=0                                    \
 EXT_NET_CIDR=10.10.61.0/24                          \
 EXT_NET_GATEWAY=10.10.61.1                          \
 EXT_NET_RANGE="start=10.10.61.240,end=10.10.61.245" \
@@ -525,30 +528,31 @@ diff -y --suppress-common-lines  custom-config/wrx/passwords.yml custom-config/w
 ## Go
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# Create config backups                                                     📋
+# 💾 Create config backups                                                  📋
 ansible  all -b -m ansible.builtin.shell -a \
   "mkdir -p ~/backup; cp  -r /etc/kolla ~/backup/$(date +%y%m%d%H%M%S)_kolla" 
 
-# force to collect facts
+# 🗂️ force to collect facts
 kolla-ansible gather-facts -i inventory/wrx
 
-# Check
+# 🩺 Check
 kolla-ansible prechecks    -i inventory/wrx
 
-# Pull images
+# 📥 Pull images
 kolla-ansible pull         -i inventory/wrx
 
-# Upgrade
+# 🚚 Upgrade
 kolla-ansible upgrade      -i inventory/wrx
 ```
 ---
-# High Availbility
+# High Availability
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 * Keepalived & HAProxy (controllers)
 * Stateless API Services
 * MariaDB Galera Cluster as State Store
 * Message Broker(RabbitMQ)
 * Multiple nodes of each type
+* 
 ---
 # Debugging RabbitMQ
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
@@ -574,28 +578,25 @@ rabbitmqctl delete_queue  <QUEUE_NAME>
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # Some useful commands for debugging                                        📋
-grep -r [RESOUCE_ID] /var/log/kolla/[SERVICE]
 
-# FIXME
+# On each nodes
 docker ps  | grep unhealthy
-
 df -Ph
 
+# on controller node
+tail -f /var/log/kolla/mariadb/mariadb.log
+tail -f /var/log/kolla/rabbitmq/rabbit*.log
 
-tail mysql
-
-tail rabbitmq
-
-
+# on deployment node
 openstack compute service list
-
 openstack volume  service list
-
 openstack network agent   list
 
-# check haproxy
+# check HA IP on controller nodes
+ip -br a
 
-# check HA IP
+# Searching for error messages connected with a resource
+grep -r [RESOUCE_ID] /var/log/kolla/[SERVICE]
 ```
 
 ---
@@ -675,13 +676,13 @@ Visit:
 # Prepare Images                                                            📋
 mkdir -p  ~/cloud-images/
 
-ALMA_VERSION="10.1"
+ALMA_VERSION="10.2"
 ALMA_IMG_NAME=$(
   curl -sS https://repo.almalinux.org/almalinux/10/cloud/x86_64/images/CHECKSUM  \
    | grep GenericCloud-$ALMA_VERSION | awk '{print $2}' |  sort  | tail -n1)
 ALMA_LINK=https://repo.almalinux.org/almalinux/10/cloud/x86_64/images/$ALMA_IMG_NAME
 
-ROCKY_VERSION="10.1"
+ROCKY_VERSION="10.2"
 ROCKY_IMG_NAME=$(
   curl -sS https://dl.rockylinux.org/pub/rocky/10/images/x86_64/CHECKSUM \
   | grep SHA256 | awk '{print $2}'  | grep GenericCloud-LVM-$ROCKY_VERSION \
@@ -769,10 +770,6 @@ sed  -e "s/OS_USERNAME=.*/OS_USERNAME=$USR_NAME/"         -i custom-config/wrx/w
 # review
 cat    custom-config/wrx/workshop-openrc.sh
 
-# activate
-source custom-config/wrx/workshop-openrc.sh
-
-# use
 openstack network list
 openstack router  list
 openstack server  list
@@ -794,6 +791,7 @@ openstack server  list
 
 ```bash
 # Create external network (vlan backed)                                     📋
+# as admin
 EXT_NET_VLAN=3010
 EXT_NET_NAME="shared${EXT_NET_VLAN}"
 EXT_NET_CIDR='10.30.10.0/24'
@@ -819,31 +817,36 @@ openstack subnet create  ${EXT_NET_NAME}-subnet \
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # Create external network (vxlan backed)                                    📋
+# as workshop user in workshop project
+
+# activate
+source custom-config/wrx/workshop-openrc.sh
+
 PRJ_NAME=workshop
-openstack network create workshop-net        \
-  --project $PRJ_NAME                        \
-  --provider-network-type vxlan
+openstack network create workshop-net
 
 openstack subnet create workshop-subnet \
-  --project $PRJ_NAME                   \
   --subnet-range 10.10.10.0/24          \
   --network workshop-net                \
   --gateway 10.10.10.1
 
-openstack router create workshop-router --project $PRJ_NAME
+openstack router create workshop-router
 openstack router add subnet workshop-router workshop-subnet
 openstack router set --external-gateway shared3010 workshop-router
 ```
 
 ---
-# Networking - Virtual Machines
-![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+# Networking - VMs
+![bg right:50% 30%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# Create first instances                                                    📋
+# as workshop user in workshop project
+
 IMAGE_NAME=ubuntu-24.04
 # IMAGE_NAME=alma-10.1
 # IMAGE_NAME=rocky-10.1
 # IMAGE_NAME=debian-13
+
+openstack keypair create --public-key ~/.ssh/id_ecdsa.pub mykey
 
 openstack server create          \
   --image    ${IMAGE_NAME}       \
@@ -863,16 +866,14 @@ openstack server create                  \
 
 
 ---
-# Networking - How to access?
+# Networking
+## **How to access?**
 ![bg right:35% 90%](../assets/openstack/networking-how-to-access.svg)
 
 ```bash
 # Create a config for a vlan interface                                      📋
 # on the testing node as root
-myid=$(
-  ip -br a | grep mgmt0 | awk '{print $NF}' |\
-  awk -F '/' '{print $1}' | awk -F '.' '{print $NF}'
-)
+myid=$(cat /etc/env.json  | jq .id)
 
 cat > /etc/netplan/80-vlan.yaml <<EOF
 network:
@@ -884,7 +885,7 @@ network:
       dhcp4: false
       dhcp6: false
       id: 3010
-      link: xtrn0
+      link: eth3
       link-local: []
 EOF
 
@@ -894,18 +895,40 @@ netplan apply
 ```
 
 ---
-# Networking - How to access ?
-![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+# Networking
+## **How to access ?**
+![bg right:50% 30%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # copy the ssh key from deployment to testing                               📋
-scp ~/.ssh/id_ecdsa testing.mgmt.wrx.sckt.net:~/.ssh/
+scp ~/.ssh/id_ecdsa* testing.mgmt.wrx.sckt.net:~/.ssh/
 
 # assign  floating ips to vms
 openstack floating ip  create shared3010
-openstack server add floating ip vm0 <IP>
+FIP_VM0=$(
+  openstack floating ip  create shared3010 -f value -c floating_ip_address
+)
+openstack server add floating ip vm0 $FIP_VM0
 
-openstack floating ip  create shared3010
-openstack server add floating ip vm1 <IP>
+FIP_VM1=$(
+  openstack floating ip  create shared3010 -f value -c floating_ip_address
+)
+openstack server add floating ip vm1 $FIP_VM1
+
+# Review assigned IPs
+openstack server list
+
+# Allow access to vm0
+openstack security group create allow-simple-access
+openstack security group rule create allow-simple-access \
+  --protocol tcp \
+  --dst-port 22 \
+  --remote-ip 0.0.0.0/0 \
+  --ingress
+openstack security group rule create allow-simple-access   \
+  --protocol icmp \
+  --remote-ip 0.0.0.0/0 \
+  --ingress
+openstack server add security group vm0 allow-simple-access
 
 # You shold be able to connect to VMs from the testing node
 ping -c 3 <IP>
@@ -914,7 +937,8 @@ ssh -i ~/.ssh/id_ecdsa ubuntu@<IP>
 
 
 ---
-# Networking - Debugging
+# Networking
+## **Debugging**
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # Check VMs and IPs assigned to them                                        📋

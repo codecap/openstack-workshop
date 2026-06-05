@@ -62,11 +62,11 @@ graph LR
 
 
 ---
-# Architecture - OpenStack
+# OpenStack
 ![w:900 ](https://www.openstack.org/static/000588f8b89d94da80eba6101f72ff7a/openstack-map-v20240401.png)
 
 ---
-# Architecture - OpenStack
+# Workshop Environment
 [//]: # (how does it look like in our simple environment?)
 
 
@@ -75,8 +75,8 @@ graph LR
 ![](https://www.ironnetworks.com/sites/default/files/products/CEPH-graphic.png)
 
 ---
-# Architecture - Ceph
-[//]: # (how does it look like in our simple environment?)
+# Workshop Environment
+![ ](../assets/archtecture/ceph-environment.svg)
 
 
 ---
@@ -147,17 +147,13 @@ N3 <-.-> N1
 
 ---
 # Ceph Environment
-
-    
-
-
 ![ ](../assets/archtecture/ceph-environment.svg)
 
 
 ---
 # Node Groups
-- Deployment node
-- Infrastructure: registry, proxy, dns
+- Deployment Node
+- Infrastructure: registry, proxy, dns, recorder
 - OpenStack Nodes
 - Ceph Nodes
 
@@ -177,56 +173,35 @@ graph LR
         direction TB
         os(OpenStack)
         ceph(Ceph)
+        deploy("Deployment")
     end
     %% Connections
+    dns --> internet
     registry --> internet
     proxy --> internet
-    Environment --> Infrastructure
+    os --> registry
+    os --> dns
+    ceph --> registry
+    ceph --> dns
+    deploy --> proxy
+    deploy --> dns
+    deploy --> recorder
+    %%Environment --> Infrastructure
     %%registry --> os
 </div>
 
 ---
 # Deployment Node
-<div class="mermaid">
-architecture-beta
-    group deploy(cloud)[Deployment]
-      service ansible(database)[ansible]             in deploy
-      service kolla-ansible(server)["kolla-ansible"] in deploy
-      service cephadm(server)[cephadm]               in deploy
-</div>
+* service ansible
+* service kolla-ansible
+* service cephadm
 
 ---
 # Baremetal Node and VMs on it
-
-<div class="mermaid">
-graph LR
-  subgraph Controllers
-     direction LR
-     ni01["dns"]
-     ni02["registry"]
-     ni03["proxy"]
-     ni04["recorder"]
-     ni05["deployment"]
-     no01["controller01"]
-     no02["controller02"]
-     no03["controller03"]
-     no04["controller01"]
-     no05["controller02"]
-     no06["controller03"]
-     no07["compute01"]
-     no08["compute02"]
-     no09["compute03"]
-     no10["monitor"]
-     no11["testing"]
-     nc01["cephmon01"]
-     nc02["cephmon02"]
-     nc03["cephmon03"]
-     nc04["cephgra01"]
-     nc05["cephosd01"]
-     nc06["cephosd02"]
-     nc07["cephosd03"]
-  end
-</div>
+* Deployment VM
+* Infra VMs: 4
+* OpenStack VMs: 3xController, 3xNetwrok, 3(+)xCompute
+* Ceph VMs: 3xMons, 3(+) OSDs
 
 ---
 # Air-Gapped Environment

@@ -100,8 +100,10 @@ we will need at least a single baremetal node with either:
 
 ---
 # Proxmox
+![bg right:40% 50%](https://www.svgrepo.com/show/331552/proxmox.svg)
+
 ```bash
-# Install post-pve-install.sh
+# Install post-pve-install.sh                                               📋
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/tools/pve/post-pve-install.sh)"
 
 # Prepare a new template for VMs
@@ -138,83 +140,78 @@ qm cloudinit update $TEMPL_ID
 qm template $TEMPL_ID
 
 #Install Packages
-apt install -y \
+apt install -y  \
  bind9-dnsutils \
- curl    \
- git     \
- htop \
- jq      \
- tcpdump \
- tmux    \
- tmuxp   \
- crudini \
- vim     \
+ curl           \
+ git            \
+ htop           \
+ jq             \
+ tcpdump        \
+ tmux           \
+ tmuxp          \
+ crudini        \
+ vim            \
  yq
+```
 
-# Create Birdges
-cat > /etc/network/interfaces.d/wrx
+---
+# Proxmox
+![bg right:60% 35%](https://www.svgrepo.com/show/331552/proxmox.svg)
+```bash
+# Create Bridges                                                            📋
+cat > /etc/network/interfaces.d/wrx <<EOF
 auto cpln01
 iface cpln01 inet manual
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-
 auto dpln0
 iface dpln0 inet manual
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-
 auto brmgmt0
 iface brmgmt0 inet static
         address 10.14.0.8/24
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-
 auto brsrvc0
 iface brsrvc0 inet static
         address 10.34.10.8/24
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-
 auto brcpln0
 iface brcpln0 inet manual
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-
 auto brdpln0
 iface brdpln0 inet manual
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-
 auto brlmgt0
 iface brlmgt0 inet manual
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-
 auto brxtrn0
 iface brxtrn0 inet manual
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-
 auto brstrg0
 iface brstrg0 inet manual
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-
 auto brstrg1
 iface brstrg1 inet manual
         bridge-ports none
         bridge-stp off
         bridge-fd 0
-
 # vimbr0 is used for public0
 EOF
 
@@ -223,22 +220,12 @@ brctl show
 ```
 
 ---
-# Prepare a new Environment
-```bash
-
-# Create 
-```
-
-
----
 # Let's GO!
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
+
 
 ```bash
 git clone https://github.com/codecap/openstack-workshop.git
-
-# ln -s ~/openstack-workshop/cephadm       ~/ceph
-# ln -s ~/openstack-workshop/kolla-ansible ~/openstack
 
 cd openstack-workshop
 ./scripts/print-ssh-config  >> ~/.ssh/config
@@ -299,8 +286,8 @@ td:first-child {
 ```bash
 create-vm --id 10 --name dns.wrx.sckt.net --cpu 1 --ram 4096 --disks '[8]' --netconf '
      {
-       "mgmt0": {"ip": "10.14.0.10/24", "macaddr": "bc:24:11:99:04:0a"},
-      "srvc0": {"ip": "10.34.10.10/24", "macaddr": "bc:24:11:99:06:0a"}
+       "mgmt0": {"ip": "10.14.0.10/24",  "macaddr": "bc:24:11:99:04:0a"},
+       "srvc0": {"ip": "10.34.10.10/24", "macaddr": "bc:24:11:99:06:0a"}
      }'
 ```
 ---
@@ -315,59 +302,125 @@ print-create-env-commands | bash
 print-destroy-env-commands | bash
 
 # if you need to rebuild only a set or a single server, you can use grep with a matching filter
-
+print-destroy-env-commands | grep <NODE_FILTER> | bash
+print-create-env-commands  | grep <NODE_FILTER> | bash
 ```
 
 ---
-# Prepare
+# Create a workshop environment
+![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
 
 ```bash
 BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/main
 
-print-create-env-commands  | grep -E "dns"   | bash
-ssh -t dns "sudo bash -i -c 'curl -L $BASE_PATH/scripts/infra/dns.sh | bash'"
+INFRA_NODES="dns|proxy|registry"
+DEPLOY_NODES="deployment|recorder"
 
-print-create-env-commands  | grep -E "registry|proxy"   | bash
-ssh -t proxy    "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/proxy.sh | bash'"
+# Infra Nodes
+print-create-env-commands  | grep -E "$INFRA_NODES" | bash
+ssh -t dns      "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/dns.sh      | bash'"
+ssh -t proxy    "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/proxy.sh    | bash'"
 ssh -t registry "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/registry.sh | bash'"
 
-print-create-env-commands  | grep -E "deploy|recorder"   | bash
+# Deployment Nodes
+print-create-env-commands  | grep -E "$DEPLOY_NODES" | bash
 ssh -t recorder "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/recorder.sh | bash'"
-```
+
+# Environment Nodes
+print-create-env-commands  | grep -E "$INFRA_NODES|$DEPLOY_NODES"   | bash
+
+# copy the ssh keys to deployment, so the node can be used as jump host
+scp /root/.ssh/id_rsa* deployment:/home/deploy/.ssh
 
 
----
-# Prepare a working environment
-![bg right:25% 25%](https://api.iconify.design/file-icons:easybuild.svg)
-- single proxmox node
-- run post-pve-install.sh
-- create bridges accoding `network_conf`
-- install ubuntu image, prepare a new template for VMS
-- create VMs for the workshop
-```bash
-print-create-env-commands | bash
-```
-- test created environment
-```bash
-# TBD
+# FIXME: disks on cephosd nodes 100Gb should be available for OSDs 
+
 ```
 
 ---
-# Prepare proxy to access environment
-[//]: # ( FIXME
-putty generate a new key
-create a config for hypervisor
-create a config for deployment host
-configure firefox to use socks5 proxy
-)
+# Configure a Tunnel
+## To access environment
+![bg right:40% 30%](https://www.svgrepo.com/show/375447/identity-aware-proxy.svg)
+
+```bash
+* generate a new eddsa key with **PuTTYgen** an save it on your system
+* put the public key in ~/.ssh/authorized_key on:
+  * hypervisor (root)
+  * deployment (deploy)
+
+* Start PuTTy. Go to Connection -> SSH -> Auth -> Credentials. Load the Pricate Key
+* Go to Connection -> Data. Put "root" for "Auto-login usernmae"
+* Go to Session. Put the IP of your hypervisor,
+* Put the name for the session - "hypervisor". Save.
+* Press "Open" button, a new session should be opened
+
+* Create a new session with PuTTY
+  * Put 10.14.0.24 into "Host Name" Field
+  * Under Connection -> Data, put "deploy" for "Auto-login usernmae"
+  * Under Connection -> SSH -> Auth -> Credentials load the private key
+* Go to Connection -> SSH -> Tunnels
+  * Chose Dynamic
+  * Source Port: 8888
+  * Press "Add" button
+* Go to Connection -> Proxy
+  * set type to "SSH to proxy and port forward"
+  * set Proxy hostname to "hypervisor"
+  * set port to 22
+* Go to Session
+  * put deployment to "Saved Sessions"
+  * press "save
+  * press open
+```
 
 ---
-# Prepare ssh config on deplomyent node
+# Configure Proxy
+![bg right:40% 30%](https://www.svgrepo.com/show/375447/identity-aware-proxy.svg)
 ```bash
+* Open Firefoxx
+* Go to settings
+* Search for "proxy"
+* Choose "Manual Configuration" 
+* Put "127.0.0.1" in Socks-Host Field, Port: 8888
+* Choose SOCKS v5
+```
+
+---
+# SSH config
+![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
+
+```bash
+# On deployment node create SSH Config to access workshop environemnt       📋
 cat >> ~/.ssh/config <<EOF
-Host *.mgmt.wrx.sckt.net
+Host hypervisor hypervisor.wrx.sckt.net
+  User root
+
+Host *.mgmt *.mgmt.wrx.sckt.net *.wrx.sckt.net
+  User  deploy
+
+Host *
   User                  deploy
   StrictHostKeyChecking no
   UserKnownHostsFile    /dev/null
+EOF
+```
+
+---
+# Some Common Configs
+![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
+```bash
+# On deployment node check out the repository                               📋
+cd ~
+git clone https://github.com/codecap/openstack-workshop.git
+
+ln -s ~/openstack-workshop/kolla-ansible openstack
+ln -s ~/openstack-workshop/cephadm       ceph
+
+# Install and configure tmuxp
+sudo apt install pipx
+pipx install tmuxp
+
+cat >> ~/.profile <<EOF
+
+alias wrx-stack='tmuxp load -y ~/openstack-workshop/conf/tmuxp.yaml'
 EOF
 ```
