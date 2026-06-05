@@ -1,3 +1,4 @@
+kolla-ansible<21.0.0
 ara[server]
 openstacksdk
 osc-placement

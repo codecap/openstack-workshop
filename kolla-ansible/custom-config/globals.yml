@@ -1,4 +1,5 @@
 ---
+enable_docker_repo: "no"
 enable_heat: "yes"
 enable_mariabackup: "yes"
 # enable_cluster_user_trust: "yes"

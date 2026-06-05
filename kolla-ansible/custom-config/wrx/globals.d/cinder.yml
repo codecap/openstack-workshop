@@ -5,6 +5,5 @@ enable_cinder_backend_iscsi: "no"
 enable_cinder_backend_lvm:   "no"
 cinder_backend_ceph:         "yes"
 cinder_backup_driver:        "ceph"
-# TODO
-# cinder_cluster_name:         "ceph"
+cinder_cluster_name:         "ceph"
 cinder_cluster_skip_precheck: "no"
