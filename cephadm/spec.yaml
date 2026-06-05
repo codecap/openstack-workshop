@@ -1,7 +1,7 @@
 ---
 service_type: host
 hostname: deployment
-addr: 10.20.21.16
+addr: 10.20.21.24
 labels:
 - _admin
 - _no_schedule
@@ -89,9 +89,9 @@ placement: {label: osd}
 spec:
   data_devices:
     paths:
-      - /dev/sdc
-      - /dev/sdd
-      - /dev/sde
+      - /dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi2
+      - /dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi3
+      - /dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi4
 crush_device_class: ssd
 ---
 service_type: rbd-mirror
