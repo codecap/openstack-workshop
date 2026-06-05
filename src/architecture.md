@@ -67,8 +67,7 @@ graph LR
 
 ---
 # Workshop Environment
-[//]: # (how does it look like in our simple environment?)
-
+![ ](../assets/archtecture/openstack-environment.svg)
 
 ---
 # Architecture - Ceph
