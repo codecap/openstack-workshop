@@ -30,8 +30,10 @@ jobs:
       - name: Build site
         run: |
           mkdir -p _site
-          cp -r ./docs/*.html _site/;
+          cp -r ./docs/*.html _site/
           cp -r ./assets _site/
+          cp ./docs/CNAME _site/CNAME
+          touch _site/.nojekyll
           # echo '<meta http-to-equiv="refresh" content="0; URL=workshops/openstack/">' > _site/index.html
           # mkdir -p _site/workshops/openstack
           # cp -r ./docs/. _site/workshops/openstack/
