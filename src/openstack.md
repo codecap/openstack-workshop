@@ -776,7 +776,7 @@ openstack server  list
 ```
 ---
 # Networking
-![bg right:40% 90%](../assets/openstack/bootstrap-test-environment.svg)
+![bg right:40% 90%](assets/openstack/bootstrap-test-environment.svg)
 * Networks:
   * flat
   * vlan
@@ -868,7 +868,7 @@ openstack server create                  \
 ---
 # Networking
 ## **How to access?**
-![bg right:35% 90%](../assets/openstack/networking-how-to-access.svg)
+![bg right:35% 90%](assets/openstack/networking-how-to-access.svg)
 
 ```bash
 # Create a config for a vlan interface                                      📋

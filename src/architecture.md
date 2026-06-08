@@ -62,7 +62,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 ---
 # Workshop Environment
-![ ](../assets/archtecture/openstack-environment.svg)
+![ ](assets/archtecture/openstack-environment.svg)
 
 ---
 # Architecture - Ceph
@@ -70,7 +70,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 
 ---
 # Workshop Environment
-![ ](../assets/archtecture/ceph-environment.svg)
+![ ](assets/archtecture/ceph-environment.svg)
 
 
 ---
@@ -138,11 +138,6 @@ N1 <-.-> N2
 N2 <-.-> N3
 N3 <-.-> N1
 </div>
-
----
-# Ceph Environment
-![ ](../assets/archtecture/ceph-environment.svg)
-
 
 ---
 # Node Groups
