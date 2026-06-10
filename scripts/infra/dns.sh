@@ -63,15 +63,23 @@ cat > /var/lib/dnsmasq/hosts.d/hosts <<EOF
 10.14.0.64   compute01.mgmt.wrx.sckt.net
 10.14.0.65   compute02.mgmt.wrx.sckt.net
 10.14.0.66   compute03.mgmt.wrx.sckt.net
+10.14.0.67   compute04.mgmt.wrx.sckt.net
 10.14.0.72   compute11.mgmt.wrx.sckt.net
+10.14.0.73   compute12.mgmt.wrx.sckt.net
+10.14.0.74   compute13.mgmt.wrx.sckt.net
+10.14.0.75   compute14.mgmt.wrx.sckt.net
 10.14.0.128  cephmon01.mgmt.wrx.sckt.net
 10.14.0.129  cephmon02.mgmt.wrx.sckt.net
 10.14.0.130  cephmon03.mgmt.wrx.sckt.net
 10.14.0.136  cephgra01.mgmt.wrx.sckt.net
 10.14.0.144  cephosd01.mgmt.wrx.sckt.net
 10.14.0.145  cephosd02.mgmt.wrx.sckt.net
-10.14.0.128  cephmon01.mgmt.wrx.sckt.net
 10.14.0.146  cephosd03.mgmt.wrx.sckt.net
+10.14.0.147  cephosd04.mgmt.wrx.sckt.net
+10.14.0.148  cephosd05.mgmt.wrx.sckt.net
+10.14.0.149  cephosd06.mgmt.wrx.sckt.net
+10.14.0.150  cephosd07.mgmt.wrx.sckt.net
+10.14.0.151  cephosd08.mgmt.wrx.sckt.net
 
 # strg
 10.20.21.128  cephmon01.strg.wrx.sckt.net
@@ -82,8 +90,15 @@ cat > /var/lib/dnsmasq/hosts.d/hosts <<EOF
 10.20.21.145  cephosd02.strg.wrx.sckt.net
 10.20.21.128  cephmon01.strg.wrx.sckt.net
 10.20.21.146  cephosd03.strg.wrx.sckt.net
+10.20.21.147  cephosd04.strg.wrx.sckt.net
+10.20.21.148  cephosd05.strg.wrx.sckt.net
+10.20.21.149  cephosd06.strg.wrx.sckt.net
+10.20.21.150  cephosd07.strg.wrx.sckt.net
+10.20.21.151  cephosd08.strg.wrx.sckt.net
 # strg services
 10.20.21.135  s3.strg.wrx.sckt.net
+
+# os
 
 # os services
 10.20.8.35    int.os.wrx.sckt.net
