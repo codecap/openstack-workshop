@@ -307,7 +307,7 @@ openstack orchestration service list
 # Replace a Network Node
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# 🔍 Review data stored on the node. Is there anythins to backup ?          📋
+# 🔍 Review data stored on the node. Is there anything to backup ?          📋
 docker volume ls
 du -lhs /var/lib/docker/volumes/*
 
@@ -330,7 +330,7 @@ kolla-ansible reconfigure       -i inventory/wrx --limit ~network03
 # Replace a Controller Node
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# 🔍 Review data stored on the node. Is there anythins to backup ?          📋
+# 🔍 Review data stored on the node. Is there anything to backup ?          📋
 docker volume ls
 du -lhs /var/lib/docker/volumes/*
 
@@ -344,12 +344,12 @@ rm -rf  /etc/kolla /var/log/kolla  \
 umount /var/lib/docker;  wipefs /dev/sdb -a; mkfs.ext4 /dev/sdb
 reboot
 
-# 🚚 Redeploy opentack services on network03 from the deployment node
+# 🚚 Redeploy opentack services on controller03 from the deployment node
 kolla-ansible bootstrap-servers -i inventory/wrx --limit ~controller03
 kolla-ansible prechecks         -i inventory/wrx --limit ~controller03
 kolla-ansible pull              -i inventory/wrx --limit ~controller03
 
-# ⚠️ we have to start reconfigure for keystone aross all controller nodes ⚠️
+# ⚠️ we have to reconfigure keystone aross all controller nodes ⚠️
 kolla-ansible reconfigure       -i inventory/wrx                       --tags      keystone
 
 # ☕ the rest works as usual
@@ -360,7 +360,7 @@ kolla-ansible reconfigure       -i inventory/wrx --limit ~controller03 --skip-ta
 # Replace a Compute Node
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# 🔍 Review data stored on the node. Is there anythins to backup ?          📋
+# 🔍 Review data stored on the node. Is there anything to backup ?          📋
 docker volume ls
 du -lhs /var/lib/docker/volumes/*
 docker exec -ti nova_libvirt virsh list  --all
@@ -375,7 +375,7 @@ do
 done
 openstack server list --all       --host    compute03
 
-# 💥 Break the controller03 node
+# 💥 Break the compute03 node
 systemctl stop kolla-* docker.service docker.socket
 apt remove  docker*  -y
 rm -rf  /etc/kolla /var/log/kolla  \
@@ -386,7 +386,7 @@ cp -pr  /var/lib/docker/volumes ~/
 umount  /var/lib/docker;  wipefs /dev/sdb -a; mkfs.ext4 /dev/sdb
 reboot
 
-# 🚚 Redeploy opentack services on network03 from the deployment node
+# 🚚 Redeploy opentack services on compute03 from the deployment node
 kolla-ansible bootstrap-servers -i inventory/wrx --limit ~compute03
 kolla-ansible prechecks         -i inventory/wrx --limit ~compute03
 kolla-ansible pull              -i inventory/wrx --limit ~compute03
@@ -449,12 +449,32 @@ docker exec -ti nova_libvirt virsh list  --all # on the host
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 
 ---
-# Reboot a OpenStack Host
+# Reboot an OpenStack Host
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
-* How to scale out controllers ?
-* How to scale out network nodes ?
-* How to scale out compute nodes ?
+* How to reboot controllers ?
+* How to reboot network nodes ?
+* How to reboot compute nodes ? 
 
+---
+# Debugging RabbitMQ
+![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+
+```bash
+# Some commands to debug rabbitmq errors                                    📋
+
+rabbitmqctl status
+rabbitmqctl cluster_status
+
+rabbitmq-plugins list
+rabbitmq-plugins disable <PLUGIN>
+rabbitmq-plugins enable  <PLUGIN>
+
+rabbitmqctl list_queues name,messages,messages_ready,messages_unacknowledged
+rabbitmqctl list_bindings 
+
+rabbitmqctl purge_queue   <QUEUE_NAME>
+rabbitmqctl delete_queue  <QUEUE_NAME>
+```
 
 ---
 # Upgrade
@@ -552,27 +572,7 @@ kolla-ansible upgrade      -i inventory/wrx
 * MariaDB Galera Cluster as State Store
 * Message Broker(RabbitMQ)
 * Multiple nodes of each type
-* 
----
-# Debugging RabbitMQ
-![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 
-```bash
-# Some commands to debug rabbitmq errors                                    📋
-
-rabbitmqctl status
-rabbitmqctl cluster_status
-
-rabbitmq-plugins list
-rabbitmq-plugins disable <PLUGIN>
-rabbitmq-plugins enable  <PLUGIN>
-
-rabbitmqctl list_queues name,messages,messages_ready,messages_unacknowledged
-rabbitmqctl list_bindings 
-
-rabbitmqctl purge_queue   <QUEUE_NAME>
-rabbitmqctl delete_queue  <QUEUE_NAME>
-```
 ---
 # Debugging Common
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
@@ -608,7 +608,7 @@ grep -r [RESOUCE_ID] /var/log/kolla/[SERVICE]
 * Message Queues (are recreated if lost)
 
 ---
-# Database backup and recovery
+# Database Backup and Recovery
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # create a new backup                                                       📋
@@ -756,7 +756,7 @@ openstack quota show $PRJ_NAME
 ```
 
 ---
-# How to athenticate with for CLI
+# How to authenticate with CLI
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # Prepare an openrc file to be used with openstack CLI                      📋

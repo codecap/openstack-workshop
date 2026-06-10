@@ -181,9 +181,9 @@ graph LR
 
 ---
 # Deployment Node
-* service ansible
-* service kolla-ansible
-* service cephadm
+* ansible
+* kolla-ansible
+* cephadm
 
 ---
 # Baremetal Node and VMs on it

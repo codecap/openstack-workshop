@@ -80,7 +80,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 sudo apt install cephadm ceph-common python3-jinja2 -y
 
 # distribute the ssh keys
-for i in cephmon0{1..3} cephosd0{1..3} cephgra01
+for i in cephmon0{1..3} cephosd0{1..3} cephgra01 deployment
 do
   # remove keys
   ssh -i ~/.ssh/id $i.mgmt 'sudo sed -i /root/.ssh/authorized_keys -e "/command=/d"'
@@ -267,6 +267,8 @@ ceph osd tree
 # Ceph Basics
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
+[//]: # (FIXME: rulesets and rules)
+
 ---
 # Crush
 - map
@@ -275,8 +277,16 @@ ceph osd tree
 
 ---
 # Placement Groups
+[//]: # (FIXME: picture)
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
 ![image](https://access.redhat.com/webassets/avalon/d/Red_Hat_Ceph_Storage-5-Architecture_Guide-en-US/images/08af4a1fab18995fda3aad1c3ede873e/arc-04.png)
+
+---
+# Placement Groups
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![image](https://media.licdn.com/dms/image/v2/C4E12AQGGNrXrOo2PyA/article-inline_image-shrink_1500_2232/article-inline_image-shrink_1500_2232/0/1625477968913?e=1782345600&v=beta&t=MbiqJhUO49zU_XEI63gTxS_XylEKGspl5VUMxKxCsoU)
+
 
 ---
 # Object Storage Daemon (OSD)
@@ -286,7 +296,6 @@ ceph osd tree
 
 ---
 # Pools
-
 
 ---
 # Interfaces
@@ -497,7 +506,7 @@ rbd unmap /dev/rbd/test/demo-disk
 ```
 
 ---
-# Filesystems
+# File Systems
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
 # Create the metadata pool (needs high-speed disks like SSDs if possible)   📋
@@ -522,7 +531,7 @@ ceph-fuse -n client.guest -k /etc/ceph/ceph.client.guest.keyring /mnt/ --client_
 ```
 
 ---
-# Filesystems and Snapshots
+# File Systems and Snapshots
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
 # Create a working project folder                                           📋
@@ -544,8 +553,8 @@ echo "Temporary junk" > /mnt/project1/garbage.txt
 # Restore the file from snapshot
 cp /mnt/project1/.snap/snapshot_backup_v1/document.txt /mnt/project1/document.txt
 
-# Remove the snapshot
-rm -rf  /mnt/cephfs/project1/.snap/snapshot_backup_v1
+# NOTE: note it wont work with rm -rf
+rmdir  /mnt/project1/.snap/snapshot_backup_v1
 ```
 
 ---
@@ -628,6 +637,8 @@ mc cat s3/demo-bucket/project1/test.txt
 ## Update system packages and reboot
 ![bg right:55% 25%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
+[//]: # (FIXME: the same with ceph orch host maintanance enter)
+
 ```bash
 # Stop ceph services on cephosd03 as root                                   📋
 docker ps
@@ -643,6 +654,8 @@ ceph pg dump_stuck
 ceph pg dump_stuck unclean
 
 ceph osd set noout
+
+# Upgrade and Reboot
 
 # On cephosd03, start ceph services
 systemctl start  ceph.target
@@ -716,15 +729,10 @@ apt install -y cephadm-<VERSION> ceph-common-<VERSION>
 ```
 
 ---
-# Operations - Scale-Out
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
-```bash
-
-```
-
----
 # Replace a Mon Node
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+[//]: # (FIXME: test)
+
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
 # 🚧 on deployment cephmon03 from the cluster                               📋
 for l in _admin mds mgr mon nfs rbd-mirror rgw
@@ -758,19 +766,21 @@ ceph orch ps
 
 ---
 # Replace an OSD
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+[//]: # (FIXME: test)
 
 ```bash
 # List all the OSDs in cluster, take the last one, check the devices behind 📋
 ceph osd tree
-ceph osd metadata <OSD> | grep device
+ceph osd metadata <OSD_NR> | grep device
 
 ceph osd set noout
 ceph osd set norecover
 
 
 # 💥 Let's break it down, on cephosd03
-dd if=/dev/zero of=/dev/sde bs=1024 count=$((1024*10))
+dd if=/dev/zero of=<DEVICE> bs=1024 count=$((1024*10))
 
 # 🩺 check status
 ceph osd tree
@@ -785,14 +795,18 @@ ceph orch ls osd
 ceph osd tree
 
 ceph orch osd rm --zap <OSD_NR> --force
+ceph osd purge <OSD_NR> --yes-i-really-mean-it
+
 ceph orch osd rm status
 ceph status
 ceph health detail
+
+ceph orch daemon rm osd.<OSD.NR> --force
 ```
 
 ---
 # Replace an OSD
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
 ```bash
 # 🚧 Set  initial weight to 0  to control recovery                          📋
@@ -820,15 +834,36 @@ ceph osd unset norecover
 ```
 
 ---
+# Replace an OSD - Workaraonfs
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+
+```bash
+# If  zapt didn't work for you, follwiing tools can help to clean up
+
+# List Block Devices
+lsblk
+
+# List Device Names
+dmsetup ls
+
+# Remove staled Logical Volume
+demsetup remove ceph--<ID>
+
+# Clean up Device
+wipefs --all --force <DEVICE>
+```
+
+
+---
 # Rebuild an OSD Node
-![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
 # Prepare the rebuild                                                       📋
 ceph osd set noout
 ceph osd set norecover
 
-# 🚧 Drain the openstack compute host
-ceph orch host drain <hostname>
+# 🚧 Drain the ceph OSD host
+ceph orch host drain <hostname> [--zap-osd-device]
 ceph orch host drain status
 ceph orch device ls  [hostname]
 ceph orch osd  rm --zap <OSD_NR> --force
@@ -871,6 +906,37 @@ ceph osd unset norecover
 ```bash
 
 ```
+
+---
+# Failure Domain
+[//]: # (FIXME:)
+![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
+```bash
+# Bucket types
+ceph osd crush dump  | jq .types
+
+# Create racks
+ceph osd crush add-bucket rack-01 rack
+ceph osd crush add-bucket rack-02 rack
+ceph osd crush add-bucket rack-03 rack
+
+# Move the racks under the root
+ceph osd crush move rack-01 root=default
+ceph osd crush move rack-02 root=default
+ceph osd crush move rack-02 root=default
+
+# Move the hosts into the recks
+ceph osd crush move cephosd01 rack=rack-01
+ceph osd crush move cephosd02 rack=rack-02
+ceph osd crush move cephosd03 rack=rack-03
+
+# create a a new replicated rule and assign it to a volume
+ceph osd crush rule create-replicated replicated_rack_rule default rack
+ceph osd crush rule ls
+ceph osd crush rule dump replicated_rack_rule
+ceph osd pool set <POOL> crush_rule replicated_rack_rule
+```
+
 
 ---
 # Benchmarking
