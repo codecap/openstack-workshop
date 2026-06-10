@@ -431,7 +431,7 @@ vim inventory/wrx/20_openstack
 
 # 🩺 check the new host
 
-# 🚚 Deploy opentack services on network03 from the deployment node
+# 🚚 Deploy opentack services on the new compute host
 kolla-ansible bootstrap-servers -i inventory/wrx --limit ~compute11
 kolla-ansible prechecks         -i inventory/wrx --limit ~compute11
 kolla-ansible pull              -i inventory/wrx --limit ~compute11
