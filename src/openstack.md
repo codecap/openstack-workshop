@@ -1092,11 +1092,12 @@ openstack volume snapshot create --volum vm1-data vm1-data-snap1 [--force]
 openstack volume snapshot list
 
 # Change the data 
-echo "Let'us add a new line into the file after snapshot was created"  >> /mnt/test
+echo "Let us add a new line into the file after snapshot was created"  >> /mnt/test
 cat  /mnt/test
 ```
 ---
-# Block Devices - Revert a Volume
+# Block Devices
+## **Revert a Volume**
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # Restore from the snapshot                                                 📋
@@ -1111,7 +1112,8 @@ openstack server start         vm1
 ```
 
 ---
-# Block Devices - More Operations
+# Block Devices
+## **More Operations**
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # Create a volume from an image                                             📋
