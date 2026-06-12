@@ -349,11 +349,11 @@ kolla-ansible bootstrap-servers -i inventory/wrx --limit ~controller03
 kolla-ansible prechecks         -i inventory/wrx --limit ~controller03
 kolla-ansible pull              -i inventory/wrx --limit ~controller03
 
+# ☕ this will take a while
+kolla-ansible reconfigure       -i inventory/wrx --limit ~controller03 --skip-tags keystone
+
 # ⚠️ we have to reconfigure keystone aross all controller nodes ⚠️
 kolla-ansible reconfigure       -i inventory/wrx                       --tags      keystone
-
-# ☕ the rest works as usual
-kolla-ansible reconfigure       -i inventory/wrx --limit ~controller03 --skip-tags keystone
 ```
 
 ---
@@ -498,7 +498,7 @@ source  ~/venv/kolla-ansible-$((CUR_KA_VER+1))/bin/activate
 
 pip install -U pip
 pip install -r requirements.txt
-pip install "kolla-ansible<$((CUR_KA_VER + 2)).0"
+pip install -U "kolla-ansible<$((CUR_KA_VER + 2)).0"
 kolla-ansible install-deps
 # ⚠️ NOTE: fix for prometheus 05.2026
 # pip install "bcrypt<5.0.0"
@@ -554,6 +554,7 @@ ansible  all -b -m ansible.builtin.shell -a \
 
 # 🗂️ force to collect facts
 kolla-ansible gather-facts -i inventory/wrx
+# ansible all -m ansible.builtin.setup
 
 # 🩺 Check
 kolla-ansible prechecks    -i inventory/wrx
@@ -642,7 +643,7 @@ table, thead, tbody, tr, th, td {
 | Alermanager | [http://int.os.wrx.sckt.net:9095](http://int.os.wrx.sckt.net:9091) | 
 
 ---
-# Expand / Deploy a new service
+# Expand / Deploy a New Service
 # Central Logging
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
@@ -786,7 +787,8 @@ openstack server  list
 * LoadBalancers
 
 ---
-# Networking - External Network
+# Networking
+## **External Network**
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 
 ```bash
@@ -813,7 +815,8 @@ openstack subnet create  ${EXT_NET_NAME}-subnet \
 ```
 
 ---
-# Networking - Project Network
+# Networking
+## **Project Network**
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # Create external network (vxlan backed)                                    📋
@@ -836,7 +839,8 @@ openstack router set --external-gateway shared3010 workshop-router
 ```
 
 ---
-# Networking - VMs
+# Networking
+##  **Virtual Machines**
 ![bg right:50% 30%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # as workshop user in workshop project
@@ -868,7 +872,7 @@ openstack server create                  \
 ---
 # Networking
 ## **How to access?**
-![bg right:35% 90%](assets/openstack/networking-how-to-access.svg)
+![bg right:40% 90%](https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/openstack/networking-how-to-access.svg)
 
 ```bash
 # Create a config for a vlan interface                                      📋
@@ -1138,14 +1142,6 @@ openstack image list
 - Availability zones
 
 ---
-# Host Aggregates
-![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
-```bash
-openstack aggregate create gpu-pool
-# FIXME
-```
-
----
 # Availalbility Zones
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 is a human-readable label that represents a **physically isolated slice of data center infrastructure**. It is the primary tool used to group hardware into separate **fault domains** so that a single physical failure does not take down an entire cloud application.
@@ -1163,17 +1159,29 @@ is a human-readable label that represents a **physically isolated slice of data 
 # Availalbility Zones
 ![bg right:50% 30%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-openstack aggregate create hw-type-A
-openstack aggregate create hw-type-B
-openstack aggregate create windows
-openstack aggregate create gpu
-
 openstack aggregate create --zone az1 prd-az1
 openstack aggregate create --zone az2 prd-az2
 
 openstack aggregate add host prd-az1 compute01
 openstack aggregate add host prd-az1 compute02
 openstack aggregate add host prd-az1 compute03
+
+openstack aggregate show prd-az1
+openstack aggregate show prd-az2
+
+openstack availability zone list --compute
+openstack availability zone list --network
+openstack availability zone list --volume
+```
+
+---
+# Host Aggregates
+![bg right:50% 30%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
+```bash
+openstack aggregate create hw-type-A
+openstack aggregate create hw-type-B
+openstack aggregate create windows
+openstack aggregate create gpu
 
 openstack aggregate add host hw-type-A compute01
 openstack aggregate add host hw-type-A compute02
@@ -1186,12 +1194,6 @@ openstack aggregate add host windows compute11
 openstack aggregate add host gpu compute11
 
 openstack aggregate show windows
-openstack aggregate show prd-az1
-openstack aggregate show prd-az2
-
-openstack availability zone list --compute
-openstack availability zone list --network
-openstack availability zone list --volume
 ```
 
 ---

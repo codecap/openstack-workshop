@@ -97,7 +97,8 @@ stestr list > tests-available.list
 cat tests-available.list | grep smoke > smoke-tests.list
 
 # How to run
-tempest run --load-list smoke-tests.list  --regex tempest.api.network.test_security_groups.SecGroupTest.test_list_security_groups
+tempest run --load-list smoke-tests.list  --regex \
+  tempest.api.network.test_security_groups.SecGroupTest.test_list_security_groups
 
   
 

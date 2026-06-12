@@ -250,7 +250,8 @@ stestr list &gt; tests-available.list
 <span class="hljs-built_in">cat</span> tests-available.list | grep smoke &gt; smoke-tests.list
 
 <span class="hljs-comment"># How to run</span>
-tempest run --load-list smoke-tests.list  --regex tempest.api.network.test_security_groups.SecGroupTest.test_list_security_groups
+tempest run --load-list smoke-tests.list  --regex \
+  tempest.api.network.test_security_groups.SecGroupTest.test_list_security_groups
 
   
 

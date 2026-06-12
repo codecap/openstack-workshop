@@ -101,7 +101,7 @@ EOF
 
 ---
 # Run
-![bg right:30% 50%](https://www.svgrepo.com/show/373429/ansible.svg)
+![bg right:50% 30%](https://www.svgrepo.com/show/373429/ansible.svg)
 ```bash
 # Create automation project
 source ~/admin-openrc.sh 
