@@ -5,5 +5,5 @@ octavia_provider_drivers: amphora:Amphora
 enable_redis:   "yes"
 enable_valkey:  "no"
 # 2025.2
-enable_redis:   "no"
-enable_valkey:  "yes"
+# enable_redis:   "no"
+# enable_valkey:  "yes"
