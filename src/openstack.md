@@ -770,6 +770,8 @@ sed  -e "s/OS_USERNAME=.*/OS_USERNAME=$USR_NAME/"         -i custom-config/wrx/w
 
 # review
 cat    custom-config/wrx/workshop-openrc.sh
+# activate
+source custom-config/wrx/workshop-openrc.sh
 
 openstack network list
 openstack router  list
