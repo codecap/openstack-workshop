@@ -1,4 +1,4 @@
 src/*.html
 removeme
-sftp-config.json
+sftp-config.json*
 clouds.yaml
