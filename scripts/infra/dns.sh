@@ -110,6 +110,8 @@ cat > /var/lib/dnsmasq/hosts.d/hosts <<EOF
 10.34.10.25   recorder.services.wrx.sckt.net
 10.34.10.35   dashboard.openstack.services.wrx.sckt.net
 10.34.10.35   keystone.os.svc.wrx.sckt.net
+# 10.34.10.35    novncproxy.os.svc.wrx.sckt.net
+10.20.8.35    novncproxy.os.svc.wrx.sckt.net
 10.34.10.135  dashboard.ceph.services.wrx.sckt.net
 10.34.10.135  s3.storage.wrx.sckt.net s3.svc.wrx.sckt.net s3.services.wrx.sckt.net
 
