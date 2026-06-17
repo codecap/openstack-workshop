@@ -11,8 +11,8 @@ network03.mgmt.wrx.sckt.net
 [hypervisor]
 compute01.mgmt.wrx.sckt.net
 compute02.mgmt.wrx.sckt.net
-compute03.mgmt.wrx.sckt.net
-# compute11.mgmt.wrx.sckt.net
+compute11.mgmt.wrx.sckt.net
+# compute12.mgmt.wrx.sckt.net
 
 [compute:children]
 hypervisor

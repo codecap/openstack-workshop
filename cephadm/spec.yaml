@@ -61,6 +61,12 @@ labels:
 - osd
 ---
 service_type: host
+hostname: cephosd04
+addr: 10.20.21.147
+labels:
+- osd
+---
+service_type: host
 hostname: cephgra01
 addr: 10.20.21.136
 labels:
