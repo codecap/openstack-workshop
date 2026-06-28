@@ -414,7 +414,7 @@ ln -s ~/openstack-workshop/kolla-ansible openstack
 ln -s ~/openstack-workshop/cephadm       ceph
 
 # Install and configure tmuxp
-sudo apt install pipx
+sudo apt install pipx -y
 pipx install tmuxp
 
 cat >> ~/.profile <<EOF

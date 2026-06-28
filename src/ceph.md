@@ -108,7 +108,9 @@ SSH_DIR="$HOME/.ssh"
 
 #ceph cephadm generate-key
 #ceph cephadm get-pub-key > ceph.pub
-#ssh-copy-id -f -i ceph.pub root@daisy
+#ssh-copy-id -f -i ceph.pub root@[[HOST
+
+]
 
 cd ~/ceph
 sudo cephadm --image "$CEPH_IMAGE"                    \

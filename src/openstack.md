@@ -553,7 +553,8 @@ ansible  all -b -m ansible.builtin.shell -a \
   "mkdir -p ~/backup; cp  -r /etc/kolla ~/backup/$(date +%y%m%d%H%M%S)_kolla" 
 
 # 🗂️ force to collect facts
-kolla-ansible gather-facts -i inventory/wrx
+kolla-ansible gather-facts -i inventory/wrx -e "ansible_python_interpreter=/usr/bin/python3"
+
 # ansible all -m ansible.builtin.setup
 
 # 🩺 Check
