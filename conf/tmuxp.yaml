@@ -22,9 +22,9 @@ windows:
     panes:
       - ssh -t compute01.mgmt.wrx.sckt.net sudo su -
       - ssh -t compute02.mgmt.wrx.sckt.net sudo su -
-      - ssh -t compute03.mgmt.wrx.sckt.net sudo su -
-      - ssh -t compute11.mgmt.wrx.sckt.net sudo su -
       - ''
+      - ssh -t compute11.mgmt.wrx.sckt.net sudo su -
+      - ssh -t compute12.mgmt.wrx.sckt.net sudo su -
       - ''
       - ''
       - ''

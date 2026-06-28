@@ -26,18 +26,20 @@ repositories:
         args:
          - custom-config/wrx/config/grafana/dashboards/infrastructure/haproxy.json
          - custom-config/wrx/config/prometheus/haproxy.rules
-      # Patch alermanager config to enable telegram notifications
-      # https://velenux.wordpress.com/2022/09/12/how-to-configure-prometheus-alertmanager-to-send-alerts-to-telegram/$
+      # Remove preconfigured receivers
       - cmd: /usr/bin/sed
         args:
          - '/^receivers:/,$d'
          - -i
          - custom-config/wrx/config/prometheus/prometheus-alertmanager.yml
-      - cmd: /usr/bin/sed
-        args:
-         - "$ a\\  routes:\\n  - receiver: 'telegram'\\n    group_wait: 10s\\n    matchers:\\n    - env = 'wrx'"
-         - -i
-         - custom-config/wrx/config/prometheus/prometheus-alertmanager.yml
+      # Patch alermanager config to enable telegram notifications
+      # https://velenux.wordpress.com/2022/09/12/how-to-configure-prometheus-alertmanager-to-send-alerts-to-telegram/$
+      # - cmd: /usr/bin/sed
+      #   args:
+      #    - "$ a\\  routes:\\n  - receiver: 'telegram'\\n    group_wait: 10s\\n    matchers:\\n    - env = 'wrx'"
+      #    - -i
+      #    - custom-config/wrx/config/prometheus/prometheus-alertmanager.yml
+      # Add default receiver
       - cmd: /usr/bin/sed
         args:
          - "$ a receivers:\\n  - name: default-receiver\\n"
@@ -95,30 +97,31 @@ repositories:
           - -c
           - |
             cat > custom-config/wrx/config/prometheus/prometheus.yml.d/10-redfish.yml <<EOF
-            {% if groups.get('redfish') %}
-            scrape_configs:
-              - job_name: redfish-exporter
-                metrics_path: /redfish
-                scrape_timeout: 300s
-                scrape_interval: 10m
-                relabel_configs:
-                 - source_labels: [__address__]
-                   target_label: __param_target
-                 - source_labels: [__param_target]
-                   target_label: instance
-                 - target_label: __address__
-                   ### the address of the redfish-exporter address
-                   replacement: "{{ groups['monitoring'][0] }}:9610"
-                static_configs:
-            {% for host in groups.get('redfish', []) %}
-                  - targets:
-                      - '10.40.11.{{ hostvars[host]["ansible_facts"]["default_ipv4"]["address"].split(".")[3] }}'
-                    labels:
-                      server: '{{hostvars[host]["inventory_hostname"].split(".")[0]}}'
-                      env:    '{{env_name}}'
-            {% endfor %}
-            {% endif %}
             EOF
+      #       {% if groups.get('redfish') %}
+      #       scrape_configs:
+      #         - job_name: redfish-exporter
+      #           metrics_path: /redfish
+      #           scrape_timeout: 300s
+      #           scrape_interval: 10m
+      #           relabel_configs:
+      #            - source_labels: [__address__]
+      #              target_label: __param_target
+      #            - source_labels: [__param_target]
+      #              target_label: instance
+      #            - target_label: __address__
+      #              ### the address of the redfish-exporter address
+      #              replacement: "{{ groups['monitoring'][0] }}:9610"
+      #           static_configs:
+      #       {% for host in groups.get('redfish', []) %}
+      #             - targets:
+      #                 - '10.40.11.{{ hostvars[host]["ansible_facts"]["default_ipv4"]["address"].split(".")[3] }}'
+      #               labels:
+      #                 server: '{{hostvars[host]["inventory_hostname"].split(".")[0]}}'
+      #                 env:    '{{env_name}}'
+      #       {% endfor %}
+      #       {% endif %}
+      #       EOF
   # 1 Node Exporter
   - git: https://github.com/starsliao/Prometheus.git
     version: d6b2d5e0cbadb5305c5673a63f6bf3237a51cb3f

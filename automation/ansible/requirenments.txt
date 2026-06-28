@@ -2,7 +2,6 @@ ansible
 openstacksdk
 osc-placement
 pytest-testinfra
-pytest-testinfra
 python-designateclient
 python-glanceclient
 python-heatclient

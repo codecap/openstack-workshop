@@ -59,12 +59,12 @@ hostname: cephosd03
 addr: 10.20.21.146
 labels:
 - osd
----
-service_type: host
-hostname: cephosd04
-addr: 10.20.21.147
-labels:
-- osd
+# ---
+# service_type: host
+# hostname: cephosd04
+# addr: 10.20.21.147
+# labels:
+# - osd
 ---
 service_type: host
 hostname: cephgra01

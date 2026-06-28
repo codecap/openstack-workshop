@@ -16,6 +16,8 @@ This repository is used to:
 ![img](https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/openstack-environment.drawio.svg)
 
 ## Ceph
+
+
 ![img](https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/ceph-environment.drawio.svg)
 
 
