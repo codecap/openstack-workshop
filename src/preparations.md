@@ -374,7 +374,7 @@ print-create-env-commands  | grep -v -E "$INFRA_NODES|$DEPLOY_NODES"   | bash
 # Configure Proxy
 ![bg right:40% 30%](https://www.svgrepo.com/show/375447/identity-aware-proxy.svg)
 ```bash
-* Open Firefoxx
+* Open Firefox
 * Go to settings
 * Search for "proxy"
 * Choose "Manual Configuration" 

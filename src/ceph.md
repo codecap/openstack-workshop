@@ -736,7 +736,7 @@ apt install -y cephadm-<VERSION> ceph-common-<VERSION>
 
 ![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-# 🚧 on deployment cephmon03 from the cluster                               📋
+# 🚧 on deployment noce remove cephmon03 from the cluster                   📋
 for l in _admin mds mgr mon nfs rbd-mirror rgw
 do
   ceph orch host label rm cephmon03 $l
@@ -752,7 +752,7 @@ rm -rf  /etc/ceph/ /var/lib/ceph/* /var/log/ceph/* /etc/systemd/system/ceph*
 systemctl daemon-reload
 docker image ls | awk '{print $3}' | xargs docker rmi
 
-# 🩺 check status on deployment node
+# 🩺 on deployment node check status 
 ceph -s
 ceph orch host ls
 ceph orch ls
@@ -761,7 +761,7 @@ ceph orch ps
 # 🚚 Redeploy
 ceph orch apply -i spec.yaml
 
-# 🩺 check status on deployment nodw
+# 🩺 check status on deployment node
 ceph -s
 ceph orch ps
 ```
@@ -836,11 +836,12 @@ ceph osd unset norecover
 ```
 
 ---
-# Replace an OSD - Workaraonfs
+# Replace an OSD
+## **Workarounds**
 ![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
 ```bash
-# If  zapt didn't work for you, follwiing tools can help to clean up
+# If  --zap didn't work for you, the following tools can help to clean up
 
 # List Block Devices
 lsblk
@@ -932,7 +933,7 @@ ceph osd crush move cephosd01 rack=rack-01
 ceph osd crush move cephosd02 rack=rack-02
 ceph osd crush move cephosd03 rack=rack-03
 
-# create a a new replicated rule and assign it to a volume
+# create a new replicated rule and assign it to a volume
 ceph osd crush rule create-replicated replicated_rack_rule default rack
 ceph osd crush rule ls
 ceph osd crush rule dump replicated_rack_rule

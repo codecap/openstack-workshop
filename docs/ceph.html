@@ -2879,7 +2879,7 @@ apt install -y cephadm-&lt;VERSION&gt; ceph-common-&lt;VERSION&gt;
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:50%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="replace-a-mon-node">Replace a Mon Node</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚧" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6a7.svg" data-marp-twemoji=""/> on deployment cephmon03 from the cluster                               <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚧" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6a7.svg" data-marp-twemoji=""/> on deployment noce remove cephmon03 from the cluster                   <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> _admin mds mgr mon nfs rbd-mirror rgw
 <span class="hljs-keyword">do</span>
   ceph orch host label <span class="hljs-built_in">rm</span> cephmon03 <span class="hljs-variable">$l</span>
@@ -2895,7 +2895,7 @@ systemctl stop ceph.target
 systemctl daemon-reload
 docker image <span class="hljs-built_in">ls</span> | awk <span class="hljs-string">&#x27;{print $3}&#x27;</span> | xargs docker rmi
 
-<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🩺" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1fa7a.svg" data-marp-twemoji=""/> check status on deployment node</span>
+<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🩺" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1fa7a.svg" data-marp-twemoji=""/> on deployment node check status </span>
 ceph -s
 ceph orch host <span class="hljs-built_in">ls</span>
 ceph orch <span class="hljs-built_in">ls</span>
@@ -2904,7 +2904,7 @@ ceph orch ps
 <span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚚" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f69a.svg" data-marp-twemoji=""/> Redeploy</span>
 ceph orch apply -i spec.yaml
 
-<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🩺" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1fa7a.svg" data-marp-twemoji=""/> check status on deployment nodw</span>
+<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🩺" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1fa7a.svg" data-marp-twemoji=""/> check status on deployment node</span>
 ceph -s
 ceph orch ps
 </code></pre>
@@ -3139,8 +3139,9 @@ ceph osd <span class="hljs-built_in">unset</span> norecover
   height: 50%;    
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:50%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
-<h1 id="replace-an-osd---workaraonfs">Replace an OSD - Workaraonfs</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># If  zapt didn&#x27;t work for you, follwiing tools can help to clean up</span>
+<h1 id="replace-an-osd-2">Replace an OSD</h1>
+<h2 id="workarounds"><strong>Workarounds</strong></h2>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># If  --zap didn&#x27;t work for you, the following tools can help to clean up</span>
 
 <span class="hljs-comment"># List Block Devices</span>
 lsblk
@@ -3500,7 +3501,7 @@ ceph osd crush move cephosd01 rack=rack-01
 ceph osd crush move cephosd02 rack=rack-02
 ceph osd crush move cephosd03 rack=rack-03
 
-<span class="hljs-comment"># create a a new replicated rule and assign it to a volume</span>
+<span class="hljs-comment"># create a new replicated rule and assign it to a volume</span>
 ceph osd crush rule create-replicated replicated_rack_rule default rack
 ceph osd crush rule <span class="hljs-built_in">ls</span>
 ceph osd crush rule dump replicated_rack_rule

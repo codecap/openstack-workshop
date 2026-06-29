@@ -181,7 +181,7 @@ graph LR
 
 ---
 # Deployment Node
-* ansible
+* python virtual envs
 * kolla-ansible
 * cephadm
 
