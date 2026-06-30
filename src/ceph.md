@@ -287,7 +287,7 @@ ceph osd tree
 ---
 # Placement Groups
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
-![image](https://media.licdn.com/dms/image/v2/C4E12AQGGNrXrOo2PyA/article-inline_image-shrink_1500_2232/article-inline_image-shrink_1500_2232/0/1625477968913?e=1782345600&v=beta&t=MbiqJhUO49zU_XEI63gTxS_XylEKGspl5VUMxKxCsoU)
+![image](https://media.licdn.com/dms/image/v2/C4E12AQGGNrXrOo2PyA/article-inline_image-shrink_1500_2232/article-inline_image-shrink_1500_2232/0/1625477968913?e=1784160000&v=beta&t=o1KEXUfgB71do85SWHCN8fIgKgtCxUQMjptZVQE6qTk)
 
 
 ---
