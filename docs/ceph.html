@@ -2369,7 +2369,7 @@ ceph-fuse -n client.guest -k /etc/ceph/ceph.client.guest.keyring /mnt/ --client_
 
 <span class="hljs-comment"># Take a Snapshot (The mkdir Trick)</span>
 <span class="hljs-built_in">mkdir</span> /mnt/project1/.snap/snapshot_backup_v1
-<span class="hljs-built_in">cat</span>   /mnt/project1/.snap/snapshot_backup_v1
+<span class="hljs-built_in">cat</span>   /mnt/project1/.snap/snapshot_backup_v1/document.txt
 
 <span class="hljs-comment"># Overwrite our working live file</span>
 <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Version 2.0 - Broken Build!&quot;</span> &gt; /mnt/project1/document.txt
@@ -2782,6 +2782,9 @@ ceph health
 <span class="hljs-comment"># Review versions installed</span>
 ceph versions
 
+<span class="hljs-comment"># Review the releases page in browser</span>
+<span class="hljs-comment"># https://docs.ceph.com/en/latest/releases/</span>
+
 <span class="hljs-comment"># List available versions</span>
 ceph orch upgrade <span class="hljs-built_in">ls</span>
 
@@ -2879,7 +2882,7 @@ apt install -y cephadm-&lt;VERSION&gt; ceph-common-&lt;VERSION&gt;
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:50%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="replace-a-mon-node">Replace a Mon Node</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚧" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6a7.svg" data-marp-twemoji=""/> on deployment noce remove cephmon03 from the cluster                   <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚧" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6a7.svg" data-marp-twemoji=""/> on deployment node remove cephmon03 from the cluster                   <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> _admin mds mgr mon nfs rbd-mirror rgw
 <span class="hljs-keyword">do</span>
   ceph orch host label <span class="hljs-built_in">rm</span> cephmon03 <span class="hljs-variable">$l</span>
@@ -2971,10 +2974,6 @@ ceph orch ps
 ceph osd tree
 ceph osd metadata &lt;OSD_NR&gt; | grep device
 
-ceph osd <span class="hljs-built_in">set</span> noout
-ceph osd <span class="hljs-built_in">set</span> norecover
-
-
 <span class="hljs-comment"># <img class="emoji" draggable="false" alt="💥" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4a5.svg" data-marp-twemoji=""/> Let&#x27;s break it down, on cephosd03</span>
 <span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=&lt;DEVICE&gt; bs=1024 count=$((<span class="hljs-number">1024</span>*<span class="hljs-number">10</span>))
 
@@ -2983,6 +2982,10 @@ ceph osd tree
 ceph status
 ceph health detail
 ceph device <span class="hljs-built_in">ls</span>
+
+<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🛠" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6e0.svg" data-marp-twemoji=""/> Tell the cluster not to try to recover</span>
+ceph osd <span class="hljs-built_in">set</span> noout
+ceph osd <span class="hljs-built_in">set</span> norecover
 
 <span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚧" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6a7.svg" data-marp-twemoji=""/> Rebuild</span>
 ceph orch <span class="hljs-built_in">ls</span> osd --<span class="hljs-built_in">export</span>

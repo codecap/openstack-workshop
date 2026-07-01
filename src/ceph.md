@@ -544,7 +544,7 @@ echo "Version 1.0 - Stable Build" > /mnt/project1/document.txt
 
 # Take a Snapshot (The mkdir Trick)
 mkdir /mnt/project1/.snap/snapshot_backup_v1
-cat   /mnt/project1/.snap/snapshot_backup_v1
+cat   /mnt/project1/.snap/snapshot_backup_v1/document.txt
 
 # Overwrite our working live file
 echo "Version 2.0 - Broken Build!" > /mnt/project1/document.txt
@@ -691,6 +691,9 @@ ceph health
 # Review versions installed
 ceph versions
 
+# Review the releases page in browser
+# https://docs.ceph.com/en/latest/releases/
+
 # List available versions
 ceph orch upgrade ls
 
@@ -736,7 +739,7 @@ apt install -y cephadm-<VERSION> ceph-common-<VERSION>
 
 ![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-# 🚧 on deployment noce remove cephmon03 from the cluster                   📋
+# 🚧 on deployment node remove cephmon03 from the cluster                   📋
 for l in _admin mds mgr mon nfs rbd-mirror rgw
 do
   ceph orch host label rm cephmon03 $l
@@ -777,10 +780,6 @@ ceph orch ps
 ceph osd tree
 ceph osd metadata <OSD_NR> | grep device
 
-ceph osd set noout
-ceph osd set norecover
-
-
 # 💥 Let's break it down, on cephosd03
 dd if=/dev/zero of=<DEVICE> bs=1024 count=$((1024*10))
 
@@ -789,6 +788,10 @@ ceph osd tree
 ceph status
 ceph health detail
 ceph device ls
+
+# 🛠️ Tell the cluster not to try to recover
+ceph osd set noout
+ceph osd set norecover
 
 # 🚧 Rebuild
 ceph orch ls osd --export
