@@ -853,7 +853,7 @@ lsblk
 dmsetup ls
 
 # Remove staled Logical Volume
-demsetup remove ceph--<ID>
+dmsetup remove ceph--<ID>
 
 # Clean up Device
 wipefs --all --force <DEVICE>
@@ -1009,7 +1009,8 @@ fio                  \
 --iodepth=8          \
 --numjobs=1          \
 --group_reporting    \
---runtime=60
+--runtime=60         \
+--time_based
 ```
 ---
 # Performance tests
@@ -1029,7 +1030,8 @@ fio                  \
 --iodepth=32         \
 --numjobs=1          \
 --group_reporting    \
---runtime=60
+--runtime=60         \
+--time_based
 ```
 
 ---

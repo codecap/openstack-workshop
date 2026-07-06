@@ -3153,7 +3153,7 @@ lsblk
 dmsetup <span class="hljs-built_in">ls</span>
 
 <span class="hljs-comment"># Remove staled Logical Volume</span>
-demsetup remove ceph--&lt;ID&gt;
+dmsetup remove ceph--&lt;ID&gt;
 
 <span class="hljs-comment"># Clean up Device</span>
 wipefs --all --force &lt;DEVICE&gt;
@@ -3736,7 +3736,8 @@ fio                  \
 --iodepth=8          \
 --numjobs=1          \
 --group_reporting    \
---runtime=60
+--runtime=60         \
+--time_based
 </code></pre>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
 </section>
@@ -3812,7 +3813,8 @@ fio                  \
 --iodepth=32         \
 --numjobs=1          \
 --group_reporting    \
---runtime=60
+--runtime=60         \
+--time_based
 </code></pre>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
 </section>

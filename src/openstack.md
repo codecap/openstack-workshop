@@ -133,7 +133,7 @@ fi
 export ARA_HOME=$VIRTUAL_ENV/lib/python3.12/site-packages/ara
 
 
-ADMIN_OPENRC_FILE=$OPENSTACK_DIR/custom-config/tst/admin-openrc.sh
+ADMIN_OPENRC_FILE=$OPENSTACK_DIR/custom-config/wrx/admin-openrc.sh
 if [ -f $ADMIN_OPENRC_FILE ]
 then
   source  $ADMIN_OPENRC_FILE
@@ -366,16 +366,17 @@ du -lhs /var/lib/docker/volumes/*
 docker exec -ti nova_libvirt virsh list  --all
 
 # 🚧 Drain the openstack compute host
-openstack server list --all       --host    compute03
-openstack compute service set     --disable compute03 nova-compute
-for vm in $(openstack server list --host    compute03 --all-projects -c ID -f value);
+openstack server list --all       --host    <COMPUTE_NAME>
+openstack compute service set     --disable <COMPUTE_NAME> nova-compute
+for vm in $(openstack server list --host    <COMPUTE_NAME> --all-projects -c ID -f value);
 do
   echo "Evacuating VM: $vm"
   openstack server migrate --live $vm
 done
-openstack server list --all       --host    compute03
+openstack server list --all       --host    <COMPUTE_NAME>
 
-# 💥 Break the compute03 node
+# 💥 Break the node
+# On the node
 systemctl stop kolla-* docker.service docker.socket
 apt remove  docker*  -y
 rm -rf  /etc/kolla /var/log/kolla  \
@@ -387,10 +388,10 @@ umount  /var/lib/docker;  wipefs /dev/sdb -a; mkfs.ext4 /dev/sdb
 reboot
 
 # 🚚 Redeploy opentack services on compute03 from the deployment node
-kolla-ansible bootstrap-servers -i inventory/wrx --limit ~compute03
-kolla-ansible prechecks         -i inventory/wrx --limit ~compute03
-kolla-ansible pull              -i inventory/wrx --limit ~compute03
-kolla-ansible reconfigure       -i inventory/wrx --limit ~compute03
+kolla-ansible bootstrap-servers -i inventory/wrx --limit ~<COMPUTE_NAME>
+kolla-ansible prechecks         -i inventory/wrx --limit ~<COMPUTE_NAME>
+kolla-ansible pull              -i inventory/wrx --limit ~<COMPUTE_NAME>
+kolla-ansible reconfigure       -i inventory/wrx --limit ~<COMPUTE_NAME>
 ```
 
 ---
@@ -432,14 +433,14 @@ vim inventory/wrx/20_openstack
 # 🩺 check the new host
 
 # 🚚 Deploy opentack services on the new compute host
-kolla-ansible bootstrap-servers -i inventory/wrx --limit ~compute11
-kolla-ansible prechecks         -i inventory/wrx --limit ~compute11
-kolla-ansible pull              -i inventory/wrx --limit ~compute11
-kolla-ansible deploy            -i inventory/wrx --limit ~compute11
+kolla-ansible bootstrap-servers -i inventory/wrx --limit ~compute12
+kolla-ansible prechecks         -i inventory/wrx --limit ~compute12
+kolla-ansible pull              -i inventory/wrx --limit ~compute12
+kolla-ansible deploy            -i inventory/wrx --limit ~compute12
 
 # 🩺 check the new host
 openstack compute service list
-openstack server  migrate --live --host compute11 <SERVER_ID> 
+openstack server  migrate --live --host compute12 <SERVER_ID>
 
 docker exec -ti nova_libvirt virsh list  --all # on the host
 ```
