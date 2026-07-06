@@ -66,13 +66,13 @@ architecture-beta
 # Deployment Models
 
 - **Baremetal** - all servers listed are baremetal machines, at least a single
-switch to interconnect and a instance for deployment (VM, laptop, a small
+switch to interconnect and an instance for deployment (VM, laptop, a small
 baremetal machine)
-- **Hyperconverged** - at least a singel baremetal node, to create all listed
-servers as VMs and additianally an instance for deployment.
-- **Hybrid** - some baremetal nodes to virtualize servers (controllers, network, inrastructure) and some to use to deliver performance (compute, ceph osd nodes)
+- **Hyperconverged** - at least a single baremetal node, to create all listed
+servers as VMs and additionally an instance for deployment.
+- **Hybrid** - some baremetal nodes to virtualize servers (controllers, network, infrastructure) and some to use to deliver performance (compute, Ceph OSD nodes)
 
-**Baremetal** and **Hybrid** aproaches can be used for production environments
+**Baremetal** and **Hybrid** approaches can be used for production environments
 
 
 ---
@@ -81,7 +81,7 @@ servers as VMs and additianally an instance for deployment.
 - simple and fast
 - single baremetal node needed
 - all listed servers backed by VMs
-- all listed networks backed by OpenVSwitch / Linux Bridges
+- all listed networks backed by Open vSwitch / Linux Bridges
 - no physical switch needed
 
 **Disadvantages**:
@@ -90,12 +90,12 @@ servers as VMs and additianally an instance for deployment.
 
 
 ---
-# Aproaches to create hyperconverged environment
-we will need at least a single baremetal node with either:
+# Approaches to create a hyperconverged environment
+We will need at least a single baremetal node with either:
 - KVM | libvirt
-- singlenode openstack environment
-- singlenode proxmox environment
-- singlenode incus environment
+- single-node OpenStack environment
+- single-node Proxmox environment
+- single-node Incus environment
 ...
 
 ---
@@ -139,7 +139,7 @@ qm cloudinit update $TEMPL_ID
 
 qm template $TEMPL_ID
 
-#Install Packages
+# Install packages
 apt install -y  \
  bind9-dnsutils \
  curl           \
@@ -158,7 +158,7 @@ apt install -y  \
 # Proxmox
 ![bg right:60% 35%](https://www.svgrepo.com/show/331552/proxmox.svg)
 ```bash
-# Create Bridges                                                            📋
+# Create bridges                                                            📋
 cat > /etc/network/interfaces.d/wrx <<EOF
 auto cpln01
 iface cpln01 inet manual
@@ -224,7 +224,7 @@ brctl show
 ```
 
 ---
-# Let's GO!
+# Let's Go!
 ![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
 
 
@@ -299,13 +299,13 @@ create-vm --id 10 --name dns.wrx.sckt.net --cpu 1 --ram 4096 --disks '[8]' --net
 ![bg right:45% 25%](https://api.iconify.design/file-icons:easybuild.svg)
 
 ```bash
-# create a new environment
+# Create a new environment
 print-create-env-commands | bash
 
-#  destroy whole environment
+# Destroy the whole environment
 print-destroy-env-commands | bash
 
-# if you need to rebuild only a set or a single server, you can use grep with a matching filter
+# If you need to rebuild only a set or a single server, use grep with a matching filter
 print-destroy-env-commands | grep <NODE_FILTER> | bash
 print-create-env-commands  | grep <NODE_FILTER> | bash
 ```
@@ -320,18 +320,18 @@ PROXY=http://proxy.wrx.sckt.net:3128
 INFRA_NODES="dns|proxy|registry"
 DEPLOY_NODES="deployment|recorder"
 
-# Infra Nodes
+# Infra nodes
 print-create-env-commands  | grep -E "$INFRA_NODES" | bash
 ssh -t dns      "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/dns.sh      | bash'"
 ssh -t proxy    "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/proxy.sh    | bash'"
 ssh -t registry "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/registry.sh | bash'"
 
-# Deployment Nodes
+# Deployment nodes
 print-create-env-commands  | grep -E "$DEPLOY_NODES" | bash
 ssh -t recorder "sudo -i bash -c 'curl --proxy $PROXY -L $BASE_PATH/scripts/infra/recorder.sh | bash'"
 scp /root/.ssh/id_rsa* deployment:/home/deploy/.ssh
 
-# Environment Nodes
+# Environment nodes
 print-create-env-commands  | grep -v -E "$INFRA_NODES|$DEPLOY_NODES"   | bash
 ```
 
@@ -341,33 +341,33 @@ print-create-env-commands  | grep -v -E "$INFRA_NODES|$DEPLOY_NODES"   | bash
 ![bg right:40% 30%](https://www.svgrepo.com/show/375447/identity-aware-proxy.svg)
 
 ```bash
-* generate a new eddsa key with **PuTTYgen** an save it on your system
-* put the public key in ~/.ssh/authorized_key on:
+* Generate a new ECDSA key with **PuTTYgen** and save it on your system
+* Put the public key in ~/.ssh/authorized_keys on:
   * hypervisor (root)
   * deployment (deploy)
 
-* Start PuTTy. Go to Connection -> SSH -> Auth -> Credentials. Load the Pricate Key
-* Go to Connection -> Data. Put "root" for "Auto-login usernmae"
-* Go to Session. Put the IP of your hypervisor,
+* Start PuTTY. Go to Connection -> SSH -> Auth -> Credentials. Load the Private Key
+* Go to Connection -> Data. Put "root" for "Auto-login username"
+* Go to Session. Put the IP of your hypervisor
 * Put the name for the session - "hypervisor". Save.
 * Press "Open" button, a new session should be opened
 
 * Create a new session with PuTTY
-  * Put 10.14.0.24 into "Host Name" Field
-  * Under Connection -> Data, put "deploy" for "Auto-login usernmae"
+  * Put 10.14.0.24 into "Host Name" field
+  * Under Connection -> Data, put "deploy" for "Auto-login username"
   * Under Connection -> SSH -> Auth -> Credentials load the private key
 * Go to Connection -> SSH -> Tunnels
-  * Chose Dynamic
+  * Choose Dynamic
   * Source Port: 8888
   * Press "Add" button
 * Go to Connection -> Proxy
-  * set type to "SSH to proxy and port forward"
-  * set Proxy hostname to "hypervisor"
-  * set port to 22
+  * Set type to "SSH to proxy and port forward"
+  * Set Proxy hostname to "hypervisor"
+  * Set port to 22
 * Go to Session
-  * put deployment to "Saved Sessions"
-  * press "save
-  * press open
+  * Put "deployment" in "Saved Sessions"
+  * Press "Save"
+  * Press "Open"
 ```
 
 ---
@@ -375,19 +375,19 @@ print-create-env-commands  | grep -v -E "$INFRA_NODES|$DEPLOY_NODES"   | bash
 ![bg right:40% 30%](https://www.svgrepo.com/show/375447/identity-aware-proxy.svg)
 ```bash
 * Open Firefox
-* Go to settings
+* Go to Settings
 * Search for "proxy"
-* Choose "Manual Configuration" 
-* Put "127.0.0.1" in Socks-Host Field, Port: 8888
+* Choose "Manual Configuration"
+* Put "127.0.0.1" in SOCKS Host field, Port: 8888
 * Choose SOCKS v5
 ```
 
 ---
-# SSH config
+# SSH Config
 ![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
 
 ```bash
-# On deployment node create SSH Config to access workshop environemnt       📋
+# On deployment node create SSH config to access the workshop environment   📋
 cat >> ~/.ssh/config <<EOF
 Host hypervisor hypervisor.wrx.sckt.net
   User root

@@ -44,7 +44,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 # Architecture
 
 ---
-# OpenStack Distrubutions
+# OpenStack Distributions
 [Catalog](https://www.openstack.org/marketplace/distros/)
 
 
@@ -90,7 +90,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 ...
 
 ---
-# Ceph Deployment Aproaches
+# Ceph Deployment Approaches
 - [cephadm (official)](https://docs.ceph.com/en/reef/cephadm/install/#cephadm-deploying-new-cluster)
 - [rook](https://rook.io/)
 
@@ -181,7 +181,7 @@ graph LR
 
 ---
 # Deployment Node
-* python virtual envs
+* Python virtual envs
 * kolla-ansible
 * cephadm
 
@@ -189,8 +189,8 @@ graph LR
 # Baremetal Node and VMs on it
 * Deployment VM
 * Infra VMs: 4
-* OpenStack VMs: 3xController, 3xNetwrok, 3(+)xCompute
-* Ceph VMs: 3xMons, 3(+) OSDs
+* OpenStack VMs: 3x Controller, 3x Network, 3(+)x Compute
+* Ceph VMs: 3x Mons, 3(+) OSDs
 
 ---
 # Air-Gapped Environment

@@ -150,10 +150,10 @@ EOF
 ![bg right:30% 90%](https://superuser.openinfra.org/wp-content/uploads/2025/01/1_q6dlalwfoVWwUqFmo4I-9g.png)
 
 ```bash
-# Prepare python virtual environment                                        📋
+# Prepare Python virtual environment                                        📋
 cd ~/openstack/
 source ~/.profile
-# Some error are expected here
+# Some errors are expected here
 
 python3 -m venv $VENV_PATH
 
@@ -180,10 +180,10 @@ gilt overlay
 ```bash
 # Prepare ansible inventory                                                 📋
 
-# Copy invenotry file
+# Copy inventory file
 cp ~/venv/openstack/share/kolla-ansible/ansible/inventory/multinode inventory/
 
-# Patch inventory file and review inventory/wrx/ directory afterwords
+# Patch inventory file and review inventory/wrx/ directory afterwards
 crudini --del inventory/multinode control
 crudini --del inventory/multinode network
 crudini --del inventory/multinode compute
@@ -191,7 +191,7 @@ crudini --del inventory/multinode monitoring
 crudini --del inventory/multinode storage
 crudini --del inventory/multinode loadbalancer:children
 
-# Prapare passwords
+# Prepare passwords
 cp ~/venv/openstack/share/kolla-ansible/etc_examples/kolla/passwords.yml \
   custom-config/wrx/passwords.yml
 
@@ -240,7 +240,7 @@ kolla-ansible pull                 -i inventory/wrx
 ```bash
 # Prepare the kolla-ansible deployment                                      📋
 
-# ⚠️ NOTE: it will take time
+# ⚠️ NOTE: this will take time
 kolla-ansible deploy               -i inventory/wrx
 
 # Post deployment steps
@@ -292,7 +292,7 @@ Check the following files to use with CLI:
 # Service Overview
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# Review the openstack environment                                          📋
+# Review the OpenStack environment                                          📋
 openstack service  list
 openstack endpoint list
 openstack catalog  list
@@ -307,7 +307,7 @@ openstack orchestration service list
 # Replace a Network Node
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# 🔍 Review data stored on the node. Is there anything to backup ?          📋
+# 🔍 Review data stored on the node. Is there anything to back up?          📋
 docker volume ls
 du -lhs /var/lib/docker/volumes/*
 
@@ -320,7 +320,7 @@ rm -rf  /etc/kolla /var/log/kolla  \
 umount /var/lib/docker;  wipefs /dev/sdb -a; mkfs.ext4 /dev/sdb
 reboot
 
-# 🚚 Redeploy opentack services on network03 from the deployment node
+# 🚚 Redeploy OpenStack services on network03 from the deployment node
 kolla-ansible bootstrap-servers -i inventory/wrx --limit ~network03
 kolla-ansible prechecks         -i inventory/wrx --limit ~network03
 kolla-ansible pull              -i inventory/wrx --limit ~network03
@@ -330,7 +330,7 @@ kolla-ansible reconfigure       -i inventory/wrx --limit ~network03
 # Replace a Controller Node
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# 🔍 Review data stored on the node. Is there anything to backup ?          📋
+# 🔍 Review data stored on the node. Is there anything to back up?          📋
 docker volume ls
 du -lhs /var/lib/docker/volumes/*
 
@@ -344,7 +344,7 @@ rm -rf  /etc/kolla /var/log/kolla  \
 umount /var/lib/docker;  wipefs /dev/sdb -a; mkfs.ext4 /dev/sdb
 reboot
 
-# 🚚 Redeploy opentack services on controller03 from the deployment node
+# 🚚 Redeploy OpenStack services on controller03 from the deployment node
 kolla-ansible bootstrap-servers -i inventory/wrx --limit ~controller03
 kolla-ansible prechecks         -i inventory/wrx --limit ~controller03
 kolla-ansible pull              -i inventory/wrx --limit ~controller03
@@ -352,7 +352,7 @@ kolla-ansible pull              -i inventory/wrx --limit ~controller03
 # ☕ this will take a while
 kolla-ansible reconfigure       -i inventory/wrx --limit ~controller03 --skip-tags keystone
 
-# ⚠️ we have to reconfigure keystone aross all controller nodes ⚠️
+# ⚠️ we have to reconfigure keystone across all controller nodes ⚠️
 kolla-ansible reconfigure       -i inventory/wrx                       --tags      keystone
 ```
 
@@ -360,12 +360,12 @@ kolla-ansible reconfigure       -i inventory/wrx                       --tags   
 # Replace a Compute Node
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# 🔍 Review data stored on the node. Is there anything to backup ?          📋
+# 🔍 Review data stored on the node. Is there anything to back up?          📋
 docker volume ls
 du -lhs /var/lib/docker/volumes/*
 docker exec -ti nova_libvirt virsh list  --all
 
-# 🚧 Drain the openstack compute host
+# 🚧 Drain the OpenStack compute host
 openstack server list --all       --host    <COMPUTE_NAME>
 openstack compute service set     --disable <COMPUTE_NAME> nova-compute
 for vm in $(openstack server list --host    <COMPUTE_NAME> --all-projects -c ID -f value);
@@ -387,7 +387,7 @@ cp -pr  /var/lib/docker/volumes ~/
 umount  /var/lib/docker;  wipefs /dev/sdb -a; mkfs.ext4 /dev/sdb
 reboot
 
-# 🚚 Redeploy opentack services on compute03 from the deployment node
+# 🚚 Redeploy OpenStack services on compute03 from the deployment node
 kolla-ansible bootstrap-servers -i inventory/wrx --limit ~<COMPUTE_NAME>
 kolla-ansible prechecks         -i inventory/wrx --limit ~<COMPUTE_NAME>
 kolla-ansible pull              -i inventory/wrx --limit ~<COMPUTE_NAME>
@@ -398,19 +398,19 @@ kolla-ansible reconfigure       -i inventory/wrx --limit ~<COMPUTE_NAME>
 # Debugging
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# 🩺 check                                                                  📋
+# 🩺 Check                                                                  📋
 openstack compute service list
 
-# 🔍 take a look at logs on compute03
+# 🔍 Take a look at logs on compute03
 tail -f /var/log/kolla/nova/nova-compute.log
 
-# 🔍 compare files on nova_compute volume and in the backup
+# 🔍 Compare files on nova_compute volume and in the backup
 ls -lh ~/volumes/nova_compute/_data/ /var/lib/docker/volumes/nova_compute/_data/
 
-# ⚙️ repair
+# ⚙️ Repair
 cp ~/volumes/nova_compute/_data/compute_id  /var/lib/docker/volumes/nova_compute/_data/
 
-# 🩺 check the status again and test
+# 🩺 Check the status again and test
 openstack compute service list
 openstack compute service set --enable compute03 nova-compute
 openstack server migrate --live --host compute03 <SERVER_ID> 
@@ -419,9 +419,9 @@ openstack server list    --all  --long
 ---
 # Scale-out
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
-* How to scale out controllers ?
-* How to scale out network nodes ?
-* How to scale out compute nodes ?
+* How to scale out controllers?
+* How to scale out network nodes?
+* How to scale out compute nodes?
 
 ---
 # Add a New Compute Host
@@ -430,15 +430,15 @@ openstack server list    --all  --long
 # 📝 Modify inventory, put the new compute host into the hypervisor section 📋
 vim inventory/wrx/20_openstack
 
-# 🩺 check the new host
+# 🩺 Check the new host
 
-# 🚚 Deploy opentack services on the new compute host
+# 🚚 Deploy OpenStack services on the new compute host
 kolla-ansible bootstrap-servers -i inventory/wrx --limit ~compute12
 kolla-ansible prechecks         -i inventory/wrx --limit ~compute12
 kolla-ansible pull              -i inventory/wrx --limit ~compute12
 kolla-ansible deploy            -i inventory/wrx --limit ~compute12
 
-# 🩺 check the new host
+# 🩺 Check the new host
 openstack compute service list
 openstack server  migrate --live --host compute12 <SERVER_ID>
 
@@ -452,16 +452,16 @@ docker exec -ti nova_libvirt virsh list  --all # on the host
 ---
 # Reboot an OpenStack Host
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
-* How to reboot controllers ?
-* How to reboot network nodes ?
-* How to reboot compute nodes ? 
+* How to reboot controllers?
+* How to reboot network nodes?
+* How to reboot compute nodes?
 
 ---
 # Debugging RabbitMQ
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 
 ```bash
-# Some commands to debug rabbitmq errors                                    📋
+# Some commands to debug RabbitMQ errors                                    📋
 
 rabbitmqctl status
 rabbitmqctl cluster_status
@@ -486,7 +486,7 @@ rabbitmqctl delete_queue  <QUEUE_NAME>
 ![bg right:50% 90%](https://releases.openstack.org/_images/slurp.png)
 
 ---
-# Rollout the Next Release
+# Roll out the Next Release
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # 📝 Update kolla-ansible                                                   📋
@@ -507,7 +507,7 @@ kolla-ansible install-deps
 ```
 
 ---
-# Rollout the Next Release
+# Roll out the Next Release
 ## Inventory
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
@@ -526,7 +526,7 @@ diff -y --suppress-common-lines  inventory/multinode  inventory/multinode.old
 ```
 
 ---
-# Rollout the Next Release
+# Roll out the Next Release
 ## Passwords
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
@@ -545,7 +545,7 @@ diff -y --suppress-common-lines  custom-config/wrx/passwords.yml custom-config/w
 ```
 
 ---
-# Rollout the Next Release
+# Roll out the Next Release
 ## Go
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
@@ -553,7 +553,7 @@ diff -y --suppress-common-lines  custom-config/wrx/passwords.yml custom-config/w
 ansible  all -b -m ansible.builtin.shell -a \
   "mkdir -p ~/backup; cp  -r /etc/kolla ~/backup/$(date +%y%m%d%H%M%S)_kolla" 
 
-# 🗂️ force to collect facts
+# 🗂️ Force to collect facts
 kolla-ansible gather-facts -i inventory/wrx -e "ansible_python_interpreter=/usr/bin/python3"
 
 # ansible all -m ansible.builtin.setup
@@ -573,7 +573,7 @@ kolla-ansible upgrade      -i inventory/wrx
 * Keepalived & HAProxy (controllers)
 * Stateless API Services
 * MariaDB Galera Cluster as State Store
-* Message Broker(RabbitMQ)
+* Message Broker (RabbitMQ)
 * Multiple nodes of each type
 
 ---
@@ -582,24 +582,24 @@ kolla-ansible upgrade      -i inventory/wrx
 ```bash
 # Some useful commands for debugging                                        📋
 
-# On each nodes
+# On each node
 docker ps  | grep unhealthy
 df -Ph
 
-# on controller node
+# On controller node
 tail -f /var/log/kolla/mariadb/mariadb.log
 tail -f /var/log/kolla/rabbitmq/rabbit*.log
 
-# on deployment node
+# On deployment node
 openstack compute service list
 openstack volume  service list
 openstack network agent   list
 
-# check HA IP on controller nodes
+# Check HA IP on controller nodes
 ip -br a
 
-# Searching for error messages connected with a resource
-grep -r [RESOUCE_ID] /var/log/kolla/[SERVICE]
+# Search for error messages connected with a resource
+grep -r [RESOURCE_ID] /var/log/kolla/[SERVICE]
 ```
 
 ---
@@ -607,23 +607,23 @@ grep -r [RESOUCE_ID] /var/log/kolla/[SERVICE]
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 * MySQL   Backup
 * Config  Backup (can be restored by kolla)
-* Volumes Backup (can be ⚠️partially restored )
+* Volumes Backup (can be ⚠️ partially restored)
 * Message Queues (are recreated if lost)
 
 ---
 # Database Backup and Recovery
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# create a new backup                                                       📋
+# Create a new backup                                                       📋
 kolla-ansible mariadb-backup -i inventory/wrx
 
-# check on the controller
+# Check on the controller
 ls -lh /var/lib/docker/volumes/mariadb_backup/_data/
 
-# to restore
+# To restore
 gunzip -c <BACKUP_FILE> | docker exec -i mariadb mysql -u root -p
 
-# if the db cluster can not create a quorum
+# If the DB cluster cannot create a quorum
 kolla-ansible mariadb-recovery -i inventory/wrx
 ```
 ---
@@ -635,14 +635,14 @@ table, thead, tbody, tr, th, td {
   border: none !important;
 }
 </style>
-* Ceilometer / Gnochi / Aodh (for Billing)
+* Ceilometer / Gnocchi / Aodh (for Billing)
 * Prometheus / Alertmanager / Grafana
 
 | | |
 | :--- | :--- |
-| Grafana     | [http://int.os.wrx.sckt.net:3000](http://int.os.wrx.sckt.net:3000) |
-| Prometheus  | [http://int.os.wrx.sckt.net:9091](http://int.os.wrx.sckt.net:9091) |
-| Alermanager | [http://int.os.wrx.sckt.net:9095](http://int.os.wrx.sckt.net:9091) | 
+| Grafana      | [http://int.os.wrx.sckt.net:3000](http://int.os.wrx.sckt.net:3000) |
+| Prometheus   | [http://int.os.wrx.sckt.net:9091](http://int.os.wrx.sckt.net:9091) |
+| Alertmanager | [http://int.os.wrx.sckt.net:9095](http://int.os.wrx.sckt.net:9091) |
 
 ---
 # Expand / Deploy a New Service
@@ -676,7 +676,7 @@ Visit:
 # Images
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# Prepare Images                                                            📋
+# Prepare images                                                            📋
 mkdir -p  ~/cloud-images/
 
 ALMA_VERSION="10.2"
@@ -705,7 +705,7 @@ DEBIAN_LINK="https://cloud.debian.org/images/cloud/trixie/latest/$DEBIAN_IMG_NAM
 # Images
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# Download Images                                                           📋
+# Download images                                                           📋
 for i in  alma~$ALMA_VERSION~$ALMA_LINK       \
           rocky~$ROCKY_VERSION~$ROCKY_LINK    \
           ubuntu~$UBUNTU_VERSION~$UBUNTU_LINK \
@@ -717,7 +717,7 @@ do
   link=${fields[2]}
   filepath=~/cloud-images/$(basename $link)
 
-  echo "Downloadig $name-$version image"
+  echo "Downloading $name-$version image"
   curl --output-dir ~/cloud-images -L -O $link
 
   echo "Uploading $name-$version image into OpenStack"
@@ -730,7 +730,7 @@ do
       --public
 done
 
-# check
+# Check
 openstack image list --long
 ```
 
@@ -743,17 +743,17 @@ PRJ_NAME=workshop
 USR_NAME=workshop
 USR_PASS=workshop
 
-# create project
+# Create project
 openstack project create                             $PRJ_NAME
 openstack quota set --instances 32 --cores 64        $PRJ_NAME
 
-# create user
+# Create user
 openstack user create --password $USR_PASS --project $PRJ_NAME $USR_NAME
 
-# create permissions for the user
+# Create permissions for the user
 openstack role add    --user $USR_NAME     --project $PRJ_NAME member
 
-# check
+# Check
 openstack role assignment list --name
 openstack quota show $PRJ_NAME
 ```
@@ -762,7 +762,7 @@ openstack quota show $PRJ_NAME
 # How to authenticate with CLI
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# Prepare an openrc file to be used with openstack CLI                      📋
+# Prepare an openrc file to be used with the OpenStack CLI                  📋
 cp  custom-config/wrx/admin-openrc.sh  custom-config/wrx/workshop-openrc.sh
 
 sed  -e "s/OS_PROJECT_NAME=.*/OS_PROJECT_NAME=$PRJ_NAME/" -i custom-config/wrx/workshop-openrc.sh
@@ -770,9 +770,9 @@ sed  -e "s/OS_TENANT_NAME=.*/OS_TENANT_NAME=$PRJ_NAME/"   -i custom-config/wrx/w
 sed  -e "s/OS_PASSWORD=.*/OS_PASSWORD=$USR_PASS/"         -i custom-config/wrx/workshop-openrc.sh
 sed  -e "s/OS_USERNAME=.*/OS_USERNAME=$USR_NAME/"         -i custom-config/wrx/workshop-openrc.sh
 
-# review
+# Review
 cat    custom-config/wrx/workshop-openrc.sh
-# activate
+# Activate
 source custom-config/wrx/workshop-openrc.sh
 
 openstack network list
@@ -787,8 +787,8 @@ openstack server  list
   * vlan
   * vxlan
 * Routers
-* FloatingIPs
-* LoadBalancers
+* Floating IPs
+* Load Balancers
 
 ---
 # Networking
@@ -796,7 +796,7 @@ openstack server  list
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 
 ```bash
-# Create external network (vlan backed)                                     📋
+# Create external network (VLAN backed)                                     📋
 # as admin
 EXT_NET_VLAN=3010
 EXT_NET_NAME="shared${EXT_NET_VLAN}"
@@ -823,10 +823,10 @@ openstack subnet create  ${EXT_NET_NAME}-subnet \
 ## **Project Network**
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# Create external network (vxlan backed)                                    📋
+# Create project network (VXLAN backed)                                     📋
 # as workshop user in workshop project
 
-# activate
+# Activate
 source custom-config/wrx/workshop-openrc.sh
 
 PRJ_NAME=workshop
@@ -879,7 +879,7 @@ openstack server create                  \
 ![bg right:40% 90%](https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/openstack/networking-how-to-access.svg)
 
 ```bash
-# Create a config for a vlan interface                                      📋
+# Create a config for a VLAN interface                                      📋
 # on the testing node as root
 myid=$(cat /etc/env.json  | jq .id)
 
@@ -904,13 +904,13 @@ netplan apply
 
 ---
 # Networking
-## **How to access ?**
+## **How to access?**
 ![bg right:50% 30%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
-# copy the ssh key from deployment to testing                               📋
+# Copy the ssh key from deployment to testing node                          📋
 scp ~/.ssh/id_ecdsa* testing.mgmt.wrx.sckt.net:~/.ssh/
 
-# assign  floating ips to vms
+# Assign floating IPs to VMs
 openstack floating ip  create shared3010
 FIP_VM0=$(
   openstack floating ip  create shared3010 -f value -c floating_ip_address
@@ -938,7 +938,7 @@ openstack security group rule create allow-simple-access   \
   --ingress
 openstack server add security group vm0 allow-simple-access
 
-# You shold be able to connect to VMs from the testing node
+# You should be able to connect to VMs from the testing node
 ping -c 3 <IP>
 ssh -i ~/.ssh/id_ecdsa ubuntu@<IP>
 ```
@@ -952,11 +952,11 @@ ssh -i ~/.ssh/id_ecdsa ubuntu@<IP>
 # Check VMs and IPs assigned to them                                        📋
 openstack server list --long
 
-# Check  the state of network services
+# Check the state of network services
 openstack network agent list
 
 # Check the router has connectivity to the external network
-# Check thr router has IPs from the tenant network assigned 
+# Check the router has IPs from the tenant network assigned
 openstack router show workshop-router
 
 # On network nodes check if there are network namespaces created for the router
@@ -964,7 +964,7 @@ openstack router show workshop-router
 # snat-<ROUTER_ID>
 # fip-<FLOATING_IP_NETWORK_ID>
 ip netns
-# check if ip addresses are assinged
+# Check if IP addresses are assigned
 ip netns exec <NETWORK_NAMESPACE_ID> ip a
 
 # On compute nodes check if there are network namespaces created for the router
@@ -1023,16 +1023,16 @@ openstack server create \
   vm2
 
 
-# inspect
+# Inspect
 openstack server show vm2 -fyaml
 openstack volume list
 
-# create a new floating ip and attach it to the server
+# Create a new floating IP and attach it to the server
 vm2_ip=$(openstack floating ip create -f value -c floating_ip_address shared3010)
 openstack server add floating ip vm2 $vm2_ip
 ```
 ---
-# User Config - Inspect the created VM
+# User Config - Inspect the Created VM
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 # Log in from testing node                                                  📋
@@ -1052,14 +1052,14 @@ cat /var/lib/data/test/hello.html
 # Inspect the instance                                                      📋
 openstack server show vm2
 
-# Inspect VM wirh libvirt on the compute host
+# Inspect VM with libvirt on the compute host
 docker exec -ti nova_libvirt virsh list
 docker exec -ti nova_libvirt virsh dumpxml    <INSTANCE_NAME>
 docker exec -ti nova_libvirt virsh console    <INSTANCE_NAME> # ctrl+5 to exit
 docker exec -ti nova_libvirt virsh domblklist <INSTANCE_NAME>
 docker exec -ti nova_libvirt virsh domiflist  <INSTANCE_NAME>
 
-# Inspect volumes backed by ceph on the compute host
+# Inspect volumes backed by Ceph on the compute host
 docker exec -ti nova_compute ls /etc/ceph/
 docker exec -ti nova_compute ceph -s
 docker exec -ti nova_compute ceph --id cinder -s
@@ -1071,7 +1071,7 @@ docker exec -ti nova_compute rbd  --id cinder ls volumes
 # Inspect network interface on the compute host
 docker exec -ti openvswitch_vswitchd ovs-vsctl show
 
-# within the instance
+# Within the instance
 cloud-init status
 cloud-init status --long
 ```
@@ -1096,11 +1096,11 @@ mkfs.ext4 /dev/vdb
 echo "$(date) Hello from vm1"
 
 # Take a snapshot on the deployment node
-openstack volume snapshot create --volum vm1-data vm1-data-snap1 [--force]
+openstack volume snapshot create --volume vm1-data vm1-data-snap1 [--force]
 openstack volume snapshot list
 
-# Change the data 
-echo "Let us add a new line into the file after snapshot was created"  >> /mnt/test
+# Change the data
+echo "Let us add a new line into the file after the snapshot was created"  >> /mnt/test
 cat  /mnt/test
 ```
 ---
@@ -1131,7 +1131,7 @@ openstack volume create --image cirros --size 1 vm1-cirros
 openstack volume snapshot create --volume vm2-root vm2-root-snap1 [--force]
 openstack volume create --snapshot vm2-root-snap1 ubuntu-24.04-from-vm2
 
-# Create an image from a Volume
+# Create an image from a volume
 openstack image create  --volume ubuntu-24.04-from-vm2 ubuntu-24.04-custom 
 openstack image list 
 ```
@@ -1143,15 +1143,15 @@ openstack image list
 - Host Aggregates
 - Volume Backends
 - Network Agents
-- Availability zones
+- Availability Zones
 
 ---
-# Availalbility Zones
+# Availability Zones
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 is a human-readable label that represents a **physically isolated slice of data center infrastructure**. It is the primary tool used to group hardware into separate **fault domains** so that a single physical failure does not take down an entire cloud application.
 
 ---
-# Availalbility Zones
+# Availability Zones
 ![bg right:30% 50%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 * Power Distribution Unit
 * Data Center (Room)
@@ -1160,7 +1160,7 @@ is a human-readable label that represents a **physically isolated slice of data 
 * Storage Backend
 
 ---
-# Availalbility Zones
+# Availability Zones
 ![bg right:50% 30%](https://www.svgrepo.com/show/354145/openstack-icon.svg)
 ```bash
 openstack aggregate create --zone az1 prd-az1
@@ -1201,7 +1201,7 @@ openstack aggregate show windows
 ```
 
 ---
-# Host Aggragates vs. Availalbility Zones
+# Host Aggregates vs. Availability Zones
 ![bg right:50% 90%](https://web-assets.dd-static.net/42588/1776303838-openstack-host-aggregates-flavors-availability-zones-aggregates1.png?format=auto&fit=bounds&quality=75&disable=upscale&width=1026&dpr=1)
 
 ---

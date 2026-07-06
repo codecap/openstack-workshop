@@ -657,7 +657,7 @@ ceph osd crush rule <span class="hljs-built_in">rm</span> replicated_rule
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="deploy-ceph-with-cephadm-3">Deploy Ceph with Cephadm</h1>
 
-<h3 id="create-client-keys-for-openstack-services">Create client keys for openstack services</h3>
+<h3 id="create-client-keys-for-openstack-services">Create client keys for OpenStack services</h3>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># On the deployment node, create the .keyring files                         <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 <span class="hljs-built_in">cat</span> &gt; /etc/ceph/ceph.client.glance.keyring &lt;&lt;<span class="hljs-string">EOF
 [client.glance]
@@ -756,7 +756,7 @@ EOF</span>
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="prepare-for-openstack">Prepare for OpenStack</h1>
 
-<p><strong>Create pools for openstack services</strong></p>
+<p><strong>Create pools for OpenStack services</strong></p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash">                                                                            <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/>
 <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> volumes images vms backups
 <span class="hljs-keyword">do</span>
@@ -825,7 +825,7 @@ EOF</span>
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="prepare-for-openstack-1">Prepare for OpenStack</h1>
 
-<p><strong>Configure ceph to be used as backend for OpenStack Swift (Object Storage)</strong></p>
+<p><strong>Configure Ceph to be used as backend for OpenStack Swift (Object Storage)</strong></p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-keyword">for</span> r <span class="hljs-keyword">in</span> $(ceph config dump | grep rgw_frontends | awk <span class="hljs-string">&#x27;{print $1}&#x27;</span>)
 <span class="hljs-keyword">do</span>
   <span class="hljs-comment"># Docs: https://docs.ceph.com/en/latest/radosgw/config-ref/#keystone-settings</span>
@@ -908,7 +908,7 @@ ceph orch restart rgw.default
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="test">Test</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># On deployment node (as root or with sude)                                 <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># On deployment node (as root or with sudo)                                 <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 ceph orch <span class="hljs-built_in">ls</span>
 ceph orch host <span class="hljs-built_in">ls</span>
 ceph orch ps
@@ -980,7 +980,7 @@ ceph osd tree
 <ul>
 <li><a href="https://cephmon01.strg.wrx.sckt.net:8443">Ceph/Dashboard</a></li>
 <li><a href="https://cephgra01.strg.wrx.sckt.net:3000">Grafana/Monitoring</a></li>
-<li><a href="http://cephgra01.strg.wrx.sckt.net:9095">Prometheus/Monitroing</a></li>
+<li><a href="http://cephgra01.strg.wrx.sckt.net:9095">Prometheus/Monitoring</a></li>
 <li><a href="http://cephgra01.strg.wrx.sckt.net:9093">Alertmanager</a></li>
 </ul>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
@@ -1401,7 +1401,7 @@ ceph osd tree
   height: 50%;    
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
-<h1 id="how-openstack-uses-ceph">How OpenStack uses ceph</h1>
+<h1 id="how-openstack-uses-ceph">How OpenStack uses Ceph</h1>
 <p><br />
 <img src="https://www.redhat.com/rhdc/managed-files/sysadmin/2021-08/Ceph-storage-cluster-%28RADOS%29.png" alt="" style="width:600px;" /></p>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
@@ -1563,11 +1563,11 @@ ceph osd tree
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}">
 <h1 id="cluster-components">Cluster Components</h1>
-<p><strong>Monitor</strong> — daemon responsible for maintaining a master copy of the cluster map. Quorum of 3 at least needed to ensure high availability .</p>
-<p><strong>OSD (Object Storage Daemon)</strong> — daemon that does all data storage, replication and data recovery operations.</p>
-<p><strong>Rados Gateway</strong> – The rados gateway delivers an api for S3 or Swift to connect directly with Ceph.</p>
+<p><strong>Monitor</strong> — daemon responsible for maintaining a master copy of the cluster map. A quorum of 3 is needed at minimum to ensure high availability.</p>
+<p><strong>OSD (Object Storage Daemon)</strong> — daemon that handles all data storage, replication and data recovery operations.</p>
+<p><strong>Rados Gateway</strong> – The Rados Gateway delivers an API for S3 or Swift to connect directly with Ceph.</p>
 <p><strong>Metadata Server</strong> — MDS handles all file operations and uses RADOS objects to store data and file system attributes.</p>
-<p><strong>Ceph Manager</strong> —  runs alongside the monitor daemons, to provide additional monitoring and interfaces to external monitoring and management systems.</p>
+<p><strong>Ceph Manager</strong> — runs alongside the monitor daemons to provide additional monitoring and interfaces to external monitoring and management systems.</p>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="26" data-background-image="url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg)" data-paginate="true" data-footer="[infraguide.org](https://infraguide.org) | Questions or need a guided workshop? → ping@socket.de" data-style="footer {
@@ -1594,9 +1594,9 @@ ceph osd tree
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}">
 <h1 id="cluster-map">Cluster Map</h1>
-<p>Ceph maintains all cluster topology, which includes five maps called the “Cluster Map”:</p>
-<p><strong>Monitor Map</strong>: Contains the fsid of the cluster, the position, the name of the address and the port of each monitor. It also indicates the current time, when the map was created and the last time it was changed. To view a map of the monitor, run ceph mon dump.</p>
-<p><strong>OSD Map</strong>: contains the cluster fsid, when the map was last created and modified, a list of pools, replica sizes, PG numbers, a list of OSDs and their status (for example, up, in and down). To view an OSD map, run ceph osd dump .</p>
+<p>Ceph maintains all cluster topology, which includes five maps called the &quot;Cluster Map&quot;:</p>
+<p><strong>Monitor Map</strong>: Contains the fsid of the cluster, the position, the name, the address and the port of each monitor. It also indicates the current time, when the map was created and the last time it was changed. To view a monitor map, run ceph mon dump.</p>
+<p><strong>OSD Map</strong>: Contains the cluster fsid, when the map was last created and modified, a list of pools, replica sizes, PG numbers, a list of OSDs and their status (for example, up, in and down). To view an OSD map, run ceph osd dump.</p>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="27" data-background-image="url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg)" data-paginate="true" data-footer="[infraguide.org](https://infraguide.org) | Questions or need a guided workshop? → ping@socket.de" data-style="footer {
@@ -1623,8 +1623,8 @@ ceph osd tree
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}">
 <h1 id="cluster-map-1">Cluster Map</h1>
-<p><strong>PG Map</strong>: Contains the PG version, its time stamp, the last epoch of the OSD map, the complete proportions and details of each positioning group, such as PG ID, Up Set, Active, PG status (for example, active + clean) and data usage statistics for each pool.</p>
-<p><strong>CRUSH Map</strong>: Contains a list of storage devices, the fault domain hierarchy (for example, device, host, rack, line, room, etc.) and rules for going through the hierarchy when storing data.<br />
+<p><strong>PG Map</strong>: Contains the PG version, its timestamp, the last epoch of the OSD map, the complete proportions and details of each placement group, such as PG ID, Up Set, Active, PG status (for example, active + clean) and data usage statistics for each pool.</p>
+<p><strong>CRUSH Map</strong>: Contains a list of storage devices, the fault domain hierarchy (for example, device, host, rack, row, room, etc.) and rules for traversing the hierarchy when storing data.<br />
 You can view the decompiled map in a text editor.</p>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
 </section>
@@ -1652,7 +1652,7 @@ You can view the decompiled map in a text editor.</p>
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}">
 <h1 id="cluster-map-2">Cluster Map</h1>
-<p><strong>MDS Map (CEPHFS)</strong>: Contains the current time of the MDS map, when the map was created and the last time it was changed. It also contains the pool to store metadata, a list of metadata servers and which metadata servers are active and available. To view an MDS map, run ceph mds dump</p>
+<p><strong>MDS Map (CephFS)</strong>: Contains the current timestamp of the MDS map, when the map was created and the last time it was changed. It also contains the pool to store metadata, a list of metadata servers and which metadata servers are active and available. To view an MDS map, run ceph mds dump.</p>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-image="url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg)" data-paginate="true" data-footer="[infraguide.org](https://infraguide.org) | Questions or need a guided workshop? → ping@socket.de" data-style="footer {
@@ -1702,7 +1702,7 @@ You can view the decompiled map in a text editor.</p>
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="authentication">Authentication</h1>
 
-<p>Ceph uses a <strong>cephx authentication system</strong> similar to Kerberos to authenticate users and daemons, both the clients and the monitors in the cluster have a copy of the client’s secret key.</p>
+<p>Ceph uses a <strong>cephx authentication system</strong> similar to Kerberos to authenticate users and daemons. Both the clients and the monitors in the cluster have a copy of the client's secret key.</p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash">[client.cinder]
         key = AQB6B/JpY78nKRAA9esk98rCEzyNbCPga83DOQ==
         caps mon = <span class="hljs-string">&quot;profile rbd&quot;</span>
@@ -2200,18 +2200,18 @@ mount     /dev/rbd/test/demo-disk /mnt/
   height: 50%;    
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
-<h1 id="rbd-snaphots">RBD Snaphots</h1>
+<h1 id="rbd-snapshots">RBD Snapshots</h1>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Create a new snapshot                                                     <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 rbd snap create <span class="hljs-built_in">test</span>/demo-disk@snap1
 rbd snap list <span class="hljs-built_in">test</span>/demo-disk
 <span class="hljs-built_in">rm</span> /mnt/test.txt
 
-<span class="hljs-comment"># Unmount and unmap the disk to safely rollback</span>
+<span class="hljs-comment"># Unmount and unmap the disk to safely roll back</span>
 umount /mnt
 rbd unmap /dev/rbd/test/demo-disk
 <span class="hljs-built_in">ls</span> -lh /dev/rbd*
 
-<span class="hljs-comment"># Rollback the volume to the snapshot state</span>
+<span class="hljs-comment"># Roll back the volume to the snapshot state</span>
 rbd snap rollback <span class="hljs-built_in">test</span>/demo-disk@snap1
 
 <span class="hljs-comment"># Remap and mount to verify the data is back</span>
@@ -2288,7 +2288,7 @@ ceph osd pool create testfs_metadata 32 32
 <span class="hljs-comment"># Create the data pool (where your files actually sit)</span>
 ceph osd pool create testfs_data 32 32
 
-<span class="hljs-comment"># Create newfs</span>
+<span class="hljs-comment"># Create new filesystem</span>
 ceph fs new testfs testfs_metadata testfs_data
 ceph fs status
 
@@ -2367,7 +2367,7 @@ ceph-fuse -n client.guest -k /etc/ceph/ceph.client.guest.keyring /mnt/ --client_
 <span class="hljs-comment"># Add a sample document</span>
 <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Version 1.0 - Stable Build&quot;</span> &gt; /mnt/project1/document.txt
 
-<span class="hljs-comment"># Take a Snapshot (The mkdir Trick)</span>
+<span class="hljs-comment"># Take a snapshot (the mkdir trick)</span>
 <span class="hljs-built_in">mkdir</span> /mnt/project1/.snap/snapshot_backup_v1
 <span class="hljs-built_in">cat</span>   /mnt/project1/.snap/snapshot_backup_v1/document.txt
 
@@ -2380,7 +2380,7 @@ ceph-fuse -n client.guest -k /etc/ceph/ceph.client.guest.keyring /mnt/ --client_
 <span class="hljs-comment"># Restore the file from snapshot</span>
 <span class="hljs-built_in">cp</span> /mnt/project1/.snap/snapshot_backup_v1/document.txt /mnt/project1/document.txt
 
-<span class="hljs-comment"># NOTE: note it wont work with rm -rf</span>
+<span class="hljs-comment"># NOTE: will not work with rm -rf</span>
 <span class="hljs-built_in">rmdir</span>  /mnt/project1/.snap/snapshot_backup_v1
 </code></pre>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
@@ -2442,7 +2442,7 @@ ceph-fuse -n client.guest -k /etc/ceph/ceph.client.guest.keyring /mnt/ --client_
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="radosgw--s3">RadosGW / S3</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Create a user to access s3                                                <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Create a user to access S3                                                <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 radosgw-admin user create --uid=demo-user --display-name=<span class="hljs-string">&quot;Demo S3 User&quot;</span>
 
 <span class="hljs-comment"># Search for access_key and secret_key in the output</span>
@@ -2508,7 +2508,7 @@ radosgw-admin user info --uid  demo-user
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:50%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="aws-cli-example">aws-cli example</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Install and Configre awscli                                               <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Install and configure awscli                                              <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 pip3 install awscli awscli-plugin-endpoint
 
 <span class="hljs-built_in">mkdir</span> ~/.aws
@@ -2604,7 +2604,7 @@ aws s3 <span class="hljs-built_in">cp</span> s3://demo-bucket/project1/test.txt 
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:50%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="mc-example">mc example</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Install and Configre mc client                                            <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Install and configure mc client                                           <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 <span class="hljs-built_in">sudo</span> curl --proxy proxy.wrx.sckt.net:3128            \
  -o /usr/local/bin/mc -L                             \
  https://dl.min.io/client/mc/release/linux-amd64/mc
@@ -2685,7 +2685,7 @@ docker ps
 systemctl stop ceph.target
 docker ps
 
-<span class="hljs-comment"># Check status on deplyoment as root</span>
+<span class="hljs-comment"># Check status on deployment as root</span>
 ceph status
 ceph health detail
 ceph osd tree
@@ -2695,7 +2695,7 @@ ceph pg dump_stuck unclean
 
 ceph osd <span class="hljs-built_in">set</span> noout
 
-<span class="hljs-comment"># Upgrade and Reboot</span>
+<span class="hljs-comment"># Upgrade and reboot</span>
 
 <span class="hljs-comment"># On cephosd03, start ceph services</span>
 systemctl start  ceph.target
@@ -2788,7 +2788,7 @@ ceph versions
 <span class="hljs-comment"># List available versions</span>
 ceph orch upgrade <span class="hljs-built_in">ls</span>
 
-<span class="hljs-comment"># start an upgrade mgr,mon</span>
+<span class="hljs-comment"># Start an upgrade for mgr, mon</span>
 ceph orch upgrade start --image <span class="hljs-variable">$IMAGE</span> --daemon-types mgr,mon
 
 <span class="hljs-comment"># status</span>
@@ -2800,13 +2800,13 @@ ceph versions
 <span class="hljs-comment"># ceph orch upgrade stop</span>
 <span class="hljs-comment"># ceph orch upgrade start --ceph-version $VERSION</span>
 
-<span class="hljs-comment"># wait for &#x27;in_progress&#x27; becomes &#x27;false&#x27;</span>
+<span class="hljs-comment"># wait for &#x27;in_progress&#x27; to become &#x27;false&#x27;</span>
 ceph orch upgrade status
 
 <span class="hljs-comment"># continue to upgrade crash</span>
 ceph orch upgrade start --image <span class="hljs-variable">$IMAGE</span> --daemon-types crash
 
-<span class="hljs-comment"># wait for &#x27;in_progress&#x27; becomes &#x27;false&#x27;</span>
+<span class="hljs-comment"># wait for &#x27;in_progress&#x27; to become &#x27;false&#x27;</span>
 ceph orch upgrade status
 
 <span class="hljs-comment"># continue to upgrade osd</span>
@@ -2816,10 +2816,10 @@ ceph -s
 ceph health
 ceph orch upgrade status
 
-<span class="hljs-comment"># contunue with the rest</span>
+<span class="hljs-comment"># continue with the rest</span>
 ceph orch upgrade start --image <span class="hljs-variable">$IMAGE</span>
 
-<span class="hljs-comment"># Check available Upgrade ceph version for ceph packages</span>
+<span class="hljs-comment"># Check available upgrade version for ceph packages</span>
 apt-cache policy ceph-common
 apt install -y cephadm-&lt;VERSION&gt; ceph-common-&lt;VERSION&gt;
 </code></pre>
@@ -2970,11 +2970,11 @@ ceph orch ps
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:50%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="replace-an-osd">Replace an OSD</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># List all the OSDs in cluster, take the last one, check the devices behind <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># List all the OSDs in the cluster, take the last one, check the devices behind <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 ceph osd tree
 ceph osd metadata &lt;OSD_NR&gt; | grep device
 
-<span class="hljs-comment"># <img class="emoji" draggable="false" alt="💥" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4a5.svg" data-marp-twemoji=""/> Let&#x27;s break it down, on cephosd03</span>
+<span class="hljs-comment"># <img class="emoji" draggable="false" alt="💥" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4a5.svg" data-marp-twemoji=""/> Let&#x27;s break it, on cephosd03</span>
 <span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=&lt;DEVICE&gt; bs=1024 count=$((<span class="hljs-number">1024</span>*<span class="hljs-number">10</span>))
 
 <span class="hljs-comment"># <img class="emoji" draggable="false" alt="🩺" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1fa7a.svg" data-marp-twemoji=""/> check status</span>
@@ -3061,7 +3061,7 @@ ceph orch daemon <span class="hljs-built_in">rm</span> osd.&lt;OSD.NR&gt; --forc
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:50%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="replace-an-osd-1">Replace an OSD</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚧" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6a7.svg" data-marp-twemoji=""/> Set  initial weight to 0  to control recovery                          <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚧" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6a7.svg" data-marp-twemoji=""/> Set initial weight to 0 to control recovery                            <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 ceph config get osd osd_crush_initial_weight
 ceph config <span class="hljs-built_in">set</span> osd osd_crush_initial_weight 0
 
@@ -3076,7 +3076,7 @@ ceph osd tree
 ceph osd <span class="hljs-built_in">df</span>
 ceph pg ls-by-osd &lt;OSD_NR&gt;
 
-<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚚" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f69a.svg" data-marp-twemoji=""/> Allow data distrubution again</span>
+<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚚" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f69a.svg" data-marp-twemoji=""/> Allow data distribution again</span>
 ceph osd crush reweight &lt;OSD&gt; &lt;WEIGHT&gt;
 
 ceph config <span class="hljs-built_in">set</span> osd osd_crush_initial_weight -1
@@ -3144,18 +3144,18 @@ ceph osd <span class="hljs-built_in">unset</span> norecover
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:50%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="replace-an-osd-2">Replace an OSD</h1>
 <h2 id="workarounds"><strong>Workarounds</strong></h2>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># If  --zap didn&#x27;t work for you, the following tools can help to clean up</span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># If --zap didn&#x27;t work, the following tools can help to clean up</span>
 
-<span class="hljs-comment"># List Block Devices</span>
+<span class="hljs-comment"># List block devices</span>
 lsblk
 
-<span class="hljs-comment"># List Device Names</span>
+<span class="hljs-comment"># List device names</span>
 dmsetup <span class="hljs-built_in">ls</span>
 
-<span class="hljs-comment"># Remove staled Logical Volume</span>
+<span class="hljs-comment"># Remove stale logical volume</span>
 dmsetup remove ceph--&lt;ID&gt;
 
-<span class="hljs-comment"># Clean up Device</span>
+<span class="hljs-comment"># Clean up device</span>
 wipefs --all --force &lt;DEVICE&gt;
 </code></pre>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
@@ -3221,25 +3221,25 @@ wipefs --all --force &lt;DEVICE&gt;
 ceph osd <span class="hljs-built_in">set</span> noout
 ceph osd <span class="hljs-built_in">set</span> norecover
 
-<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚧" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6a7.svg" data-marp-twemoji=""/> Drain the ceph OSD host</span>
+<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🚧" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f6a7.svg" data-marp-twemoji=""/> Drain the Ceph OSD host</span>
 ceph orch host drain &lt;hostname&gt; [--zap-osd-device]
 ceph orch host drain status
 ceph orch device <span class="hljs-built_in">ls</span>  [hostname]
 ceph orch osd  <span class="hljs-built_in">rm</span> --zap &lt;OSD_NR&gt; --force
 ceph orch host <span class="hljs-built_in">rm</span>     &lt;hostname&gt; --force
 
-<span class="hljs-comment"># join the cluster again</span>
+<span class="hljs-comment"># Join the cluster again</span>
 ceph orch set-managed osd.ssd
 ceph orch apply -i spec.yaml
 
 <span class="hljs-comment"># Rebuild the host</span>
-<span class="hljs-comment"># <img class="emoji" draggable="false" alt="⚠" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/26a0.svg" data-marp-twemoji=""/> add the ssh key for the ceph deployment in authorized_keys on the host</span>
+<span class="hljs-comment"># <img class="emoji" draggable="false" alt="⚠" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/26a0.svg" data-marp-twemoji=""/> Add the ssh key for the ceph deployment in authorized_keys on the host</span>
 
-<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🩺" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1fa7a.svg" data-marp-twemoji=""/> check the status</span>
+<span class="hljs-comment"># <img class="emoji" draggable="false" alt="🩺" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1fa7a.svg" data-marp-twemoji=""/> Check the status</span>
 ceph status
 ceph health detail
 
-<span class="hljs-comment"># <img class="emoji" draggable="false" alt="⚠" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/26a0.svg" data-marp-twemoji=""/> you may want to control the recovery process, check available options</span>
+<span class="hljs-comment"># <img class="emoji" draggable="false" alt="⚠" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/26a0.svg" data-marp-twemoji=""/> You may want to control the recovery process – check available options</span>
 
 ceph osd <span class="hljs-built_in">unset</span> noout
 ceph osd <span class="hljs-built_in">unset</span> norecover
@@ -3499,12 +3499,12 @@ ceph osd crush move rack-01 root=default
 ceph osd crush move rack-02 root=default
 ceph osd crush move rack-02 root=default
 
-<span class="hljs-comment"># Move the hosts into the recks</span>
+<span class="hljs-comment"># Move the hosts into the racks</span>
 ceph osd crush move cephosd01 rack=rack-01
 ceph osd crush move cephosd02 rack=rack-02
 ceph osd crush move cephosd03 rack=rack-03
 
-<span class="hljs-comment"># create a new replicated rule and assign it to a volume</span>
+<span class="hljs-comment"># Create a new replicated rule and assign it to a volume</span>
 ceph osd crush rule create-replicated replicated_rack_rule default rack
 ceph osd crush rule <span class="hljs-built_in">ls</span>
 ceph osd crush rule dump replicated_rack_rule
@@ -3569,29 +3569,29 @@ ceph osd pool <span class="hljs-built_in">set</span> &lt;POOL&gt; crush_rule rep
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="59" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="benchmarking">Benchmarking</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># benchmark specific osd</span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Benchmark a specific OSD</span>
 ceph tell osd.2 bench
 ceph --format plain tell osd.0 bench
-<span class="hljs-comment"># benchmark all osds</span>
+<span class="hljs-comment"># Benchmark all OSDs</span>
 ceph tell osd.* bench
 ceph --format plain tell osd.* bench
 
-<span class="hljs-comment"># benchmark on newly created pool + cleanup</span>
+<span class="hljs-comment"># Benchmark on newly created pool + cleanup</span>
 ceph osd pool create benchmark 64
 rados bench -p benchmark 30 write
 rados -p benchmark bench -b 4096 30 write <span class="hljs-comment"># object size 4096</span>
-<span class="hljs-comment"># read benchmartk</span>
+<span class="hljs-comment"># Read benchmark</span>
 rados -p benchmark bench 30 write --no-cleanup
 rados -p benchmark bench 30 rand
 ceph tell mon.\* injectargs <span class="hljs-string">&#x27;--mon-allow-pool-delete=true&#x27;</span>
 ceph osd pool delete benchmark benchmark --yes-i-really-really-mean-it
 
-<span class="hljs-comment"># bechmark on a newly created volume + cleanup</span>
+<span class="hljs-comment"># Benchmark on a newly created volume + cleanup</span>
 rbd create  --size 1024 <span class="hljs-built_in">test</span>/benchmark
 rbd bench-write <span class="hljs-built_in">test</span>/benchmark --io-size 1048576  --io-threads 16 --io-pattern rand
 rbd <span class="hljs-built_in">rm</span>  <span class="hljs-built_in">test</span>/benchmark
 
-<span class="hljs-comment"># bechmark on a newly created volume + cleanup</span>
+<span class="hljs-comment"># Benchmark on a newly created volume + cleanup</span>
 rbd create  --size 1024 <span class="hljs-built_in">test</span>/benchmark
 fio --size=100M --ioengine=rbd --invalidate=0 --direct=1 --numjobs=10 --rw=write --name=fiojob --blocksize_range=4K-512k --iodepth=1 --pool=<span class="hljs-built_in">test</span> --rbdname=benchmark
 rbd <span class="hljs-built_in">rm</span>  <span class="hljs-built_in">test</span>/benchmark

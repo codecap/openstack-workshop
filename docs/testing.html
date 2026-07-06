@@ -99,7 +99,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 <li>My specific configuration</li>
 <li>My specific implementation / deployment / infra</li>
 <li>Networking</li>
-<li>Changes outside of my environment ( BGP, Storage, Object Storage, DNS)</li>
+<li>Changes outside of my environment (BGP, Storage, Object Storage, DNS)</li>
 </ul>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
 </section>
@@ -152,16 +152,13 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 <h2 id="install"><strong>Install</strong></h2>
 <p><br />
 <a href="https://docs.openstack.org/releasenotes/tempest/v45.0.0.html">Release Notes Tempest v45</a></p>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Install tempest on testing node                                           <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Install Tempest on testing node                                           <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 <span class="hljs-built_in">sudo</span> apt install build-essential python3.12-dev -y
-
 python3 -m venv ~/venv/tempest
 <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span>                                   &gt;&gt; ~/.profile
 <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;source ~/venv/tempest/bin/activate&quot;</span> &gt;&gt; ~/.profile
 <span class="hljs-built_in">source</span> ~/.profile
-
 pip install -U pip --proxy http://proxy.wrx.sckt.net:3128
-
 pip install --proxy http://proxy.wrx.sckt.net:3128 -r \
   https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/requirements.txt
 </code></pre>
@@ -227,28 +224,21 @@ pip install --proxy http://proxy.wrx.sckt.net:3128 -r \
 <h2 id="configuration"><strong>Configuration</strong></h2>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Copy admin-openrc.sh file from deployment to testing node                 <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 scp ~/openstack/custom-config/wrx/admin-openrc.sh testing.mgmt:~/
-
-<span class="hljs-comment"># On testing node source your openr(credentials) file</span>
+<span class="hljs-comment"># On testing node source your openrc (credentials) file</span>
 <span class="hljs-built_in">source</span> ~/admin-openrc.sh
-
 <span class="hljs-comment"># The configuration script</span>
 CONF_SCRIPT=https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/configure.sh
-
 <span class="hljs-comment"># Review</span>
 curl --proxy http://proxy.wrx.sckt.net:3128 -L <span class="hljs-variable">$CONF_SCRIPT</span>
-
 <span class="hljs-comment"># Run</span>
 curl --proxy http://proxy.wrx.sckt.net:3128 -L <span class="hljs-variable">$CONF_SCRIPT</span> | bash
-
 <span class="hljs-comment"># Review generated config</span>
 <span class="hljs-built_in">cd</span>  ~/tempest-45
 <span class="hljs-built_in">cat</span> etc/tempest.conf
-
 <span class="hljs-comment"># Create a list of available tests</span>
 stestr list &gt; tests-available.list
-<span class="hljs-comment"># Create a list of smoketests</span>
+<span class="hljs-comment"># Create a list of smoke tests</span>
 <span class="hljs-built_in">cat</span> tests-available.list | grep smoke &gt; smoke-tests.list
-
 <span class="hljs-comment"># How to run</span>
 tempest run --load-list smoke-tests.list  --regex \
   tempest.api.network.test_security_groups.SecGroupTest.test_list_security_groups
@@ -293,15 +283,12 @@ tempest run --load-list smoke-tests.list  --regex \
 <p><a href="https://github.com/SovereignCloudStack/openstack-health-monitor">openstack-health-monitor</a></p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-built_in">mkdir</span> testing
 git <span class="hljs-built_in">clone</span> https://github.com/SovereignCloudStack/openstack-health-monitor.git
-
 <span class="hljs-built_in">export</span> IMG=ubuntu-24.04
 <span class="hljs-built_in">export</span> JHIMG=<span class="hljs-variable">$IMG</span>
 <span class="hljs-built_in">export</span> FLAVOR=m1.small
 <span class="hljs-built_in">export</span> JHFLAVOR=<span class="hljs-variable">$FLAVOR</span>
 <span class="hljs-built_in">export</span> ADDJHVOLSIZE=10
-
 <span class="hljs-built_in">source</span> ~/venv/ansible/bin/activate
-
 <span class="hljs-built_in">source</span> ~/automation-openrc.sh
 </code></pre>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
@@ -330,15 +317,14 @@ git <span class="hljs-built_in">clone</span> https://github.com/SovereignCloudSt
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;" data-marpit-pagination-total="7" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}">
 <h1 id="run">Run</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># -o    - translate nova/cinder/neutron/glance into openstack client commands</span>
-<span class="hljs-comment"># -C    - full Connectivity check: Every VM pings every other</span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># -o    - translate nova/cinder/neutron/glance into OpenStack client commands</span>
+<span class="hljs-comment"># -C    - full connectivity check: every VM pings every other</span>
 <span class="hljs-comment"># -D    - create all VMs with one API call (implies -d -P)</span>
 <span class="hljs-comment"># -n 1  - number of VMs to create</span>
-<span class="hljs-comment"># -B    - measure TCP BW b/w VMs (iperf3)</span>
+<span class="hljs-comment"># -B    - measure TCP bandwidth between VMs (iperf3)</span>
 <span class="hljs-comment"># -T    - assign tags to resources; use to clean up floating IPs</span>
-<span class="hljs-comment"># -s 10 - sends stats as well once per day (or every SH hours), not just alarms</span>
-<span class="hljs-comment"># -W 45 - sets error wait (VM only): 0-inf seconds or neg value for interactive wait</span>
-
+<span class="hljs-comment"># -s 10 - send stats once per day (or every SH hours), not just alarms</span>
+<span class="hljs-comment"># -W 45 - set error wait (VM only): 0-inf seconds or negative value for interactive wait</span>
 ./api_monitor.sh -o -C -D -n 1 -B -T -s 10 -W 45
 </code></pre>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>

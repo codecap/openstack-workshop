@@ -83,7 +83,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:30%;" data-marpit-pagination-total="7" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="ansible">Ansible</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># On Testing node                                                           <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># On testing node                                                           <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 python3 -m venv ~/venv/ansible
 <span class="hljs-built_in">source</span>  ~/venv/ansible/bin/activate
 
@@ -92,15 +92,15 @@ git <span class="hljs-built_in">clone</span> -c http.proxy=<span class="hljs-str
           -c https.proxy=<span class="hljs-string">&quot;http://proxy.wrx.sckt.net:3128&quot;</span> \
           https://github.com/codecap/openstack-workshop.git
 
-<span class="hljs-comment"># Install dependencies for ansible</span>
+<span class="hljs-comment"># Install dependencies for Ansible</span>
 <span class="hljs-built_in">cd</span>  openstack-workshop/automation/ansible
 pip install --proxy=http://proxy.wrx.sckt.net:3128 -U pip
-pip install --proxy=http://proxy.wrx.sckt.net:3128 -r requirenments.txt
+pip install --proxy=http://proxy.wrx.sckt.net:3128 -r requirements.txt
 
 <span class="hljs-comment"># Install dependencies via ansible-galaxy</span>
 http_proxy=http://proxy.wrx.sckt.net:3128  \
 https_proxy=http://proxy.wrx.sckt.net:3128 \
-ansible-galaxy collection install -r requirenments.yml --force
+ansible-galaxy collection install -r requirements.yml --force
 </code></pre>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
 </section>
@@ -319,11 +319,11 @@ EOF</span>
 <span class="hljs-built_in">source</span> ~/admin-openrc.sh 
 ansible-playbook playbooks/create-project.yml
 
-<span class="hljs-comment"># Create Test Infra in automation project</span>
+<span class="hljs-comment"># Create test infra in automation project</span>
 <span class="hljs-built_in">source</span> ~/automation-openrc.sh 
 ansible-playbook playbooks/create-infra.yml
 
-<span class="hljs-comment"># Destroy Test Infra</span>
+<span class="hljs-comment"># Destroy test infra</span>
 ansible-playbook playbooks/destroy-infra.yml
 </code></pre>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
@@ -385,7 +385,7 @@ ansible-playbook playbooks/destroy-infra.yml
 }
 ;--theme:default;background-image:url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg);background-position:center;background-repeat:no-repeat;background-size:cover;--marpit-advanced-background-split:50%;" data-marpit-pagination-total="7" data-transition-back="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-transition="{&quot;name&quot;:&quot;cover&quot;,&quot;builtinFallback&quot;:true}" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
 <h1 id="terraform">Terraform</h1>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Install terraform on testing node                                         <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Install Terraform on testing node                                         <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 KEYRING_PATH=/usr/share/keyrings/hashicorp-archive-keyring.gpg
 
 curl -fsSL https://apt.releases.hashicorp.com/gpg \

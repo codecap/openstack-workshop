@@ -153,7 +153,7 @@ ceph osd crush rule rm replicated_rule
 ---
 # Deploy Ceph with Cephadm
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
-### Create client keys for openstack services
+### Create client keys for OpenStack services
 ```bash
 # On the deployment node, create the .keyring files                         📋
 cat > /etc/ceph/ceph.client.glance.keyring <<EOF
@@ -199,7 +199,7 @@ done
 # Prepare for OpenStack
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
-**Create pools for openstack services**
+**Create pools for OpenStack services**
 
 ```bash
                                                                             📋
@@ -215,7 +215,7 @@ done
 # Prepare for OpenStack
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
-**Configure ceph to be used as backend for OpenStack Swift (Object Storage)**
+**Configure Ceph to be used as backend for OpenStack Swift (Object Storage)**
 
 ```bash
 for r in $(ceph config dump | grep rgw_frontends | awk '{print $1}')
@@ -246,7 +246,7 @@ ceph orch restart rgw.default
 # Test
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-# On deployment node (as root or with sude)                                 📋
+# On deployment node (as root or with sudo)                                 📋
 ceph orch ls
 ceph orch host ls
 ceph orch ps
@@ -261,7 +261,7 @@ ceph osd tree
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 - [Ceph/Dashboard](https://cephmon01.strg.wrx.sckt.net:8443)
 - [Grafana/Monitoring](https://cephgra01.strg.wrx.sckt.net:3000)
-- [Prometheus/Monitroing](http://cephgra01.strg.wrx.sckt.net:9095)
+- [Prometheus/Monitoring](http://cephgra01.strg.wrx.sckt.net:9095)
 - [Alertmanager](http://cephgra01.strg.wrx.sckt.net:9093)
 
 
@@ -309,7 +309,7 @@ ceph osd tree
 [//]: # (Object Storage / S3)
 
 ---
-# How OpenStack uses ceph
+# How OpenStack uses Ceph
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ![width:600](https://www.redhat.com/rhdc/managed-files/sysadmin/2021-08/Ceph-storage-cluster-%28RADOS%29.png)
 
@@ -325,42 +325,42 @@ ceph osd tree
 
 ---
 # Cluster Components
-**Monitor** — daemon responsible for maintaining a master copy of the cluster map. Quorum of 3 at least needed to ensure high availability .
+**Monitor** — daemon responsible for maintaining a master copy of the cluster map. A quorum of 3 is needed at minimum to ensure high availability.
 
-**OSD (Object Storage Daemon)** — daemon that does all data storage, replication and data recovery operations.
+**OSD (Object Storage Daemon)** — daemon that handles all data storage, replication and data recovery operations.
 
-**Rados Gateway** – The rados gateway delivers an api for S3 or Swift to connect directly with Ceph.
+**Rados Gateway** – The Rados Gateway delivers an API for S3 or Swift to connect directly with Ceph.
 
 **Metadata Server** — MDS handles all file operations and uses RADOS objects to store data and file system attributes.
 
-**Ceph Manager** —  runs alongside the monitor daemons, to provide additional monitoring and interfaces to external monitoring and management systems.
+**Ceph Manager** — runs alongside the monitor daemons to provide additional monitoring and interfaces to external monitoring and management systems.
 
 ---
 # Cluster Map
-Ceph maintains all cluster topology, which includes five maps called the “Cluster Map”:
+Ceph maintains all cluster topology, which includes five maps called the "Cluster Map":
 
-**Monitor Map**: Contains the fsid of the cluster, the position, the name of the address and the port of each monitor. It also indicates the current time, when the map was created and the last time it was changed. To view a map of the monitor, run ceph mon dump.
+**Monitor Map**: Contains the fsid of the cluster, the position, the name, the address and the port of each monitor. It also indicates the current time, when the map was created and the last time it was changed. To view a monitor map, run ceph mon dump.
 
-**OSD Map**: contains the cluster fsid, when the map was last created and modified, a list of pools, replica sizes, PG numbers, a list of OSDs and their status (for example, up, in and down). To view an OSD map, run ceph osd dump .
+**OSD Map**: Contains the cluster fsid, when the map was last created and modified, a list of pools, replica sizes, PG numbers, a list of OSDs and their status (for example, up, in and down). To view an OSD map, run ceph osd dump.
 
 ---
 # Cluster Map
 
-**PG Map**: Contains the PG version, its time stamp, the last epoch of the OSD map, the complete proportions and details of each positioning group, such as PG ID, Up Set, Active, PG status (for example, active + clean) and data usage statistics for each pool.
+**PG Map**: Contains the PG version, its timestamp, the last epoch of the OSD map, the complete proportions and details of each placement group, such as PG ID, Up Set, Active, PG status (for example, active + clean) and data usage statistics for each pool.
 
-**CRUSH Map**: Contains a list of storage devices, the fault domain hierarchy (for example, device, host, rack, line, room, etc.) and rules for going through the hierarchy when storing data.
+**CRUSH Map**: Contains a list of storage devices, the fault domain hierarchy (for example, device, host, rack, row, room, etc.) and rules for traversing the hierarchy when storing data.
 You can view the decompiled map in a text editor.
 
 ---
 # Cluster Map
 
-**MDS Map (CEPHFS)**: Contains the current time of the MDS map, when the map was created and the last time it was changed. It also contains the pool to store metadata, a list of metadata servers and which metadata servers are active and available. To view an MDS map, run ceph mds dump
+**MDS Map (CephFS)**: Contains the current timestamp of the MDS map, when the map was created and the last time it was changed. It also contains the pool to store metadata, a list of metadata servers and which metadata servers are active and available. To view an MDS map, run ceph mds dump.
 
 ---
 # Authentication
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
-Ceph uses a **cephx authentication system** similar to Kerberos to authenticate users and daemons, both the clients and the monitors in the cluster have a copy of the client’s secret key.
+Ceph uses a **cephx authentication system** similar to Kerberos to authenticate users and daemons. Both the clients and the monitors in the cluster have a copy of the client's secret key.
 
 
 
@@ -481,7 +481,7 @@ echo "Hello from Ceph RBD Storage!" > /mnt/test.txt
 ```
 
 ---
-# RBD Snaphots
+# RBD Snapshots
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
 # Create a new snapshot                                                     📋
@@ -489,12 +489,12 @@ rbd snap create test/demo-disk@snap1
 rbd snap list test/demo-disk
 rm /mnt/test.txt
 
-# Unmount and unmap the disk to safely rollback
+# Unmount and unmap the disk to safely roll back
 umount /mnt
 rbd unmap /dev/rbd/test/demo-disk
 ls -lh /dev/rbd*
 
-# Rollback the volume to the snapshot state
+# Roll back the volume to the snapshot state
 rbd snap rollback test/demo-disk@snap1
 
 # Remap and mount to verify the data is back
@@ -517,7 +517,7 @@ ceph osd pool create testfs_metadata 32 32
 # Create the data pool (where your files actually sit)
 ceph osd pool create testfs_data 32 32
 
-# Create newfs
+# Create new filesystem
 ceph fs new testfs testfs_metadata testfs_data
 ceph fs status
 
@@ -542,7 +542,7 @@ mkdir -p /mnt/project1
 # Add a sample document
 echo "Version 1.0 - Stable Build" > /mnt/project1/document.txt
 
-# Take a Snapshot (The mkdir Trick)
+# Take a snapshot (the mkdir trick)
 mkdir /mnt/project1/.snap/snapshot_backup_v1
 cat   /mnt/project1/.snap/snapshot_backup_v1/document.txt
 
@@ -555,7 +555,7 @@ echo "Temporary junk" > /mnt/project1/garbage.txt
 # Restore the file from snapshot
 cp /mnt/project1/.snap/snapshot_backup_v1/document.txt /mnt/project1/document.txt
 
-# NOTE: note it wont work with rm -rf
+# NOTE: will not work with rm -rf
 rmdir  /mnt/project1/.snap/snapshot_backup_v1
 ```
 
@@ -563,7 +563,7 @@ rmdir  /mnt/project1/.snap/snapshot_backup_v1
 # RadosGW / S3
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-# Create a user to access s3                                                📋
+# Create a user to access S3                                                📋
 radosgw-admin user create --uid=demo-user --display-name="Demo S3 User"
 
 # Search for access_key and secret_key in the output
@@ -575,7 +575,7 @@ radosgw-admin user info --uid  demo-user
 # aws-cli example
 ![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-# Install and Configre awscli                                               📋
+# Install and configure awscli                                              📋
 pip3 install awscli awscli-plugin-endpoint
 
 mkdir ~/.aws
@@ -617,7 +617,7 @@ cat  /tmp/test.txt
 # mc example
 ![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-# Install and Configre mc client                                            📋
+# Install and configure mc client                                           📋
 sudo curl --proxy proxy.wrx.sckt.net:3128            \
  -o /usr/local/bin/mc -L                             \
  https://dl.min.io/client/mc/release/linux-amd64/mc
@@ -639,7 +639,7 @@ mc cat s3/demo-bucket/project1/test.txt
 ## Update system packages and reboot
 ![bg right:55% 25%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
-[//]: # (FIXME: the same with ceph orch host maintanance enter)
+[//]: # (FIXME: the same with ceph orch host maintenance enter)
 
 ```bash
 # Stop ceph services on cephosd03 as root                                   📋
@@ -647,7 +647,7 @@ docker ps
 systemctl stop ceph.target
 docker ps
 
-# Check status on deplyoment as root
+# Check status on deployment as root
 ceph status
 ceph health detail
 ceph osd tree
@@ -657,7 +657,7 @@ ceph pg dump_stuck unclean
 
 ceph osd set noout
 
-# Upgrade and Reboot
+# Upgrade and reboot
 
 # On cephosd03, start ceph services
 systemctl start  ceph.target
@@ -697,7 +697,7 @@ ceph versions
 # List available versions
 ceph orch upgrade ls
 
-# start an upgrade mgr,mon
+# Start an upgrade for mgr, mon
 ceph orch upgrade start --image $IMAGE --daemon-types mgr,mon
 
 # status
@@ -709,13 +709,13 @@ ceph versions
 # ceph orch upgrade stop
 # ceph orch upgrade start --ceph-version $VERSION
 
-# wait for 'in_progress' becomes 'false'
+# wait for 'in_progress' to become 'false'
 ceph orch upgrade status
 
 # continue to upgrade crash
 ceph orch upgrade start --image $IMAGE --daemon-types crash
 
-# wait for 'in_progress' becomes 'false'
+# wait for 'in_progress' to become 'false'
 ceph orch upgrade status
 
 # continue to upgrade osd
@@ -725,10 +725,10 @@ ceph -s
 ceph health
 ceph orch upgrade status
 
-# contunue with the rest
+# continue with the rest
 ceph orch upgrade start --image $IMAGE
 
-# Check available Upgrade ceph version for ceph packages
+# Check available upgrade version for ceph packages
 apt-cache policy ceph-common
 apt install -y cephadm-<VERSION> ceph-common-<VERSION>
 ```
@@ -776,11 +776,11 @@ ceph orch ps
 [//]: # (FIXME: test)
 
 ```bash
-# List all the OSDs in cluster, take the last one, check the devices behind 📋
+# List all the OSDs in the cluster, take the last one, check the devices behind 📋
 ceph osd tree
 ceph osd metadata <OSD_NR> | grep device
 
-# 💥 Let's break it down, on cephosd03
+# 💥 Let's break it, on cephosd03
 dd if=/dev/zero of=<DEVICE> bs=1024 count=$((1024*10))
 
 # 🩺 check status
@@ -814,7 +814,7 @@ ceph orch daemon rm osd.<OSD.NR> --force
 ![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
 ```bash
-# 🚧 Set  initial weight to 0  to control recovery                          📋
+# 🚧 Set initial weight to 0 to control recovery                            📋
 ceph config get osd osd_crush_initial_weight
 ceph config set osd osd_crush_initial_weight 0
 
@@ -829,7 +829,7 @@ ceph osd tree
 ceph osd df
 ceph pg ls-by-osd <OSD_NR>
 
-# 🚚 Allow data distrubution again
+# 🚚 Allow data distribution again
 ceph osd crush reweight <OSD> <WEIGHT>
 
 ceph config set osd osd_crush_initial_weight -1
@@ -844,18 +844,18 @@ ceph osd unset norecover
 ![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 
 ```bash
-# If  --zap didn't work for you, the following tools can help to clean up
+# If --zap didn't work, the following tools can help to clean up
 
-# List Block Devices
+# List block devices
 lsblk
 
-# List Device Names
+# List device names
 dmsetup ls
 
-# Remove staled Logical Volume
+# Remove stale logical volume
 dmsetup remove ceph--<ID>
 
-# Clean up Device
+# Clean up device
 wipefs --all --force <DEVICE>
 ```
 
@@ -868,25 +868,25 @@ wipefs --all --force <DEVICE>
 ceph osd set noout
 ceph osd set norecover
 
-# 🚧 Drain the ceph OSD host
+# 🚧 Drain the Ceph OSD host
 ceph orch host drain <hostname> [--zap-osd-device]
 ceph orch host drain status
 ceph orch device ls  [hostname]
 ceph orch osd  rm --zap <OSD_NR> --force
 ceph orch host rm     <hostname> --force
 
-# join the cluster again
+# Join the cluster again
 ceph orch set-managed osd.ssd
 ceph orch apply -i spec.yaml
 
 # Rebuild the host
-# ⚠️ add the ssh key for the ceph deployment in authorized_keys on the host
+# ⚠️ Add the ssh key for the ceph deployment in authorized_keys on the host
 
-# 🩺 check the status
+# 🩺 Check the status
 ceph status
 ceph health detail
 
-# ⚠️ you may want to control the recovery process, check available options
+# ⚠️ You may want to control the recovery process – check available options
 
 ceph osd unset noout
 ceph osd unset norecover
@@ -931,12 +931,12 @@ ceph osd crush move rack-01 root=default
 ceph osd crush move rack-02 root=default
 ceph osd crush move rack-02 root=default
 
-# Move the hosts into the recks
+# Move the hosts into the racks
 ceph osd crush move cephosd01 rack=rack-01
 ceph osd crush move cephosd02 rack=rack-02
 ceph osd crush move cephosd03 rack=rack-03
 
-# create a new replicated rule and assign it to a volume
+# Create a new replicated rule and assign it to a volume
 ceph osd crush rule create-replicated replicated_rack_rule default rack
 ceph osd crush rule ls
 ceph osd crush rule dump replicated_rack_rule
@@ -951,29 +951,29 @@ ceph osd pool set <POOL> crush_rule replicated_rack_rule
 [//]: # (FIXME:)
 
 ```bash
-# benchmark specific osd
+# Benchmark a specific OSD
 ceph tell osd.2 bench
 ceph --format plain tell osd.0 bench
-# benchmark all osds
+# Benchmark all OSDs
 ceph tell osd.* bench
 ceph --format plain tell osd.* bench
 
-# benchmark on newly created pool + cleanup
+# Benchmark on newly created pool + cleanup
 ceph osd pool create benchmark 64
 rados bench -p benchmark 30 write
 rados -p benchmark bench -b 4096 30 write # object size 4096
-# read benchmartk
+# Read benchmark
 rados -p benchmark bench 30 write --no-cleanup
 rados -p benchmark bench 30 rand
 ceph tell mon.\* injectargs '--mon-allow-pool-delete=true'
 ceph osd pool delete benchmark benchmark --yes-i-really-really-mean-it
 
-# bechmark on a newly created volume + cleanup
+# Benchmark on a newly created volume + cleanup
 rbd create  --size 1024 test/benchmark
 rbd bench-write test/benchmark --io-size 1048576  --io-threads 16 --io-pattern rand
 rbd rm  test/benchmark
 
-# bechmark on a newly created volume + cleanup
+# Benchmark on a newly created volume + cleanup
 rbd create  --size 1024 test/benchmark
 fio --size=100M --ioengine=rbd --invalidate=0 --direct=1 --numjobs=10 --rw=write --name=fiojob --blocksize_range=4K-512k --iodepth=1 --pool=test --rbdname=benchmark
 rbd rm  test/benchmark

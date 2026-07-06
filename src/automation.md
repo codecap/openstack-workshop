@@ -34,7 +34,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 ![bg right:30% 50%](https://www.svgrepo.com/show/373429/ansible.svg)
 
 ```bash
-# On Testing node                                                           📋
+# On testing node                                                           📋
 python3 -m venv ~/venv/ansible
 source  ~/venv/ansible/bin/activate
 
@@ -43,15 +43,15 @@ git clone -c http.proxy="http://proxy.wrx.sckt.net:3128"  \
           -c https.proxy="http://proxy.wrx.sckt.net:3128" \
           https://github.com/codecap/openstack-workshop.git
 
-# Install dependencies for ansible
+# Install dependencies for Ansible
 cd  openstack-workshop/automation/ansible
 pip install --proxy=http://proxy.wrx.sckt.net:3128 -U pip
-pip install --proxy=http://proxy.wrx.sckt.net:3128 -r requirenments.txt
+pip install --proxy=http://proxy.wrx.sckt.net:3128 -r requirements.txt
 
 # Install dependencies via ansible-galaxy
 http_proxy=http://proxy.wrx.sckt.net:3128  \
 https_proxy=http://proxy.wrx.sckt.net:3128 \
-ansible-galaxy collection install -r requirenments.yml --force
+ansible-galaxy collection install -r requirements.yml --force
 ```
 
 ---
@@ -107,11 +107,11 @@ EOF
 source ~/admin-openrc.sh 
 ansible-playbook playbooks/create-project.yml
 
-# Create Test Infra in automation project
+# Create test infra in automation project
 source ~/automation-openrc.sh 
 ansible-playbook playbooks/create-infra.yml
 
-# Destroy Test Infra
+# Destroy test infra
 ansible-playbook playbooks/destroy-infra.yml
 ```
 
@@ -122,7 +122,7 @@ ansible-playbook playbooks/destroy-infra.yml
 ![bg right:50% 30%](https://www.svgrepo.com/show/354447/terraform-icon.svg)
 
 ```bash
-# Install terraform on testing node                                         📋
+# Install Terraform on testing node                                         📋
 KEYRING_PATH=/usr/share/keyrings/hashicorp-archive-keyring.gpg
 
 curl -fsSL https://apt.releases.hashicorp.com/gpg \

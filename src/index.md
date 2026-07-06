@@ -2,7 +2,7 @@
 title:       OpenStack Workshop
 description: OpenStack & Ceph
 author:      Vladislav Nazarenko (vnazarenko@📯socket.de)
-keywords:    openstack,ceph,workshops,operations,troubleshoouting
+keywords:    openstack,ceph,workshops,operations,troubleshooting
 url:
 image:
 backgroundImage: url(https://raw.githubusercontent.com/codecap/openstack-workshop/refs/heads/main/assets/background.jpg)
@@ -58,16 +58,16 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 - [Harbor - Registry](http://registry.wrx.sckt.net/)
 - [Ara - Recorder](http://recorder.wrx.sckt.net/)
 - [Ceph - Dashboard](https://cephmon01.strg.wrx.sckt.net:8443)
-- [Ceph - Grafana/Monitoring](https://cephgra01.strg.wrx.sckt.net:3000)
-- [Ceph - Prometheus/Monitroing](https://cephgra01.strg.wrx.sckt.net:9095)
+- [Ceph - Grafana / Monitoring](https://cephgra01.strg.wrx.sckt.net:3000)
+- [Ceph - Prometheus / Monitoring](https://cephgra01.strg.wrx.sckt.net:9095)
 - [Ceph - Alertmanager](https://cephgra01.strg.wrx.sckt.net:9093)
 
 ---
 # Links
-- [OpenStack - Hirizon/Dashboard](http://int.os.wrx.sckt.net)
-- [OpenStack - Skyline/Dashboard](http://int.os.wrx.sckt.net:9999)
-- [OpenStack - Grafana/Monitoring](http://int.os.wrx.sckt.net:3000)
-- [OpenStack - Prometheus/Monitoring](http://int.os.wrx.sckt.net:9091)
+- [OpenStack - Horizon / Dashboard](http://int.os.wrx.sckt.net)
+- [OpenStack - Skyline / Dashboard](http://int.os.wrx.sckt.net:9999)
+- [OpenStack - Grafana / Monitoring](http://int.os.wrx.sckt.net:3000)
+- [OpenStack - Prometheus / Monitoring](http://int.os.wrx.sckt.net:9091)
 - [OpenStack - Alertmanager](http://int.os.wrx.sckt.net:9093)
 
 ---
