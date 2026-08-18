@@ -25,7 +25,7 @@ sed -e "s/^hostname:.*/hostname: registry.wrx.sckt.net/"   -i harbor.yml
 sed '/^https:/,/private_key:/ s/^/#/'                      -i harbor.yml
 
 # Install
-./install.sh ; sleep 5;
+./install.sh ; sleep 15;
 
 
 # Setupt Proxy Repository

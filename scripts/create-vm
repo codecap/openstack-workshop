@@ -9,7 +9,9 @@ ENV_CONF="$CONFIG_DIR/env.yaml"
 # vars
 ID_START_FROM=1000
 TEMPLATE_ID=9000
-STORAGE="local-lvm"
+#STORAGE="local-lvm"
+STORAGE="local"
+STORAGE="vmdata"
 NCARD_MODEL="virtio"
 SNIPPET_STORAGE="local"
 SNIPPET_DIR="/var/lib/vz/snippets"
@@ -48,8 +50,9 @@ SEARCHDOMAIN="$SEARCHDOMAIN $DOMAIN"
 ##############################################################################
 # go
 VENDOR_FILE="$SNIPPET_DIR/vm-${VMID}-vendor.yaml"
+# VENDOR_FILE="$SNIPPET_DIR/vm-${VMID}-vendor.yaml.debug"
 
-qm clone $TEMPLATE_ID $VMID --name "$NAME" --full
+qm clone $TEMPLATE_ID $VMID --name "$NAME" --storage $STORAGE --full
 qm set $VMID --ciuser $CIUSER --cipassword $CIPASS --cores "$CPU" --memory "$RAM"
 
 cat <<EOF > "$VENDOR_FILE"
@@ -124,7 +127,18 @@ cat <<EOF >> "$VENDOR_FILE"
   - systemctl restart systemd-networkd
 EOF
 
-if [ "$AIRGAPPED" = "true" ]
+
+# TODO: do we need this
+# if [[ "$AIRGAPPED" =~ ^(soft)$ ]]
+#   then
+#   cat <<EOF >> "$VENDOR_FILE"
+# proxy:       http://proxy.wrx.sckt.net:3128
+# https_proxy: http://proxy.wrx.sckt.net:3128
+# no_proxy:    localhost,127.0.0.1,.wrx.sckt.net,169.254.169.254
+# EOF
+# fi
+
+if [[ "$AIRGAPPED" =~ ^(true|yes|soft)$ ]]
   then
   #
   # NOTE: this is needed for cloud-init during provisioning to
@@ -132,9 +146,6 @@ if [ "$AIRGAPPED" = "true" ]
   #         - install packages
   #
   cat <<EOF >> "$VENDOR_FILE"
-proxy:       http://proxy.wrx.sckt.net:3128
-https_proxy: http://proxy.wrx.sckt.net:3128
-no_proxy:    localhost,127.0.0.1,.wrx.sckt.net,169.254.169.254
 apt:
   proxy: http://proxy.wrx.sckt.net:3128
 EOF
@@ -309,8 +320,22 @@ if [ "$AIRGAPPED" = "soft" ]
 EOF
 fi
 
+cat <<EOF >> "$VENDOR_FILE"
+  - path:        /etc/profile.d/wrx.sh
+    owner:       root:root
+    permissions: '0644'
+    content: |
+      export WRX_RAW_BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/main
+      export WRX_PROXY=http://proxy.wrx.sckt.net:3128
+      export WRX_INFRA_NODES="dns|proxy|registry"
+      export WRX_DEPLOY_NODES="deployment|recorder"
+EOF
 
-qm set $VMID --cicustom "vendor=${SNIPPET_STORAGE}:snippets/$(basename $VENDOR_FILE)"
+#
+# NOTE: whether or not we wrote in a debug file with ".debug" suffix we use
+#       the file without it
+#
+qm set $VMID --cicustom "vendor=${SNIPPET_STORAGE}:snippets/$(basename ${VENDOR_FILE/.debug/})"
 qm cloudinit update $VMID
 
 # Disks logic (Original Loop)
