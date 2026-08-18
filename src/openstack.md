@@ -126,7 +126,7 @@ export OPENSTACK_DIR=~/openstack
 KOLLA_ANSIBLE_RELEASE=20 # OS 2025.1
 VENV_PATH=~/venv/kolla-ansible-$KOLLA_ANSIBLE_RELEASE
 
-if [ -z "$VIRTUAL_ENV" ]
+if [ -z "$VIRTUAL_ENV" -a -L ~/venv/openstack ]
 then
   source ~/venv/openstack/bin/activate
 fi
@@ -883,7 +883,7 @@ openstack server create                  \
 # on the testing node as root
 myid=$(cat /etc/env.json  | jq .id)
 
-cat > /etc/netplan/80-vlan.yaml <<EOF
+cat > /etc/netplan/500-vlan.yaml <<EOF
 network:
   version: 2
   vlans:

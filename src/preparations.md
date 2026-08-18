@@ -125,6 +125,7 @@ qm create $TEMPL_ID \
 --scsihw virtio-scsi-pci \
 --net0 virtio,bridge=vmbr0
 
+# TODO: local-lvm to local or zfs pool
 qm importdisk $TEMPL_ID /tmp/noble-server-cloudimg-amd64.img local-lvm
 
 qm set $TEMPL_ID --scsi0 local-lvm:vm-$TEMPL_ID-disk-0
@@ -142,14 +143,14 @@ qm template $TEMPL_ID
 # Install packages
 apt install -y  \
  bind9-dnsutils \
+ crudini        \
  curl           \
  git            \
  htop           \
  jq             \
+ python3-venv   \
  tcpdump        \
  tmux           \
- tmuxp          \
- crudini        \
  vim            \
  yq
 ```
@@ -315,20 +316,19 @@ print-create-env-commands  | grep <NODE_FILTER> | bash
 ![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
 
 ```bash
-BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/main
-PROXY=http://proxy.wrx.sckt.net:3128
-INFRA_NODES="dns|proxy|registry"
-DEPLOY_NODES="deployment|recorder"
+WRX_INFRA_NODES="dns|proxy|registry"
+WRX_DEPLOY_NODES="deployment|recorder"
 
 # Infra nodes
-print-create-env-commands  | grep -E "$INFRA_NODES" | bash
-ssh -t dns      "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/dns.sh      | bash'"
-ssh -t proxy    "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/proxy.sh    | bash'"
-ssh -t registry "sudo -i bash -c 'curl -L $BASE_PATH/scripts/infra/registry.sh | bash'"
+print-create-env-commands  | grep -E "$WRX_INFRA_NODES" | bash
+echo 'curl -sS -L $WRX_RAW_BASE_PATH/scripts/infra/dns.sh       | bash' | ssh -t dns      'sudo -i'
+echo 'curl -sS -L $WRX_RAW_BASE_PATH/scripts/infra/proxy.sh     | bash' | ssh -t proxy    'sudo -i'
+echo 'curl -sS -L $WRX_RAW_BASE_PATH/scripts/infra/registry.sh  | bash' | ssh -t registry 'sudo -i'
 
 # Deployment nodes
-print-create-env-commands  | grep -E "$DEPLOY_NODES" | bash
-ssh -t recorder "sudo -i bash -c 'curl --proxy $PROXY -L $BASE_PATH/scripts/infra/recorder.sh | bash'"
+print-create-env-commands  | grep -E "$WRX_DEPLOY_NODES" | bash
+echo 'curl -sS --proxy $WRX_PROXY -L $WRX_RAW_BASE_PATH/scripts/infra/recorder.sh  | bash' | ssh -t recorder 'sudo -i'
+
 scp /root/.ssh/id_rsa* deployment:/home/deploy/.ssh
 
 # Environment nodes

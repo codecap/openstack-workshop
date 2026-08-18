@@ -500,12 +500,6 @@ CEPH_IMAGE=<span class="hljs-string">&quot;registry.wrx.sckt.net/quay/ceph/ceph:
 SPEC=<span class="hljs-string">&quot;<span class="hljs-variable">$HOME</span>/ceph/spec.yaml&quot;</span>
 SSH_DIR=<span class="hljs-string">&quot;<span class="hljs-variable">$HOME</span>/.ssh&quot;</span>
 
-<span class="hljs-comment">#ceph cephadm generate-key</span>
-<span class="hljs-comment">#ceph cephadm get-pub-key &gt; ceph.pub</span>
-<span class="hljs-comment">#ssh-copy-id -f -i ceph.pub root@[[HOST</span>
-
-]
-
 <span class="hljs-built_in">cd</span> ~/ceph
 <span class="hljs-built_in">sudo</span> cephadm --image <span class="hljs-string">&quot;<span class="hljs-variable">$CEPH_IMAGE</span>&quot;</span>                    \
   bootstrap                                           \
@@ -520,6 +514,10 @@ SSH_DIR=<span class="hljs-string">&quot;<span class="hljs-variable">$HOME</span>
     --allow-fqdn-hostname                             \
     --skip-firewalld                                  \
     --single-host-defaults
+
+<span class="hljs-comment"># NOTE: --no-cleanup-on-failure to debug if the bootsrap step fails</span>
+<span class="hljs-comment">#       --verbose</span>
+<span class="hljs-comment">#       --retry &lt;NR&gt;</span>
 
 <span class="hljs-comment"># wait a moment</span>
 <span class="hljs-keyword">until</span> <span class="hljs-built_in">sudo</span> ceph -s | grep -q HEALTH_OK; <span class="hljs-keyword">do</span> <span class="hljs-built_in">sudo</span> ceph -s; <span class="hljs-built_in">sleep</span> 5; <span class="hljs-keyword">done</span>

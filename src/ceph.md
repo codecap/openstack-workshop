@@ -106,12 +106,6 @@ CEPH_IMAGE="registry.wrx.sckt.net/quay/ceph/ceph:v$CEPH_VERSION"
 SPEC="$HOME/ceph/spec.yaml"
 SSH_DIR="$HOME/.ssh"
 
-#ceph cephadm generate-key
-#ceph cephadm get-pub-key > ceph.pub
-#ssh-copy-id -f -i ceph.pub root@[[HOST
-
-]
-
 cd ~/ceph
 sudo cephadm --image "$CEPH_IMAGE"                    \
   bootstrap                                           \
@@ -126,6 +120,10 @@ sudo cephadm --image "$CEPH_IMAGE"                    \
     --allow-fqdn-hostname                             \
     --skip-firewalld                                  \
     --single-host-defaults
+
+# NOTE: --no-cleanup-on-failure to debug if the bootsrap step fails
+#       --verbose
+#       --retry <NR>
 
 # wait a moment
 until sudo ceph -s | grep -q HEALTH_OK; do sudo ceph -s; sleep 5; done

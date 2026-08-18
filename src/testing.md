@@ -67,11 +67,11 @@ scp ~/openstack/custom-config/wrx/admin-openrc.sh testing.mgmt:~/
 # On testing node source your openrc (credentials) file
 source ~/admin-openrc.sh
 # The configuration script
-CONF_SCRIPT=https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/configure.sh
+CONF_SCRIPT=$WRX_RAW_BASE_PATH/testing/tempest/configure.sh
 # Review
 curl --proxy http://proxy.wrx.sckt.net:3128 -L $CONF_SCRIPT
 # Run
-curl --proxy http://proxy.wrx.sckt.net:3128 -L $CONF_SCRIPT | bash
+curl --proxy http://proxy.wrx.sckt.net:3128 -L $CONF_SCRIPT -sS | bash
 # Review generated config
 cd  ~/tempest-45
 cat etc/tempest.conf

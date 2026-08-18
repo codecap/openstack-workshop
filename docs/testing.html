@@ -227,11 +227,11 @@ scp ~/openstack/custom-config/wrx/admin-openrc.sh testing.mgmt:~/
 <span class="hljs-comment"># On testing node source your openrc (credentials) file</span>
 <span class="hljs-built_in">source</span> ~/admin-openrc.sh
 <span class="hljs-comment"># The configuration script</span>
-CONF_SCRIPT=https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/configure.sh
+CONF_SCRIPT=<span class="hljs-variable">$WRX_RAW_BASE_PATH</span>/testing/tempest/configure.sh
 <span class="hljs-comment"># Review</span>
 curl --proxy http://proxy.wrx.sckt.net:3128 -L <span class="hljs-variable">$CONF_SCRIPT</span>
 <span class="hljs-comment"># Run</span>
-curl --proxy http://proxy.wrx.sckt.net:3128 -L <span class="hljs-variable">$CONF_SCRIPT</span> | bash
+curl --proxy http://proxy.wrx.sckt.net:3128 -L <span class="hljs-variable">$CONF_SCRIPT</span> -sS | bash
 <span class="hljs-comment"># Review generated config</span>
 <span class="hljs-built_in">cd</span>  ~/tempest-45
 <span class="hljs-built_in">cat</span> etc/tempest.conf
