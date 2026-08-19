@@ -55,7 +55,7 @@ echo "source ~/venv/tempest/bin/activate" >> ~/.profile
 source ~/.profile
 pip install -U pip --proxy http://proxy.wrx.sckt.net:3128
 pip install --proxy http://proxy.wrx.sckt.net:3128 -r \
-  https://raw.githack.com/codecap/openstack-workshop/main/testing/tempest/requirements.txt
+  $WRX_RAW_BASE_PATH//testing/tempest/requirements.txt
 ```
 ---
 # Tempest

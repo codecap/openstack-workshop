@@ -125,15 +125,14 @@ qm create $TEMPL_ID \
 --scsihw virtio-scsi-pci \
 --net0 virtio,bridge=vmbr0
 
-# TODO: local-lvm to local or zfs pool
-qm importdisk $TEMPL_ID /tmp/noble-server-cloudimg-amd64.img local-lvm
+qm importdisk $TEMPL_ID /tmp/noble-server-cloudimg-amd64.img local
 
-qm set $TEMPL_ID --scsi0 local-lvm:vm-$TEMPL_ID-disk-0
+qm set $TEMPL_ID --scsi0 local:$TEMPL_ID/vm-$TEMPL_ID-disk-0.raw
 qm set $TEMPL_ID --boot c --bootdisk scsi0
 
 qm set $TEMPL_ID --serial0 socket --vga serial0
 
-qm set $TEMPL_ID --ide2 local-lvm:cloudinit
+qm set $TEMPL_ID --ide2 local:cloudinit
 
 qm set $TEMPL_ID --ipconfig0 ip=dhcp
 qm cloudinit update $TEMPL_ID
@@ -332,7 +331,7 @@ echo 'curl -sS --proxy $WRX_PROXY -L $WRX_RAW_BASE_PATH/scripts/infra/recorder.s
 scp /root/.ssh/id_rsa* deployment:/home/deploy/.ssh
 
 # Environment nodes
-print-create-env-commands  | grep -v -E "$INFRA_NODES|$DEPLOY_NODES"   | bash
+print-create-env-commands  | grep -v -E "$WRX_INFRA_NODES|$WRX_DEPLOY_NODES"   | bash
 ```
 
 ---

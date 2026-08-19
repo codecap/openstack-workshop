@@ -253,13 +253,12 @@ kolla-ansible check                -i inventory/wrx
 ![bg right:30% 90%](https://superuser.openinfra.org/wp-content/uploads/2025/01/1_q6dlalwfoVWwUqFmo4I-9g.png)
 ```bash
 # Create first basic test resources                                         📋
-# FIXME:
 KOLLA_CONFIG_PATH=~/openstack/custom-config/wrx/    \
-ENABLE_EXT_NET=0                                    \
-EXT_NET_CIDR=10.10.61.0/24                          \
-EXT_NET_GATEWAY=10.10.61.1                          \
-EXT_NET_RANGE="start=10.10.61.240,end=10.10.61.245" \
-DEMO_NET_DNS=8.8.8.8                                \
+ENABLE_EXT_NET=1                                    \
+EXT_NET_CIDR=10.30.0.0/24                           \
+EXT_NET_GATEWAY=10.30.0.1                           \
+EXT_NET_RANGE="start=10.30.0.240,end=10.30.0.245"   \
+DEMO_NET_DNS=10.30.0.1                              \
 ~/venv/openstack/share/kolla-ansible/init-runonce
 ```
 
@@ -883,7 +882,7 @@ openstack server create                  \
 # on the testing node as root
 myid=$(cat /etc/env.json  | jq .id)
 
-cat > /etc/netplan/500-vlan.yaml <<EOF
+cat > /etc/netplan/80-vlan.yaml <<EOF
 network:
   version: 2
   vlans:
