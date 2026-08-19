@@ -1,0 +1,169 @@
+---
+##############################################################################
+# ntp
+# ntp__daemon: ntp
+##############################################################################
+# network
+
+ifupdown__enabled: true
+
+ifupdown__interfaces:
+  - name: 'brmgt0'
+    auto: true
+    method: 'manual'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+  - name: 'brsrvc0'
+    auto: true
+    method: 'manual'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+  - name: 'brcpln0'
+    auto: true
+    method: 'manual'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+  - name: 'brdpln0'
+    auto: true
+    method: 'manual'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+  - name: 'brlmgt0'
+    auto: true
+    method: 'manual'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+  - name: 'brxtrm0'
+    auto: true
+    method: 'manual'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+  - name: 'brstrg0'
+    auto: true
+    method: 'manual'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+  - name: 'brstrg1'
+    auto: true
+    method: 'manual'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+  - name: 'brpblc0'
+    auto: true
+    method: 'manual'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+  - name: 'vmbr0'
+    auto: true
+    method: 'static'
+    address: '192.168.1.1'
+    netmask: '255.255.255.0'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+
+##############################################################################
+# sysctl
+sysctl__system_ip_forwarding_enabled: true
+
+##############################################################################
+# dnsmasq
+dnsmasq__dhcpv6: false
+
+dnsmasq__upstream_servers:
+  - 1.1.1.1
+  - 8.8.4.4
+
+dnsmasq__nameservers: false
+
+dnsmasq__interfaces:
+  - vmbr0
+  - brpblc0
+dnsmasq__bind_interfaces: true
+
+dnsmasq__no_dhcp_interfaces:
+  - brpblc0
+
+dnsmasq__domain_needed: true
+dnsmasq__bogus_priv: true
+dnsmasq__no_resolv: true
+
+
+dnsmasq__dhcp: true
+dnsmasq__dhcp_authoritative: true
+
+
+dnsmasq__dhcp_ranges:
+  - interface: 'vmbr0'
+    start:     '192.168.1.128'
+    end:       '192.168.1.196'
+    netmask:   '255.255.255.0'
+    lease: '12h'
+
+dnsmasq__dhcp_options:
+  - 'option:router,192.168.1.1'
+  - 'option:dns-server,192.168.1.1'
+
+
+##############################################################################
+# nftables
+
+# TODO:
+pub_iface: enp65s0f0
+
+resources__files:
+  - path: '/opt/scripts/backup.sh'
+    content: |
+      #!/usr/sbin/nft -f
+
+      flush ruleset
+
+      table inet filter {
+        chain input {
+          type filter hook input priority filter;
+        }
+        chain forward {
+          type filter hook forward priority filter;
+        }
+        chain output {
+          type filter hook output priority filter;
+        }
+
+        chain forward {
+            type filter hook forward priority 0; policy drop;
+            ct state established,related accept
+            iifname "vmbr0" oifname "{{pub_iface}}" accept
+        }
+      }
+
+      table ip nat {
+          chain postrouting {
+              type nat hook postrouting priority 100;
+              oifname "{{pub_iface}}" ip saddr 192.168.1.0/24 masquerade
+          }
+      }
+
+##############################################################################
+# Proxmox
+pve_group: proxmox
+pve_remove_subscription_warning: true
+pve_check_for_kernel_update: true
+pve_reboot_on_kernel_update: true
+pve_reboot_on_kernel_update_delay: 60
+pve_remove_old_kernels: true
+pve_run_system_upgrades: false
+pve_run_proxmox_upgrades: true
+pve_zfs_enabled: yes
+pve_zfs_create_volumes: []
+pve_ceph_enabled: false
+pve_cluster_enabled: no
+pve_cluster_clustername: "{{ pve_group }}"

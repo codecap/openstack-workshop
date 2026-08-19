@@ -1,0 +1,7 @@
+---
+roles:
+  - name:    lae.proxmox
+    version: v1.10.1
+collections:
+  - name:    debops.debops
+    version: v3.3.0

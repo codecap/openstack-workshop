@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: yes
+  roles:
+    - rule: debops.resources
+    - rule: debops.ifupdown
+    - role: debops.ntp
+    - role: debops.sysctl
+    - role: debops.dnsmasq
+    - role: lae.proxmox
