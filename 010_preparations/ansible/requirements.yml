@@ -1,7 +1,15 @@
 ---
 roles:
-  - name:    lae.proxmox
+  - src: https://github.com/lae/ansible-role-proxmox.git
     version: v1.10.1
+    name: lae.proxmox
 collections:
-  - name:    debops.debops
+  - name: https://github.com/debops/debops.git
+    type: git
     version: v3.3.0
+  # deps
+  - name: ansible.posix
+  - name: ansible.utils
+  - name: community.general
+  - name: community.crypto
+

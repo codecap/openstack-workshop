@@ -98,8 +98,67 @@ We will need at least a single baremetal node with either:
 - single-node Incus environment
 ...
 
+
+
+---
+# # Operating System
+![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
+
+```bash
+apt install -y   \
+ bind9-dnsutils  \
+ curl            \
+ git             \
+ htop            \
+ isc-dhcp-client \
+ jq              \
+ nftables        \
+ python3-venv    \
+ tcpdump         \
+ tmux            \
+ vim             \
+ yq
+```
+
+
+---
+# # Checkout
+![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
+```bash
+git clone https://github.com/codecap/openstack-workshop.git
+
+cd openstack-workshop
+./scripts/print-ssh-config  >> ~/.ssh/config
+
+ssh-keygen
+cat /root/.ssh/id_ed25519.pub >> /home/debian/.ssh/authorized_keys
+```
+
 ---
 # Proxmox
+![bg right:40% 50%](https://www.svgrepo.com/show/331552/proxmox.svg)
+```bash
+cd  010_preparations/ansible/
+
+python3 -m venv ~/venv/wrx
+source ~/venv/wrx/bin/activate
+
+# Install ansible
+pip3 install -U pip
+pip3 install -r requirements.txt
+
+# Install requiremnets for ansible
+ansible-galaxy role       install -r requirements.yml
+ansible-galaxy collection install -r requirements.yml
+
+
+# Prepare the host for Proxmox
+ansible-playbooks playbooks/proxmox/install.yml
+
+```
+
+---
+# Prepare a Template VM for Guests
 ![bg right:40% 50%](https://www.svgrepo.com/show/331552/proxmox.svg)
 
 ```bash
@@ -139,100 +198,6 @@ qm cloudinit update $TEMPL_ID
 
 qm template $TEMPL_ID
 
-# Install packages
-apt install -y  \
- bind9-dnsutils \
- crudini        \
- curl           \
- git            \
- htop           \
- jq             \
- python3-venv   \
- tcpdump        \
- tmux           \
- vim            \
- yq
-```
-
----
-# Proxmox
-![bg right:60% 35%](https://www.svgrepo.com/show/331552/proxmox.svg)
-```bash
-# Create bridges                                                            📋
-cat > /etc/network/interfaces.d/wrx <<EOF
-auto cpln01
-iface cpln01 inet manual
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-auto dpln0
-iface dpln0 inet manual
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-auto brmgmt0
-iface brmgmt0 inet static
-        address 10.14.0.8/24
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-auto brsrvc0
-iface brsrvc0 inet static
-        address 10.34.10.8/24
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-auto brcpln0
-iface brcpln0 inet manual
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-auto brdpln0
-iface brdpln0 inet manual
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-auto brlmgt0
-iface brlmgt0 inet manual
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-auto brxtrn0
-iface brxtrn0 inet manual
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-auto brstrg0
-iface brstrg0 inet manual
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-auto brstrg1
-iface brstrg1 inet manual
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-auto brpblc0
-iface brpblc0 inet manual
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-EOF
-
-systemctl restart networking.service
-brctl show
-```
-
----
-# Let's Go!
-![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
-
-
-```bash
-git clone https://github.com/codecap/openstack-workshop.git
-
-cd openstack-workshop
-./scripts/print-ssh-config  >> ~/.ssh/config
 ```
 
 ---

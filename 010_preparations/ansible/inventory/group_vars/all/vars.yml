@@ -8,61 +8,71 @@
 ifupdown__enabled: true
 
 ifupdown__interfaces:
-  - name: 'brmgt0'
+  brmgt0:
+    type: bridge
+    auto: true
+    inet: 'manual'
+    bridge_ports: 'none'
+    bridge_stp: 'off'
+    bridge_fd: '0'
+  brsrvc0:
+    type: bridge
     auto: true
     method: 'manual'
     bridge_ports: 'none'
     bridge_stp: 'off'
     bridge_fd: '0'
-  - name: 'brsrvc0'
+  brcpln0:
+    type: bridge
     auto: true
     method: 'manual'
     bridge_ports: 'none'
     bridge_stp: 'off'
     bridge_fd: '0'
-  - name: 'brcpln0'
+  brdpln0:
+    type: bridge
     auto: true
     method: 'manual'
     bridge_ports: 'none'
     bridge_stp: 'off'
     bridge_fd: '0'
-  - name: 'brdpln0'
+  brlmgt0:
+    type: bridge
     auto: true
     method: 'manual'
     bridge_ports: 'none'
     bridge_stp: 'off'
     bridge_fd: '0'
-  - name: 'brlmgt0'
+  brxtrm0:
+    type: bridge
     auto: true
     method: 'manual'
     bridge_ports: 'none'
     bridge_stp: 'off'
     bridge_fd: '0'
-  - name: 'brxtrm0'
+  brstrg0:
+    type: bridge
     auto: true
     method: 'manual'
     bridge_ports: 'none'
     bridge_stp: 'off'
     bridge_fd: '0'
-  - name: 'brstrg0'
+  brstrg1:
+    type: bridge
     auto: true
     method: 'manual'
     bridge_ports: 'none'
     bridge_stp: 'off'
     bridge_fd: '0'
-  - name: 'brstrg1'
+  brpblc0:
+    type: bridge
     auto: true
     method: 'manual'
     bridge_ports: 'none'
     bridge_stp: 'off'
     bridge_fd: '0'
-  - name: 'brpblc0'
-    auto: true
-    method: 'manual'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
-  - name: 'vmbr0'
+  vmbr0:
+    type: bridge
     auto: true
     method: 'static'
     address: '192.168.1.1'
@@ -81,7 +91,7 @@ dnsmasq__dhcpv6: false
 
 dnsmasq__upstream_servers:
   - 1.1.1.1
-  - 8.8.4.4
+  - 8.8.8.8
 
 dnsmasq__nameservers: false
 
@@ -121,7 +131,7 @@ dnsmasq__dhcp_options:
 pub_iface: enp65s0f0
 
 resources__files:
-  - path: '/opt/scripts/backup.sh'
+  - path: '/etc/nftables.conf'
     content: |
       #!/usr/sbin/nft -f
 

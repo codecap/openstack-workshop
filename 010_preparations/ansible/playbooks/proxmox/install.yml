@@ -1,10 +1,18 @@
 ---
 - hosts: all
   gather_facts: yes
+  environment:
+    PATH: "/lib/systemd:/usr/lib/systemd:{{ ansible_env.PATH }}"
   roles:
-    - rule: debops.resources
-    - rule: debops.ifupdown
-    - role: debops.ntp
-    - role: debops.sysctl
-    - role: debops.dnsmasq
+    - role: debops.debops.resources
+    - role: debops.debops.ifupdown
+    - role: debops.debops.ntp
+    - role: debops.debops.sysctl
+    - role: debops.debops.dnsmasq
     - role: lae.proxmox
+  post_tasks:
+    - name: 'Restart nftables'
+      service:
+        name: nftables
+        enabled: true
+        state: restarted
