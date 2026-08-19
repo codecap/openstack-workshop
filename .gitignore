@@ -2,3 +2,4 @@ src/*.html
 removeme
 sftp-config.json*
 clouds.yaml
+010_preparations/ansible/.vault_pass

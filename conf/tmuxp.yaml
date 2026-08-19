@@ -41,7 +41,7 @@ windows:
       - ssh -t cephosd02.strg.wrx.sckt.net sudo su -
       - ssh -t cephosd03.strg.wrx.sckt.net sudo su -
       - cd  ~/ceph
-      - cd  ~/ceph
+      - sudo su -
       - cd  ~/ceph
   - window_name: infra
     layout: tiled
