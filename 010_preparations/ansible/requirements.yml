@@ -8,8 +8,7 @@ collections:
     type: git
     version: v3.3.0
   # deps
-  - name: ansible.posix
-  - name: ansible.utils
-  - name: community.general
-  - name: community.crypto
-
+  # - name: ansible.posix
+  # - name: ansible.utils
+  # - name: community.general
+  # - name: community.crypto

@@ -16,9 +16,8 @@ NCARD_MODEL="virtio"
 SNIPPET_STORAGE="local"
 SNIPPET_DIR="/var/lib/vz/snippets"
 IFACE_DATA_JSON=$(cat "$ENV_CONF" | yq -r '.network_conf' -j)
-# FIXME: NAMESERVER, SEARCHDOMAINS should be set by paramters
-NAMESERVER=$(cat conf/env.yaml | yq -r '.resolve_conf.nameservers[]' | xargs)
-SEARCHDOMAIN="$(cat conf/env.yaml | yq -r '.resolve_conf.searchdomains[]' | xargs)"
+NAMESERVER=$(   cat $ENV_CONF | yq -r '.resolve_conf.nameservers[]'   | xargs)
+SEARCHDOMAIN=$( cat $ENV_CONF | yq -r '.resolve_conf.searchdomains[]' | xargs)
 CIUSER=deploy
 CIPASS=deploy
 

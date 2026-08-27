@@ -99,15 +99,21 @@ We will need at least a single baremetal node with either:
 ...
 
 
-
 ---
-# # Operating System
+# Operating System
 ![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
 
 ```bash
-apt install -y   \
+# On the baremetal node as root                                             📋
+apt-get update
+
+apt-get remove grub-cloud-amd64 -y
+apt-get dist-upgrade            -y
+
+apt-get  install -y   \
  bind9-dnsutils  \
  curl            \
+ dnsmasq         \
  git             \
  htop            \
  isc-dhcp-client \
@@ -120,17 +126,17 @@ apt install -y   \
  yq
 ```
 
-
 ---
-# # Checkout
+# Checkout
 ![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
 ```bash
+# On the baremetal node as root                                             📋
 git clone https://github.com/codecap/openstack-workshop.git
 
 cd openstack-workshop
 ./scripts/print-ssh-config  >> ~/.ssh/config
 
-ssh-keygen
+ssh-keygen -t ed25519 -N '' -f ~/.ssh/id_ed25519
 cat /root/.ssh/id_ed25519.pub >> /home/debian/.ssh/authorized_keys
 ```
 
@@ -138,6 +144,7 @@ cat /root/.ssh/id_ed25519.pub >> /home/debian/.ssh/authorized_keys
 # Proxmox
 ![bg right:40% 50%](https://www.svgrepo.com/show/331552/proxmox.svg)
 ```bash
+# On the baremetal node as root                                             📋
 cd  010_preparations/ansible/
 
 python3 -m venv ~/venv/wrx
@@ -151,10 +158,10 @@ pip3 install -r requirements.txt
 ansible-galaxy role       install -r requirements.yml
 ansible-galaxy collection install -r requirements.yml
 
+ansible-playbook playbooks/proxmox/install.yml
 
-# Prepare the host for Proxmox
-ansible-playbooks playbooks/proxmox/install.yml
-
+# Reboot
+reboot
 ```
 
 ---
@@ -162,42 +169,15 @@ ansible-playbooks playbooks/proxmox/install.yml
 ![bg right:40% 50%](https://www.svgrepo.com/show/331552/proxmox.svg)
 
 ```bash
-# Install post-pve-install.sh                                               📋
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/tools/pve/post-pve-install.sh)"
+# On the baremetal node as root                                             📋
+WRX_RAW_BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/refs/heads/main
+CONF_SCRIPT=$WRX_RAW_BASE_PATH/010_preparations/scripts/proxmox-template.sh
 
-# Prepare a new template for VMs
-# https://www.croit.io/blog/how-to-use-cloud-images-for-faster-vm-deployment-in-proxmox-ve
+# Review
+curl -sS -L $CONF_SCRIPT
 
-TEMPL_ID=9000
-
-wget -O /tmp/noble-server-cloudimg-amd64.img \
-https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
-
-qm create $TEMPL_ID \
---name ubuntu-2404-cloud-init \
---description "Ubuntu 24.04 Cloud Init template" \
---ostype l26 \
---cpu cputype=host \
---cores 1 \
---sockets 1 \
---memory 2048 \
---scsihw virtio-scsi-pci \
---net0 virtio,bridge=vmbr0
-
-qm importdisk $TEMPL_ID /tmp/noble-server-cloudimg-amd64.img local
-
-qm set $TEMPL_ID --scsi0 local:$TEMPL_ID/vm-$TEMPL_ID-disk-0.raw
-qm set $TEMPL_ID --boot c --bootdisk scsi0
-
-qm set $TEMPL_ID --serial0 socket --vga serial0
-
-qm set $TEMPL_ID --ide2 local:cloudinit
-
-qm set $TEMPL_ID --ipconfig0 ip=dhcp
-qm cloudinit update $TEMPL_ID
-
-qm template $TEMPL_ID
-
+# Execute
+curl -sS -L $CONF_SCRIPT | bash
 ```
 
 ---

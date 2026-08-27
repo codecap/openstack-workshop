@@ -1,136 +1,149 @@
 ---
 ##############################################################################
-# ntp
-# ntp__daemon: ntp
-##############################################################################
 # network
-
-ifupdown__enabled: true
-
-ifupdown__interfaces:
-  brmgt0:
-    type: bridge
-    auto: true
-    inet: 'manual'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
-  brsrvc0:
-    type: bridge
-    auto: true
-    method: 'manual'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
-  brcpln0:
-    type: bridge
-    auto: true
-    method: 'manual'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
-  brdpln0:
-    type: bridge
-    auto: true
-    method: 'manual'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
-  brlmgt0:
-    type: bridge
-    auto: true
-    method: 'manual'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
-  brxtrm0:
-    type: bridge
-    auto: true
-    method: 'manual'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
-  brstrg0:
-    type: bridge
-    auto: true
-    method: 'manual'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
-  brstrg1:
-    type: bridge
-    auto: true
-    method: 'manual'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
-  brpblc0:
-    type: bridge
-    auto: true
-    method: 'manual'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
-  vmbr0:
-    type: bridge
-    auto: true
-    method: 'static'
-    address: '192.168.1.1'
-    netmask: '255.255.255.0'
-    bridge_ports: 'none'
-    bridge_stp: 'off'
-    bridge_fd: '0'
+netplan_conf:
+  network:
+    version: 2
+    renderer: networkd
+    bridges:
+      brmgmt0:
+        addresses: ["10.14.0.8/24"]
+        dhcp4: false
+        dhcp6: false
+        link-local: []
+      brsrvc0:
+        addresses: []
+        dhcp4: false
+        dhcp6: false
+        link-local: []
+      brcpln0:
+        addresses: []
+        dhcp4: false
+        dhcp6: false
+        link-local: []
+      brdpln0:
+        addresses: []
+        dhcp4: false
+        dhcp6: false
+        link-local: []
+      brlmgt0:
+        addresses: []
+        dhcp4: false
+        dhcp6: false
+        link-local: []
+      brxtrn0:
+        addresses: []
+        dhcp4: false
+        dhcp6: false
+        link-local: []
+      brstrg0:
+        addresses: []
+        dhcp4: false
+        dhcp6: false
+        link-local: []
+      brstrg1:
+        addresses: []
+        dhcp4: false
+        dhcp6: false
+        link-local: []
+      brpblc0:
+        addresses: []
+        dhcp4: false
+        dhcp6: false
+        link-local: []
+      vmbr0:
+        addresses:
+          - '192.168.1.1/24'
+        dhcp4: false
+        dhcp6: false
+        link-local: []
 
 ##############################################################################
-# sysctl
-sysctl__system_ip_forwarding_enabled: true
-
-##############################################################################
-# dnsmasq
-dnsmasq__dhcpv6: false
-
-dnsmasq__upstream_servers:
-  - 1.1.1.1
-  - 8.8.8.8
-
-dnsmasq__nameservers: false
-
-dnsmasq__interfaces:
-  - vmbr0
-  - brpblc0
-dnsmasq__bind_interfaces: true
-
-dnsmasq__no_dhcp_interfaces:
-  - brpblc0
-
-dnsmasq__domain_needed: true
-dnsmasq__bogus_priv: true
-dnsmasq__no_resolv: true
-
-
-dnsmasq__dhcp: true
-dnsmasq__dhcp_authoritative: true
-
-
-dnsmasq__dhcp_ranges:
-  - interface: 'vmbr0'
-    start:     '192.168.1.128'
-    end:       '192.168.1.196'
-    netmask:   '255.255.255.0'
-    lease: '12h'
-
-dnsmasq__dhcp_options:
-  - 'option:router,192.168.1.1'
-  - 'option:dns-server,192.168.1.1'
-
-
-##############################################################################
-# nftables
-
-# TODO:
-pub_iface: enp65s0f0
-
+# resources
 resources__files:
+
+  - path:    '/etc/sysctl.d/60-wrx.conf'
+    content: |
+      net.ipv4.conf.{{ansible_default_ipv4.interface}}.forwarding = 1
+      net.ipv6.conf.{{ansible_default_ipv6.interface}}.forwarding = 1
+
+  - path:    '/etc/systemd/system/wrx-bridge-forwarding.service'
+    content: |
+      [Unit]
+      Description=WRX Enable IP Forwarding on Bridges
+      After=systemd-networkd.service network-online.target
+      Wants=systemd-networkd.service
+
+      [Service]
+      Type=oneshot
+      ExecStart=/bin/bash -c 'for f in /proc/sys/net/ipv{4,6}/conf/{brpblc*,brxtrn*,vmbr*}/forwarding; do [ -f "$f" ] && echo 1 > "$f"; done'
+      RemainAfterExit=yes
+
+      [Install]
+      WantedBy=multi-user.target
+
+  - path: /etc/systemd/system/wrx-bridge-forwarding.service
+    src:  /etc/systemd/system/multi-user.target.wants/wrx-bridge-forwarding.service
+    state: 'link'
+
+  - path:    '/etc/cloud/cloud-init.disabled'
+    content: ""
+
+  - path:    '/etc/netplan/60-wrx.yaml'
+    content: "{{netplan_conf | to_nice_yaml}}"
+    owner: 'root'
+    group: 'root'
+    mode: '0600'
+    notify: ['Restart systemd-networkd']
+
+  - path:    '/etc/netplan/70-private-net.yaml'
+    owner: 'root'
+    group: 'root'
+    mode: '0600'
+    notify: ['Restart systemd-networkd']
+    content: |
+      network:
+        version: 2
+        renderer: networkd
+        vlans:
+          vlan2810:
+            id: 2810
+            link: eth0
+            dhcp4: true
+            dhcp-identifier: mac
+
+  - path: '/etc/network/interfaces'
+    content: |
+      {% for b in netplan_conf.network.bridges.keys() %}
+      auto {{b}}
+      iface {{b}} inet static
+        bridge_ports eth0
+        bridge_stp off
+        bridge_fd 0
+
+      {% endfor %}
+
+  - path: '/etc/dnsmasq.d/60-wrx.conf'
+    content: |
+      # Interfaces to listen on for DNS
+      interface=brpblc0
+      interface=vmbr0
+      bind-dynamic
+
+      # DNS Security & Forwarding
+      domain-needed
+      bogus-priv
+      no-resolv
+      server=1.1.1.1
+      server=8.8.8.8
+
+      no-dhcp-interface=brpblc0
+
+      # DHCP
+      dhcp-range=interface:vmbr0,192.168.1.128,192.168.1.196,255.255.255.0,12h
+      dhcp-option=option:router,192.168.1.1
+      dhcp-option=option:dns-server,192.168.1.1
+
   - path: '/etc/nftables.conf'
     content: |
       #!/usr/sbin/nft -f
@@ -151,33 +164,55 @@ resources__files:
         chain forward {
             type filter hook forward priority 0; policy drop;
             ct state established,related accept
-            iifname "vmbr0" oifname "{{pub_iface}}" accept
+            iifname "vmbr0" oifname "{{ansible_default_ipv4.interface}}" accept
         }
       }
 
       table ip nat {
           chain postrouting {
               type nat hook postrouting priority 100;
-              oifname "{{pub_iface}}" ip saddr 192.168.1.0/24 masquerade
+              oifname "{{ansible_default_ipv4.interface}}" ip saddr 192.168.1.0/24 masquerade
           }
       }
+
+  - path: '/etc/profile.d/60-wrx.sh'
+    content: |
+      #!/usr/bin/env bash
+      if [ "$EUID" -eq 0 ] && [ -d "/root/openstack-workshop/scripts" ]; then
+        if [[ ":$PATH:" != *":/root/openstack-workshop/scripts:"* ]]; then
+            export PATH="/root/openstack-workshop/scripts:$PATH"
+        fi
+      fi
 
 ##############################################################################
 # Proxmox
 pve_group: proxmox
 pve_remove_subscription_warning: true
-pve_check_for_kernel_update: false
-pve_reboot_on_kernel_update: false
-pve_reboot_on_kernel_update_delay: 60
-pve_remove_old_kernels: false
-pve_run_system_upgrades: false
-pve_run_proxmox_upgrades: false
-pve_zfs_enabled: yes
-pve_zfs_create_volumes: []
-pve_ceph_enabled: false
-pve_cluster_enabled: no
-pve_cluster_clustername: "{{ pve_group }}"
+pve_upgrade_packages:            false
+pve_check_for_kernel_update:     false
+pve_reboot_on_kernel_update:     false
+pve_remove_old_kernels:          false
+pve_run_system_upgrades:         false
+pve_run_proxmox_upgrades:        false
+pve_zfs_enabled:                 false
+pve_ceph_enabled:                false
+pve_cluster_enabled:             no
+pve_cluster_clustername:         "{{ pve_group }}"
 
 pve_users:
   - name: admin@pve
-    password: "{{ raw_password | password_hash('sha512', vault_secret_salt) }}"
+    password: "{{ ansible_machine_id  }}"
+    groups:
+      - 'admin-group'
+
+pve_groups:
+  - name: 'admin-group'
+    comment: 'Full Cluster Administrators'
+
+pve_acls:
+  - path: '/'
+    roles:
+      - 'Administrator'
+    groups:
+      - 'admin-group'
+    state: 'present'
