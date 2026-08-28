@@ -1,0 +1,42 @@
+#cloud-config
+write_files:
+  - path: /etc/systemd/system/prepare-wrx-environment.service
+    permissions: '0644'
+    content: |
+      [Unit]
+      Description=Prepare WRX Environment (Post-Reboot)
+      After=network-online.target
+      Wants=network-online.target
+      ConditionPathExists=!/var/lib/prepare-wrx-environment.done
+
+      [Service]
+      Type=oneshot
+      ExecStart=/bin/bash -c '\
+        set -euo pipefail; \
+        echo "=== Starting WRX Environment Preparation ===" >> /var/log/prepare-wrx-environment.log; \
+        \
+        WRX_RAW_BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/refs/heads/main \
+        curl -sS -L $WRX_RAW_BASE_PATH/010_preparations/scripts/proxmox-template.sh   | bash \
+        curl -sS -L $WRX_RAW_BASE_PATH/010_preparations/scripts/environment-create.sh | bash \
+        \
+        echo "=== WRX Environment Preparation Completed ===" >> /var/log/prepare-wrx-environment.log \
+      '
+      ExecStartPost=/usr/bin/touch /var/lib/prepare-wrx-environment.done
+      ExecStartPost=/usr/bin/systemctl disable prepare-wrx-environment.service
+      RemainAfterExit=yes
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - "curl -sS -L https://raw.githack.com/codecap/openstack-workshop/refs/heads/main/010_preparations/scripts/proxmox-install.sh | bash"
+  # Enable service so systemd queues it for the next boot
+  - systemctl daemon-reload
+  - systemctl enable prepare-wrx-environment.service
+
+power_state:
+  delay: "now"
+  mode: reboot
+  message: "Rebooting post cloud-init setup"
+  timeout: 30
+  condition: True
