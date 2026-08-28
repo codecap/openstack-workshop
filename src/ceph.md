@@ -77,6 +77,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 # Deploy Ceph with Cephadm
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
+# as deploy on deployment host                                              📋
 sudo apt install cephadm ceph-common python3-jinja2 -y
 
 # distribute the ssh keys
@@ -94,7 +95,7 @@ done
 # Deploy Ceph with Cephadm
 ![bg right:50% 30%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ```bash
-#                                                                           📋
+#  as deploy on deployment host                                             📋
 CEPH_VERSION="19.2.1"
 CEPH_FSID="1959570b-e2e3-4017-a5dc-c7606c5068fd"
 CEPH_CONFIG="$HOME/ceph/initial-ceph.conf"
@@ -153,7 +154,7 @@ ceph osd crush rule rm replicated_rule
 ![bg right:30% 50%](https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/ceph.svg)
 ### Create client keys for OpenStack services
 ```bash
-# On the deployment node, create the .keyring files                         📋
+# as root on deployment node, create the .keyring files                     📋
 cat > /etc/ceph/ceph.client.glance.keyring <<EOF
 [client.glance]
         key = AQBqB/JpuJQKDRAACBv/LtaMfeBa4cG3s/5WCg==
@@ -200,7 +201,7 @@ done
 **Create pools for OpenStack services**
 
 ```bash
-                                                                            📋
+# as root on deployment host                                                📋
 for p in volumes images vms backups
 do
   ceph osd pool create $p

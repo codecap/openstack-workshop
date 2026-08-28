@@ -116,44 +116,10 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 ---
 # Deploy OpenStack
 ![bg right:30% 90%](https://superuser.openinfra.org/wp-content/uploads/2025/01/1_q6dlalwfoVWwUqFmo4I-9g.png)
-```bash
-# Prepare environment                                                       📋
-cat >> ~/.profile <<"EOF"
-##############################################################################
-# openstack vars
-
-export OPENSTACK_DIR=~/openstack
-KOLLA_ANSIBLE_RELEASE=20 # OS 2025.1
-VENV_PATH=~/venv/kolla-ansible-$KOLLA_ANSIBLE_RELEASE
-
-if [ -z "$VIRTUAL_ENV" -a -L ~/venv/openstack ]
-then
-  source ~/venv/openstack/bin/activate
-fi
-export ARA_HOME=$VIRTUAL_ENV/lib/python3.12/site-packages/ara
-
-
-ADMIN_OPENRC_FILE=$OPENSTACK_DIR/custom-config/wrx/admin-openrc.sh
-if [ -f $ADMIN_OPENRC_FILE ]
-then
-  source  $ADMIN_OPENRC_FILE
-fi
-
-export PATH=~/openstack/bin/:$PATH
-export PS1="[\u@\h \W|\[\e[1;32m\]\$OS_USERNAME.\$OS_PROJECT_NAME\[\e[m\]]\$"
-source <(openstack complete)
-EOF
-```
-
----
-# Deploy OpenStack
-![bg right:30% 90%](https://superuser.openinfra.org/wp-content/uploads/2025/01/1_q6dlalwfoVWwUqFmo4I-9g.png)
 
 ```bash
 # Prepare Python virtual environment                                        📋
 cd ~/openstack/
-source ~/.profile
-# Some errors are expected here
 
 python3 -m venv $VENV_PATH
 
@@ -172,6 +138,9 @@ kolla-ansible install-deps
 
 # Install additional dependencies
 gilt overlay
+
+# Reload environment
+source ~/.profile
 ```
 
 ---

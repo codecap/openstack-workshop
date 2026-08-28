@@ -10,6 +10,10 @@ location = "$REGISTRY"
 insecure = true
 EOF
 
+# FIXME: remove --network host, --publish -> 8000, debugging needed
+#        ARA config then needed on ansible side
+
+
 podman volume create ara
 
 mkdir /etc/ara
