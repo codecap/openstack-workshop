@@ -82,10 +82,6 @@ resources__files:
       [Install]
       WantedBy=multi-user.target
 
-  - path: /etc/systemd/system/wrx-bridge-forwarding.service
-    src:  /etc/systemd/system/multi-user.target.wants/wrx-bridge-forwarding.service
-    state: 'link'
-
   - path:    '/etc/cloud/cloud-init.disabled'
     content: ""
 

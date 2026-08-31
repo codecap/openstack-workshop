@@ -22,7 +22,6 @@
   roles:
     - role: debops.debops.resources
     - role: debops.debops.ntp
-    - role: lae.proxmox
   post_tasks:
     - name: 'Restart nftables'
       service:
@@ -34,3 +33,7 @@
         name: wrx-bridge-forwarding.service
         enabled: true
         daemon_reload: true
+- hosts: all
+  gather_facts: yes
+  roles:
+    - role: lae.proxmox

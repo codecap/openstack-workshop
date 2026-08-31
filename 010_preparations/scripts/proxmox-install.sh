@@ -21,6 +21,7 @@ apt-get  install -y   \
  vim             \
  yq
 
+cd /root
 git clone https://github.com/codecap/openstack-workshop.git
 
 # ssh
@@ -44,11 +45,3 @@ ansible-galaxy role       install -r requirements.yml
 ansible-galaxy collection install -r requirements.yml
 
 ansible-playbook playbooks/proxmox/install.yml
-RES=$?
-
-# Reboot
-if [ "$RES" = "0" ]
-then
-  # Reboot only when no errors occured
-  reboot
-fi
