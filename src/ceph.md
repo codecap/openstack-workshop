@@ -80,14 +80,13 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 # as deploy on deployment host                                              📋
 sudo apt install cephadm ceph-common python3-jinja2 -y
 
-# distribute the ssh keys
+# create ssh keypair for ceph
+sudo ssh-keygen -t rsa -N '' -f /etc/ceph/id_rsa
+# copy the pub key to ceph nodes
 for i in cephmon0{1..3} cephosd0{1..3} cephgra01 deployment
 do
-  # remove keys
-  ssh -q -i ~/.ssh/id_rsa $i.mgmt 'sudo sed -i /root/.ssh/authorized_keys -e "/command=/d"'
-  # add keys
-  ssh -q -i ~/.ssh/id_rsa $i.mgmt 'echo "'$(cat ~/.ssh/id_rsa.pub)'" \
-  | sudo tee -a /root/.ssh/authorized_keys'
+  ssh  $i.mgmt 'sudo cp /home/deploy/.ssh/authorized_keys /root/.ssh/authorized_keys'
+  ssh-copy-id -f -i /etc/ceph/id_rsa root@$i.mgmt
 done
 ```
 
@@ -105,21 +104,20 @@ CEPH_PUBLIC_NET="10.20.21.0/24"
 CEPH_CLUSTER_NET="10.20.22.0/24"
 CEPH_IMAGE="registry.wrx.sckt.net/quay/ceph/ceph:v$CEPH_VERSION"
 SPEC="$HOME/ceph/spec.yaml"
-SSH_DIR="$HOME/.ssh"
 
 cd ~/ceph
-sudo cephadm --image "$CEPH_IMAGE"                    \
-  bootstrap                                           \
-    --fsid                        $CEPH_FSID          \
-    --config                      $CEPH_CONFIG        \
-    --mon-ip                      $CEPH_MON_IP        \
-    --cluster-network             $CEPH_CLUSTER_NET   \
-    --ssh-private-key             $SSH_DIR/id_rsa     \
-    --ssh-public-key              $SSH_DIR/id_rsa.pub \
-    --initial-dashboard-password  p@ssw0rd            \
-    --dashboard-password-noupdate                     \
-    --allow-fqdn-hostname                             \
-    --skip-firewalld                                  \
+sudo cephadm --image "$CEPH_IMAGE"                     \
+  bootstrap                                            \
+    --fsid                        $CEPH_FSID           \
+    --config                      $CEPH_CONFIG         \
+    --mon-ip                      $CEPH_MON_IP         \
+    --cluster-network             $CEPH_CLUSTER_NET    \
+    --ssh-private-key             /etc/ceph/id_rsa     \
+    --ssh-public-key              /etc/ceph/id_rsa.pub \
+    --initial-dashboard-password  p@ssw0rd             \
+    --dashboard-password-noupdate                      \
+    --allow-fqdn-hostname                              \
+    --skip-firewalld                                   \
     --single-host-defaults
 
 # NOTE: --no-cleanup-on-failure to debug if the bootsrap step fails

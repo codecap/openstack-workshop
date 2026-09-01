@@ -420,14 +420,13 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># as deploy on deployment host                                              <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
 <span class="hljs-built_in">sudo</span> apt install cephadm ceph-common python3-jinja2 -y
 
-<span class="hljs-comment"># distribute the ssh keys</span>
+<span class="hljs-comment"># create ssh keypair for ceph</span>
+<span class="hljs-built_in">sudo</span> ssh-keygen -t rsa -N <span class="hljs-string">&#x27;&#x27;</span> -f /etc/ceph/id_rsa
+<span class="hljs-comment"># copy the pub key to ceph nodes</span>
 <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> cephmon0{1..3} cephosd0{1..3} cephgra01 deployment
 <span class="hljs-keyword">do</span>
-  <span class="hljs-comment"># remove keys</span>
-  ssh -q -i ~/.ssh/id_rsa <span class="hljs-variable">$i</span>.mgmt <span class="hljs-string">&#x27;sudo sed -i /root/.ssh/authorized_keys -e &quot;/command=/d&quot;&#x27;</span>
-  <span class="hljs-comment"># add keys</span>
-  ssh -q -i ~/.ssh/id_rsa <span class="hljs-variable">$i</span>.mgmt <span class="hljs-string">&#x27;echo &quot;&#x27;</span>$(<span class="hljs-built_in">cat</span> ~/.ssh/id_rsa.pub)<span class="hljs-string">&#x27;&quot; \
-  | sudo tee -a /root/.ssh/authorized_keys&#x27;</span>
+  ssh  <span class="hljs-variable">$i</span>.mgmt <span class="hljs-string">&#x27;sudo cp /home/deploy/.ssh/authorized_keys /root/.ssh/authorized_keys&#x27;</span>
+  ssh-copy-id -f -i /etc/ceph/id_rsa root@<span class="hljs-variable">$i</span>.mgmt
 <span class="hljs-keyword">done</span>
 </code></pre>
 <footer><a href="https://infraguide.org">infraguide.org</a> | Questions or need a guided workshop? → <a href="mailto:ping@socket.de">ping@socket.de</a></footer>
@@ -499,21 +498,20 @@ CEPH_PUBLIC_NET=<span class="hljs-string">&quot;10.20.21.0/24&quot;</span>
 CEPH_CLUSTER_NET=<span class="hljs-string">&quot;10.20.22.0/24&quot;</span>
 CEPH_IMAGE=<span class="hljs-string">&quot;registry.wrx.sckt.net/quay/ceph/ceph:v<span class="hljs-variable">$CEPH_VERSION</span>&quot;</span>
 SPEC=<span class="hljs-string">&quot;<span class="hljs-variable">$HOME</span>/ceph/spec.yaml&quot;</span>
-SSH_DIR=<span class="hljs-string">&quot;<span class="hljs-variable">$HOME</span>/.ssh&quot;</span>
 
 <span class="hljs-built_in">cd</span> ~/ceph
-<span class="hljs-built_in">sudo</span> cephadm --image <span class="hljs-string">&quot;<span class="hljs-variable">$CEPH_IMAGE</span>&quot;</span>                    \
-  bootstrap                                           \
-    --fsid                        <span class="hljs-variable">$CEPH_FSID</span>          \
-    --config                      <span class="hljs-variable">$CEPH_CONFIG</span>        \
-    --mon-ip                      <span class="hljs-variable">$CEPH_MON_IP</span>        \
-    --cluster-network             <span class="hljs-variable">$CEPH_CLUSTER_NET</span>   \
-    --ssh-private-key             <span class="hljs-variable">$SSH_DIR</span>/id_rsa     \
-    --ssh-public-key              <span class="hljs-variable">$SSH_DIR</span>/id_rsa.pub \
-    --initial-dashboard-password  p@ssw0rd            \
-    --dashboard-password-noupdate                     \
-    --allow-fqdn-hostname                             \
-    --skip-firewalld                                  \
+<span class="hljs-built_in">sudo</span> cephadm --image <span class="hljs-string">&quot;<span class="hljs-variable">$CEPH_IMAGE</span>&quot;</span>                     \
+  bootstrap                                            \
+    --fsid                        <span class="hljs-variable">$CEPH_FSID</span>           \
+    --config                      <span class="hljs-variable">$CEPH_CONFIG</span>         \
+    --mon-ip                      <span class="hljs-variable">$CEPH_MON_IP</span>         \
+    --cluster-network             <span class="hljs-variable">$CEPH_CLUSTER_NET</span>    \
+    --ssh-private-key             /etc/ceph/id_rsa     \
+    --ssh-public-key              /etc/ceph/id_rsa.pub \
+    --initial-dashboard-password  p@ssw0rd             \
+    --dashboard-password-noupdate                      \
+    --allow-fqdn-hostname                              \
+    --skip-firewalld                                   \
     --single-host-defaults
 
 <span class="hljs-comment"># NOTE: --no-cleanup-on-failure to debug if the bootsrap step fails</span>

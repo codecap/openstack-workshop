@@ -153,7 +153,8 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 <p><br />
 <a href="https://docs.openstack.org/releasenotes/tempest/v45.0.0.html">Release Notes Tempest v45</a></p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-comment"># Install Tempest on testing node                                           <img class="emoji" draggable="false" alt="📋" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f4cb.svg" data-marp-twemoji=""/></span>
-<span class="hljs-built_in">sudo</span> apt install build-essential python3.12-dev -y
+<span class="hljs-built_in">sudo</span> apt-get update
+<span class="hljs-built_in">sudo</span> apt-get install build-essential python3.12-dev -y
 python3 -m venv ~/venv/tempest
 <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span>                                   &gt;&gt; ~/.profile
 <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;source ~/venv/tempest/bin/activate&quot;</span> &gt;&gt; ~/.profile

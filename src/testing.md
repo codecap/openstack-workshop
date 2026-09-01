@@ -48,7 +48,8 @@ mermaid.initialize({ startOnLoad: true, theme: 'default' });
 [Release Notes Tempest v45](https://docs.openstack.org/releasenotes/tempest/v45.0.0.html)
 ```bash
 # Install Tempest on testing node                                           📋
-sudo apt install build-essential python3.12-dev -y
+sudo apt-get update
+sudo apt-get install build-essential python3.12-dev -y
 python3 -m venv ~/venv/tempest
 echo ""                                   >> ~/.profile
 echo "source ~/venv/tempest/bin/activate" >> ~/.profile
