@@ -1,0 +1,941 @@
+{0} tempest.api.compute.flavors.test_flavors.FlavorsV2TestJSON.test_get_flavor [0.129132s] ... ok
+{0} tempest.api.compute.flavors.test_flavors.FlavorsV2TestJSON.test_list_flavors [0.054883s] ... ok
+{0} tempest.api.compute.security_groups.test_security_group_rules.SecurityGroupRulesTestJSON.test_security_group_rules_create [0.830916s] ... ok
+{0} tempest.api.compute.security_groups.test_security_group_rules.SecurityGroupRulesTestJSON.test_security_group_rules_list [1.510754s] ... ok
+{0} tempest.api.compute.security_groups.test_security_groups.SecurityGroupsTestJSON.test_security_groups_create_list_delete [2.524073s] ... ok
+{0} tempest.api.compute.servers.test_attach_interfaces.AttachInterfacesUnderV243Test.test_add_remove_fixed_ip [61.802774s] ... ok
+{0} tempest.api.compute.servers.test_create_server.ServersTestBootFromVolume.test_list_servers [0.127473s] ... ok
+{0} tempest.api.compute.servers.test_create_server.ServersTestBootFromVolume.test_verify_server_details [0.000296s] ... ok
+{0} tempest.api.compute.servers.test_create_server.ServersTestJSON.test_list_servers [0.106524s] ... ok
+{0} tempest.api.compute.servers.test_create_server.ServersTestJSON.test_verify_server_details [0.000287s] ... ok
+{0} tempest.api.compute.servers.test_create_server.ServersTestManualDisk.test_list_servers [0.054083s] ... ok
+{0} tempest.api.compute.servers.test_create_server.ServersTestManualDisk.test_verify_server_details [0.000346s] ... ok
+{0} tempest.api.compute.servers.test_server_actions.ServerActionsTestJSON.test_reboot_server_hard [31.887586s] ... ok
+{0} tempest.api.compute.servers.test_server_addresses.ServerAddressesTestJSON.test_list_server_addresses [0.029915s] ... ok
+{0} tempest.api.compute.servers.test_server_addresses.ServerAddressesTestJSON.test_list_server_addresses_by_network [0.098702s] ... ok
+{0} tempest.api.compute.test_versions.TestVersions.test_get_version_details [0.028353s] ... ok
+{0} tempest.api.compute.test_versions.TestVersions.test_list_api_versions [0.011274s] ... ok
+{0} tempest.api.identity.admin.v3.test_credentials.CredentialsTestJSON.test_credentials_create_get_update_delete [0.135656s] ... ok
+{0} tempest.api.identity.admin.v3.test_domains.DomainsTestJSON.test_create_update_delete_domain [0.471260s] ... ok
+{0} tempest.api.identity.admin.v3.test_endpoints.EndPointsTestJSON.test_update_endpoint [0.415868s] ... ok
+{0} tempest.api.identity.admin.v3.test_groups.GroupsV3TestJSON.test_group_users_add_list_delete [2.170780s] ... ok
+{0} tempest.api.identity.admin.v3.test_policies.PoliciesTestJSON.test_create_update_delete_policy [0.180256s] ... ok
+{0} tempest.api.identity.admin.v3.test_regions.RegionsTestJSON.test_create_region_with_specific_id [0.097362s] ... ok
+{0} tempest.api.identity.admin.v3.test_roles.RolesV3TestJSON.test_role_create_update_show_list [0.180432s] ... ok
+{0} tempest.api.identity.admin.v3.test_services.ServicesTestJSON.test_create_update_get_service [0.253333s] ... ok
+{0} tempest.api.identity.admin.v3.test_trusts.TrustsV3TestJSON.test_get_trusts_all [2.080509s] ... ok
+{0} tempest.api.identity.v3.test_api_discovery.TestApiDiscovery.test_api_media_types [0.017598s] ... ok
+{0} tempest.api.identity.v3.test_api_discovery.TestApiDiscovery.test_api_version_resources [0.012781s] ... ok
+{0} tempest.api.identity.v3.test_api_discovery.TestApiDiscovery.test_api_version_statuses [0.046864s] ... ok
+{0} tempest.api.identity.v3.test_api_discovery.TestApiDiscovery.test_list_api_versions [0.005592s] ... ok
+{0} tempest.api.identity.v3.test_domains.DefaultDomainTestJSON.test_default_domain_exists [0.021168s] ... ok
+{0} tempest.api.image.v2.test_images.BasicOperationsImagesTest.test_delete_image [0.295408s] ... ok
+{0} tempest.api.image.v2.test_images.BasicOperationsImagesTest.test_register_upload_get_image_file [1.829953s] ... ok
+{0} tempest.api.image.v2.test_images.BasicOperationsImagesTest.test_update_image [0.131101s] ... ok
+{0} tempest.api.image.v2.test_versions.VersionsTest.test_list_versions [0.004728s] ... ok
+{0} tempest.api.network.test_extensions.ExtensionsTestJSON.test_list_show_extensions [0.493811s] ... FAILED
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/api/network/test_extensions.py", line 70, in test_list_show_extensions
+    self.assertIn(e, actual_alias)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/testtools/testcase.py", line 522, in assertIn
+    self.assertThat(haystack, Contains(needle), message)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/testtools/testcase.py", line 704, in assertThat
+    raise mismatch_error
+
+    testtools.matchers._impl.MismatchError: 'metering' not in ['address-group', 'address-scope', 'router-admin-state-down-before-update', 'agent', 'agent-resources-synced', 'allowed-address-pairs', 'auto-allocated-topology', 'availability_zone', 'availability_zone_filter', 'default-subnetpools', 'dhcp_agent_scheduler', 'dvr', 'empty-string-filtering', 'external-net', 'extra_dhcp_opt', 'extraroute', 'extraroute-atomic', 'filter-validation', 'floating-ip-port-forwarding-detail', 'fip-port-details', 'flavors', 'floatingip-pools', 'ip-substring-filtering', 'router', 'ext-gw-mode', 'l3-ha', 'l3-flavors', 'l3-port-ip-change-not-allowed', 'l3_agent_scheduler', 'multi-provider', 'net-mtu', 'net-mtu-writable', 'network_availability_zone', 'network_ha', 'network-ip-availability', 'pagination', 'port-device-profile', 'port-mac-override', 'port-mac-address-regenerate', 'port-numa-affinity-policy', 'port-numa-affinity-policy-socket', 'binding', 'binding-extended', 'port-security', 'project-id', 'provider', 'quota-check-limit', 'quota-check-limit-default', 'quotas', 'quota_details', 'rbac-policies', 'rbac-address-group', 'rbac-address-scope', 'rbac-security-groups', 'rbac-subnetpool', 'revision-if-match', 'standard-attr-revisions', 'router_availability_zone', 'security-groups-default-rules', 'security-groups-normalized-cidr', 'port-security-groups-filtering', 'security-groups-remote-address-group', 'security-groups-rules-belongs-to-default-sg', 'security-groups-shared-filtering', 'security-group', 'service-type', 'sorting', 'standard-attr-description', 'stateful-security-group', 'subnet-external-network', 'subnet_onboard', 'subnet-service-types', 'subnet_allocation', 'subnetpool-prefix-ops', 'tag-creation', 'standard-attr-tag', 'standard-attr-timestamp']
+
+
+Captured pythonlogging:
+~~~~~~~~~~~~~~~~~~~~~~~
+    2026-09-01 18:01:49,764 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions 0.078s
+2026-09-01 18:01:49,771 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/address-group 0.006s
+2026-09-01 18:01:49,777 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/address-scope 0.006s
+2026-09-01 18:01:49,783 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/router-admin-state-down-before-update 0.005s
+2026-09-01 18:01:49,788 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/agent 0.005s
+2026-09-01 18:01:49,794 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/agent-resources-synced 0.005s
+2026-09-01 18:01:49,801 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/allowed-address-pairs 0.006s
+2026-09-01 18:01:49,805 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/auto-allocated-topology 0.004s
+2026-09-01 18:01:49,811 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/availability_zone 0.005s
+2026-09-01 18:01:49,816 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/availability_zone_filter 0.005s
+2026-09-01 18:01:49,822 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/default-subnetpools 0.006s
+2026-09-01 18:01:49,827 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/dhcp_agent_scheduler 0.005s
+2026-09-01 18:01:49,833 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/dvr 0.005s
+2026-09-01 18:01:49,838 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/empty-string-filtering 0.005s
+2026-09-01 18:01:49,843 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/external-net 0.005s
+2026-09-01 18:01:49,848 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/extra_dhcp_opt 0.004s
+2026-09-01 18:01:49,853 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/extraroute 0.005s
+2026-09-01 18:01:49,858 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/extraroute-atomic 0.005s
+2026-09-01 18:01:49,863 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/filter-validation 0.005s
+2026-09-01 18:01:49,868 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.n
+    et:9696/v2.0/extensions/floating-ip-port-forwarding-detail 0.004s
+2026-09-01 18:01:49,873 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/fip-port-details 0.005s
+2026-09-01 18:01:49,878 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/flavors 0.004s
+2026-09-01 18:01:49,883 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/floatingip-pools 0.004s
+2026-09-01 18:01:49,888 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/ip-substring-filtering 0.005s
+2026-09-01 18:01:49,892 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/router 0.004s
+2026-09-01 18:01:49,897 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/ext-gw-mode 0.005s
+2026-09-01 18:01:49,902 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/l3-ha 0.005s
+2026-09-01 18:01:49,907 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/l3-flavors 0.004s
+2026-09-01 18:01:49,911 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/l3-port-ip-change-not-allowed 0.004s
+2026-09-01 18:01:49,915 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/l3_agent_scheduler 0.004s
+2026-09-01 18:01:49,919 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/multi-provider 0.004s
+2026-09-01 18:01:49,924 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/net-mtu 0.004s
+2026-09-01 18:01:49,928 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/net-mtu-writable 0.004s
+2026-09-01 18:01:49,932 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/network_availability_zone 0.004s
+2026-09-01 18:01:49,936 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/network_ha 0.004s
+2026-09-01 18:01:49,941 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/network-ip-availability 0.004s
+2026-09-01 18:01:49,945 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/pagination 0.004s
+2026-09-01 18:01:49,950 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-device-profile 0.005s
+2026-09-01 18:01:49,955 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-mac-override 0.005s
+2026-09-01 18:01:49,960 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extens
+    ions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-mac-address-regenerate 0.004s
+2026-09-01 18:01:49,965 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-numa-affinity-policy 0.005s
+2026-09-01 18:01:49,970 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-numa-affinity-policy-socket 0.005s
+2026-09-01 18:01:49,975 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/binding 0.004s
+2026-09-01 18:01:49,981 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/binding-extended 0.006s
+2026-09-01 18:01:49,986 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-security 0.005s
+2026-09-01 18:01:49,991 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/project-id 0.005s
+2026-09-01 18:01:49,998 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/provider 0.006s
+2026-09-01 18:01:50,005 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/quota-check-limit 0.007s
+2026-09-01 18:01:50,011 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/quota-check-limit-default 0.005s
+2026-09-01 18:01:50,017 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/quotas 0.006s
+2026-09-01 18:01:50,024 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/quota_details 0.006s
+2026-09-01 18:01:50,029 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/rbac-policies 0.005s
+2026-09-01 18:01:50,034 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/rbac-address-group 0.005s
+2026-09-01 18:01:50,040 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/rbac-address-scope 0.006s
+2026-09-01 18:01:50,045 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/rbac-security-groups 0.004s
+2026-09-01 18:01:50,051 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/rbac-subnetpool 0.005s
+2026-09-01 18:01:50,057 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/revision-if-match 0.006s
+2026-09-01 18:01:50,063 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/standard-attr-revisions 0.005s
+2026-09-01 18:01:50,068 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/router_availability_zone 0.005s
+2026-09-01 18:01:50,075 5624 INFO     [tempest.li
+    b.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-groups-default-rules 0.006s
+2026-09-01 18:01:50,081 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-groups-normalized-cidr 0.006s
+2026-09-01 18:01:50,088 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-security-groups-filtering 0.007s
+2026-09-01 18:01:50,094 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-groups-remote-address-group 0.006s
+2026-09-01 18:01:50,100 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-groups-rules-belongs-to-default-sg 0.006s
+2026-09-01 18:01:50,106 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-groups-shared-filtering 0.006s
+2026-09-01 18:01:50,112 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-group 0.005s
+2026-09-01 18:01:50,118 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/service-type 0.005s
+2026-09-01 18:01:50,123 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/sorting 0.005s
+2026-09-01 18:01:50,129 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/standard-attr-description 0.006s
+2026-09-01 18:01:50,135 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/stateful-security-group 0.005s
+2026-09-01 18:01:50,140 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/subnet-external-network 0.005s
+2026-09-01 18:01:50,145 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/subnet_onboard 0.005s
+2026-09-01 18:01:50,149 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/subnet-service-types 0.004s
+2026-09-01 18:01:50,154 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/subnet_allocation 0.004s
+2026-09-01 18:01:50,162 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/subnetpool-prefix-ops 0.008s
+2026-09-01 18:01:50,167 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/tag-creation 0.004s
+2026-09-01 18:01:50,172 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/standard-attr-tag 0.005s
+2026-09-01 18:01:50,178 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/standard-attr-timestamp 0.006s
+
+{0} tempest.api.network.test_floating_ips.FloatingIPTestJSON.test_create_floating_ip_specifying_a_fixed_ip_address [2.348239s] ... ok
+{0} tempest.api.network.test_floating_ips.FloatingIPTestJSON.test_create_list_show_update_delete_floating_ip [3.308502s] ... ok
+{0} tempest.api.network.test_networks.BulkNetworkOpsIpV6Test.test_bulk_create_delete_network [1.025014s] ... ok
+{0} tempest.api.network.test_networks.BulkNetworkOpsIpV6Test.test_bulk_create_delete_port [1.851122s] ... ok
+{0} tempest.api.network.test_networks.BulkNetworkOpsIpV6Test.test_bulk_create_delete_subnet [2.354669s] ... ok
+{0} tempest.api.network.test_networks.BulkNetworkOpsTest.test_bulk_create_delete_network [1.068286s] ... ok
+{0} tempest.api.network.test_networks.BulkNetworkOpsTest.test_bulk_create_delete_port [2.086180s] ... ok
+{0} tempest.api.network.test_networks.BulkNetworkOpsTest.test_bulk_create_delete_subnet [1.604034s] ... ok
+{0} tempest.api.network.test_networks.NetworksIpV6Test.test_create_update_delete_network_subnet [1.369278s] ... ok
+{0} tempest.api.network.test_networks.NetworksIpV6Test.test_external_network_visibility [0.099166s] ... ok
+{0} tempest.api.network.test_networks.NetworksIpV6Test.test_list_networks [0.052999s] ... ok
+{0} tempest.api.network.test_networks.NetworksIpV6Test.test_list_subnets [0.037786s] ... ok
+{0} tempest.api.network.test_networks.NetworksIpV6Test.test_show_network [0.038270s] ... ok
+{0} tempest.api.network.test_networks.NetworksIpV6Test.test_show_subnet [0.026718s] ... ok
+{0} tempest.api.network.test_networks.NetworksTest.test_create_update_delete_network_subnet [1.477563s] ... ok
+{0} tempest.api.network.test_networks.NetworksTest.test_external_network_visibility [0.098430s] ... ok
+{0} tempest.api.network.test_networks.NetworksTest.test_list_networks [0.053414s] ... ok
+{0} tempest.api.network.test_networks.NetworksTest.test_list_subnets [0.041049s] ... ok
+{0} tempest.api.network.test_networks.NetworksTest.test_show_network [0.042838s] ... ok
+{0} tempest.api.network.test_networks.NetworksTest.test_show_subnet [0.019524s] ... ok
+{0} tempest.api.network.test_ports.PortsIpV6TestJSON.test_create_port_in_allowed_allocation_pools [2.317785s] ... ok
+{0} tempest.api.network.test_ports.PortsIpV6TestJSON.test_create_port_with_no_securitygroups [2.083137s] ... ok
+{0} tempest.api.network.test_ports.PortsIpV6TestJSON.test_create_update_delete_port [0.924422s] ... ok
+{0} tempest.api.network.test_ports.PortsIpV6TestJSON.test_list_ports [0.050071s] ... ok
+{0} tempest.api.network.test_ports.PortsIpV6TestJSON.test_show_port [0.059755s] ... ok
+{0} tempest.api.network.test_ports.PortsTestJSON.test_create_port_in_allowed_allocation_pools [2.571276s] ... ok
+{0} tempest.api.network.test_ports.PortsTestJSON.test_create_port_with_no_securitygroups [1.986614s] ... ok
+{0} tempest.api.network.test_ports.PortsTestJSON.test_create_update_delete_port [1.155147s] ... ok
+{0} tempest.api.network.test_ports.PortsTestJSON.test_list_ports [0.065059s] ... ok
+{0} tempest.api.network.test_ports.PortsTestJSON.test_show_port [0.198336s] ... ok
+{0} tempest.api.network.test_routers.RoutersIpV6Test.test_add_multiple_router_interfaces [13.660017s] ... ok
+{0} tempest.api.network.test_routers.RoutersIpV6Test.test_add_remove_router_interface_with_port_id [9.056565s] ... ok
+{0} tempest.api.network.test_routers.RoutersIpV6Test.test_add_remove_router_interface_with_subnet_id [8.297706s] ... ok
+{0} tempest.api.network.test_routers.RoutersIpV6Test.test_create_show_list_update_delete_router [5.890715s] ... ok
+{0} tempest.api.network.test_routers.RoutersTest.test_add_multiple_router_interfaces [13.118071s] ... ok
+{0} tempest.api.network.test_routers.RoutersTest.test_add_remove_router_interface_with_port_id [7.869720s] ... ok
+{0} tempest.api.network.test_routers.RoutersTest.test_add_remove_router_interface_with_subnet_id [8.816613s] ... ok
+{0} tempest.api.network.test_routers.RoutersTest.test_create_show_list_update_delete_router [5.971868s] ... ok
+{0} tempest.api.network.test_security_groups.SecGroupIPv6Test.test_create_list_update_show_delete_security_group [0.770402s] ... ok
+{0} tempest.api.network.test_security_groups.SecGroupIPv6Test.test_create_show_delete_security_group_rule [1.601386s] ... ok
+{0} tempest.api.network.test_security_groups.SecGroupIPv6Test.test_list_security_groups [0.036054s] ... ok
+{0} tempest.api.network.test_security_groups.SecGroupTest.test_create_list_update_show_delete_security_group [0.639315s] ... ok
+{0} tempest.api.network.test_security_groups.SecGroupTest.test_create_show_delete_security_group_rule [1.498492s] ... ok
+{0} tempest.api.network.test_security_groups.SecGroupTest.test_list_security_groups [0.041552s] ... ok
+{0} tempest.api.network.test_subnetpools_extensions.SubnetPoolsTestJSON.test_create_list_show_update_delete_subnetpools [0.548218s] ... ok
+{0} tempest.api.network.test_versions.NetworksApiDiscovery.test_api_version_resources [0.005394s] ... ok
+{0} tempest.api.network.test_versions.NetworksApiDiscovery.test_show_api_v2_details [0.071471s] ... ok
+{0} setUpClass (tempest.api.object_storage.test_account_quotas.AccountQuotasTest) ... SKIPPED: AccountQuotasTest skipped as swift is not available
+{0} setUpClass (tempest.api.object_storage.test_account_services.AccountTest) ... SKIPPED: AccountTest skipped as swift is not available
+{0} setUpClass (tempest.api.object_storage.test_container_quotas.ContainerQuotasTest) ... SKIPPED: ContainerQuotasTest skipped as swift is not available
+{0} setUpClass (tempest.api.object_storage.test_container_services.ContainerTest) ... SKIPPED: ContainerTest skipped as swift is not available
+{0} setUpClass (tempest.api.object_storage.test_object_services.ObjectTest) ... SKIPPED: ObjectTest skipped as swift is not available
+{0} tempest.api.volume.test_versions.VersionsTest.test_list_versions [0.007465s] ... ok
+{0} tempest.api.volume.test_volumes_actions.VolumesActionsTest.test_attach_detach_volume_to_instance [26.422998s] ... ok
+{0} tempest.api.volume.test_volumes_get.VolumesGetTest.test_volume_create_get_update_delete [5.716430s] ... ok
+{0} tempest.api.volume.test_volumes_get.VolumesGetTest.test_volume_create_get_update_delete_from_image [9.653199s] ... ok
+{0} tempest.api.volume.test_volumes_list.VolumesListTestJSON.test_volume_list [0.044334s] ... ok
+{0} tempest.scenario.test_dashboard_basic_ops.TestDashboardBasicOps.test_basic_scenario [0.028555s] ... FAILED
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/usr/lib/python3.12/urllib/request.py", line 1344, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+
+      File "/usr/lib/python3.12/http/client.py", line 1365, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+
+      File "/usr/lib/python3.12/http/client.py", line 1411, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+
+      File "/usr/lib/python3.12/http/client.py", line 1360, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+
+      File "/usr/lib/python3.12/http/client.py", line 1120, in _send_output
+    self.send(msg)
+
+      File "/usr/lib/python3.12/http/client.py", line 1064, in send
+    self.connect()
+
+      File "/usr/lib/python3.12/http/client.py", line 1030, in connect
+    self.sock = self._create_connection(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/socket.py", line 852, in create_connection
+    raise exceptions[0]
+
+      File "/usr/lib/python3.12/socket.py", line 837, in create_connection
+    sock.connect(sa)
+
+    ConnectionRefusedError: [Errno 111] Connection refused
+
+    
+During handling of the above exception, another exception occurred:
+
+
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/common/utils/__init__.py", line 65, in wrapper
+    return f(*func_args, **func_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/scenario/test_dashboard_basic_ops.py", line 139, in test_basic_scenario
+    self.check_login_page()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/scenario/test_dashboard_basic_ops.py", line 84, in check_login_page
+    response = self._get_opener().open(CONF.dashboard.dashboard_url).read()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/urllib/request.py", line 515, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/urllib/request.py", line 532, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/urllib/request.py", line 492, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/urllib/request.py", line 1373, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/urllib/request.py", line 1347, in do_open
+    raise URLError(err)
+
+    urllib.error.URLError: <urlopen error [Errno 111] Connection refused>
+
+{0} tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops [112.579943s] ... ok
+{0} tempest.scenario.test_server_basic_ops.TestServerBasicOps.test_server_basic_ops [48.386431s] ... ok
+{0} setUpClass (tempest.scenario.test_server_multinode.TestServerMultinode) ... SKIPPED: Less than 2 compute nodes, skipping multinode tests.
+{0} setUpClass (octavia_tempest_plugin.tests.scenario.v2.test_traffic_ops.TrafficOperationsScenarioTest) ... SKIPPED: TrafficOperationsScenarioTest skipped as load_balancer service is not available.
+{0} neutron_tempest_plugin.api.admin.test_shared_network_extension.RBACSharedNetworksTest.test_create_rbac_policy_with_target_tenant_none [1.952452s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_shared_network_extension.RBACSharedNetworksTest.test_create_rbac_policy_with_target_tenant_too_long_id [0.953888s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_shared_network_extension.RBACSharedNetworksTest.test_network_only_visible_to_policy_target [2.542429s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagFilterFloatingIpTestJSON.test_filter_floatingip_tags [0.362448s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagFilterNetworkTestJSON.test_filter_network_tags [0.377207s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagFilterPortTestJSON.test_filter_port_tags [0.719483s] ... ok
+{0} setUpClass (neutron_tempest_plugin.api.admin.test_tag.TagFilterQosPolicyTestJSON) [0.000000s] ... FAILED
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 185, in setUpClass
+    raise value.with_traceback(trace)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 178, in setUpClass
+    cls.resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 453, in resource_setup
+    super().resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 237, in resource_setup
+    cls.res_ids.append(cls._create_resource())
+                       ^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/common/utils/__init__.py", line 84, in wrapper
+    return func(*func_args, **func_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 443, in _create_resource
+    qos_policy = cls.create_qos_policy(name='test-policy', shared=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/base.py", line 907, in create_qos_policy
+    body = cls.admin_client.create_qos_policy(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/services/network/json/network_client.py", line 663, in create_qos_policy
+    resp, body = self.post(uri, self.serialize(post_data))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 314, in post
+    resp_header, resp_body = self.request(
+                             ^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 762, in request
+    self._error_checker(resp, resp_body)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 872, in _error_checker
+    raise exceptions.NotFound(resp_body, resp=resp)
+
+    tempest.lib.exceptions.NotFound: Object not found
+Details: {'type': 'HTTPNotFound', 'message': 'The resource could not be found.', 'detail': ''}
+
+{0} neutron_tempest_plugin.api.admin.test_tag.TagFilterRouterTestJSON.test_filter_router_tags [0.827650s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagFilterSecGroupTestJSON.test_filter_security_group_tags [0.279683s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagFilterSubnetTestJSON.test_filter_subnet_tags [0.375423s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagFilterSubnetpoolTestJSON.test_filter_subnetpool_tags [0.172257s] ... ok
+{0} setUpClass (neutron_tempest_plugin.api.admin.test_tag.TagFilterTrunkTestJSON) [0.000000s] ... FAILED
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 185, in setUpClass
+    raise value.with_traceback(trace)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 178, in setUpClass
+    cls.resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 237, in resource_setup
+    cls.res_ids.append(cls._create_resource())
+                       ^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/common/utils/__init__.py", line 84, in wrapper
+    return func(*func_args, **func_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 470, in _create_resource
+    return cls.create_trunk(parent_port)['id']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/base.py", line 1097, in create_trunk
+    trunk = client.create_trunk(subports=subports, **kwargs)['trunk']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/services/network/json/network_client.py", line 752, in create_trunk
+    resp, body = self.post(uri, self.serialize({'trunk': kwargs}))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 314, in post
+    resp_header, resp_body = self.request(
+                             ^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 762, in request
+    self._error_checker(resp, resp_body)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 872, in _error_checker
+    raise exceptions.NotFound(resp_body, resp=resp)
+
+    tempest.lib.exceptions.NotFound: Object not found
+Details: {'type': 'HTTPNotFound', 'message': 'The resource could not be found.', 'detail': ''}
+
+{0} neutron_tempest_plugin.api.admin.test_tag.TagFloatingIpTestJSON.test_floatingip_tags [1.504909s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagNetworkTestJSON.test_network_tags [1.182377s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagPortTestJSON.test_port_tags [1.246599s] ... ok
+{0} setUpClass (neutron_tempest_plugin.api.admin.test_tag.TagQosPolicyTestJSON) [0.000000s] ... FAILED
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 185, in setUpClass
+    raise value.with_traceback(trace)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 178, in setUpClass
+    cls.resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 27, in resource_setup
+    cls.res_id = cls._create_resource()
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/common/utils/__init__.py", line 84, in wrapper
+    return func(*func_args, **func_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 196, in _create_resource
+    qos_policy = cls.create_qos_policy(name='test-policy', shared=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/base.py", line 907, in create_qos_policy
+    body = cls.admin_client.create_qos_policy(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/services/network/json/network_client.py", line 663, in create_qos_policy
+    resp, body = self.post(uri, self.serialize(post_data))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 314, in post
+    resp_header, resp_body = self.request(
+                             ^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 762, in request
+    self._error_checker(resp, resp_body)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 872, in _error_checker
+    raise exceptions.NotFound(resp_body, resp=resp)
+
+    tempest.lib.exceptions.NotFound: Object not found
+Details: {'type': 'HTTPNotFound', 'message': 'The resource could not be found.', 'detail': ''}
+
+{0} neutron_tempest_plugin.api.admin.test_tag.TagRouterTestJSON.test_router_tags [2.845473s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagSecGroupTestJSON.test_security_group_tags [0.888806s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagSubnetPoolTestJSON.test_subnetpool_tags [0.918443s] ... ok
+{0} neutron_tempest_plugin.api.admin.test_tag.TagSubnetTestJSON.test_subnet_tags [1.039199s] ... ok
+{0} setUpClass (neutron_tempest_plugin.api.admin.test_tag.TagTrunkTestJSON) [0.000000s] ... FAILED
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 185, in setUpClass
+    raise value.with_traceback(trace)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 178, in setUpClass
+    cls.resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 27, in resource_setup
+    cls.res_id = cls._create_resource()
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/common/utils/__init__.py", line 84, in wrapper
+    return func(*func_args, **func_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 214, in _create_resource
+    return cls.create_trunk(parent_port)['id']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/base.py", line 1097, in create_trunk
+    trunk = client.create_trunk(subports=subports, **kwargs)['trunk']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/services/network/json/network_client.py", line 752, in create_trunk
+    resp, body = self.post(uri, self.serialize({'trunk': kwargs}))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 314, in post
+    resp_header, resp_body = self.request(
+                             ^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 762, in request
+    self._error_checker(resp, resp_body)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 872, in _error_checker
+    raise exceptions.NotFound(resp_body, resp=resp)
+
+    tempest.lib.exceptions.NotFound: Object not found
+Details: {'type': 'HTTPNotFound', 'message': 'The resource could not be found.', 'detail': ''}
+
+{0} neutron_tempest_plugin.api.admin.test_tag.UpdateTagsTest.test_update_tags_affects_only_updated_resource [1.372828s] ... ok
+{0} setUpClass (neutron_tempest_plugin.vpnaas.api.test_vpnaas.VPNaaSTestJSON) [0.000000s] ... FAILED
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 185, in setUpClass
+    raise value.with_traceback(trace)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 178, in setUpClass
+    cls.resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/vpnaas/api/test_vpnaas.py", line 57, in resource_setup
+    cls.vpnservice = cls.create_vpnservice(cls.subnet['id'],
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/vpnaas/api/base_vpnaas.py", line 79, in create_vpnservice
+    body = cls.client.create_vpnservice(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/services/network/json/network_client.py", line 146, in _create
+    resp, body = self.post(uri, post_data)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 314, in post
+    resp_header, resp_body = self.request(
+                             ^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 762, in request
+    self._error_checker(resp, resp_body)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 872, in _error_checker
+    raise exceptions.NotFound(resp_body, resp=resp)
+
+    tempest.lib.exceptions.NotFound: Object not found
+Details: {'type': 'HTTPNotFound', 'message': 'The resource could not be found.', 'detail': ''}
+
+
+==============================
+Failed 7 tests - output below:
+==============================
+
+tempest.api.network.test_extensions.ExtensionsTestJSON.test_list_show_extensions[id-ef28c7e6-e646-4979-9d67-deb207bc5564,smoke]
+-------------------------------------------------------------------------------------------------------------------------------
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/api/network/test_extensions.py", line 70, in test_list_show_extensions
+    self.assertIn(e, actual_alias)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/testtools/testcase.py", line 522, in assertIn
+    self.assertThat(haystack, Contains(needle), message)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/testtools/testcase.py", line 704, in assertThat
+    raise mismatch_error
+
+    testtools.matchers._impl.MismatchError: 'metering' not in ['address-group', 'address-scope', 'router-admin-state-down-before-update', 'agent', 'agent-resources-synced', 'allowed-address-pairs', 'auto-allocated-topology', 'availability_zone', 'availability_zone_filter', 'default-subnetpools', 'dhcp_agent_scheduler', 'dvr', 'empty-string-filtering', 'external-net', 'extra_dhcp_opt', 'extraroute', 'extraroute-atomic', 'filter-validation', 'floating-ip-port-forwarding-detail', 'fip-port-details', 'flavors', 'floatingip-pools', 'ip-substring-filtering', 'router', 'ext-gw-mode', 'l3-ha', 'l3-flavors', 'l3-port-ip-change-not-allowed', 'l3_agent_scheduler', 'multi-provider', 'net-mtu', 'net-mtu-writable', 'network_availability_zone', 'network_ha', 'network-ip-availability', 'pagination', 'port-device-profile', 'port-mac-override', 'port-mac-address-regenerate', 'port-numa-affinity-policy', 'port-numa-affinity-policy-socket', 'binding', 'binding-extended', 'port-security', 'project-id', 'provider', 'quota-check-limit', 'quota-check-limit-default', 'quotas', 'quota_details', 'rbac-policies', 'rbac-address-group', 'rbac-address-scope', 'rbac-security-groups', 'rbac-subnetpool', 'revision-if-match', 'standard-attr-revisions', 'router_availability_zone', 'security-groups-default-rules', 'security-groups-normalized-cidr', 'port-security-groups-filtering', 'security-groups-remote-address-group', 'security-groups-rules-belongs-to-default-sg', 'security-groups-shared-filtering', 'security-group', 'service-type', 'sorting', 'standard-attr-description', 'stateful-security-group', 'subnet-external-network', 'subnet_onboard', 'subnet-service-types', 'subnet_allocation', 'subnetpool-prefix-ops', 'tag-creation', 'standard-attr-tag', 'standard-attr-timestamp']
+
+
+Captured pythonlogging:
+~~~~~~~~~~~~~~~~~~~~~~~
+    2026-09-01 18:01:49,764 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions 0.078s
+2026-09-01 18:01:49,771 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/address-group 0.006s
+2026-09-01 18:01:49,777 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/address-scope 0.006s
+2026-09-01 18:01:49,783 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/router-admin-state-down-before-update 0.005s
+2026-09-01 18:01:49,788 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/agent 0.005s
+2026-09-01 18:01:49,794 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/agent-resources-synced 0.005s
+2026-09-01 18:01:49,801 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/allowed-address-pairs 0.006s
+2026-09-01 18:01:49,805 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/auto-allocated-topology 0.004s
+2026-09-01 18:01:49,811 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/availability_zone 0.005s
+2026-09-01 18:01:49,816 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/availability_zone_filter 0.005s
+2026-09-01 18:01:49,822 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/default-subnetpools 0.006s
+2026-09-01 18:01:49,827 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/dhcp_agent_scheduler 0.005s
+2026-09-01 18:01:49,833 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/dvr 0.005s
+2026-09-01 18:01:49,838 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/empty-string-filtering 0.005s
+2026-09-01 18:01:49,843 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/external-net 0.005s
+2026-09-01 18:01:49,848 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/extra_dhcp_opt 0.004s
+2026-09-01 18:01:49,853 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/extraroute 0.005s
+2026-09-01 18:01:49,858 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/extraroute-atomic 0.005s
+2026-09-01 18:01:49,863 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/filter-validation 0.005s
+2026-09-01 18:01:49,868 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.n
+    et:9696/v2.0/extensions/floating-ip-port-forwarding-detail 0.004s
+2026-09-01 18:01:49,873 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/fip-port-details 0.005s
+2026-09-01 18:01:49,878 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/flavors 0.004s
+2026-09-01 18:01:49,883 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/floatingip-pools 0.004s
+2026-09-01 18:01:49,888 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/ip-substring-filtering 0.005s
+2026-09-01 18:01:49,892 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/router 0.004s
+2026-09-01 18:01:49,897 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/ext-gw-mode 0.005s
+2026-09-01 18:01:49,902 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/l3-ha 0.005s
+2026-09-01 18:01:49,907 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/l3-flavors 0.004s
+2026-09-01 18:01:49,911 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/l3-port-ip-change-not-allowed 0.004s
+2026-09-01 18:01:49,915 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/l3_agent_scheduler 0.004s
+2026-09-01 18:01:49,919 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/multi-provider 0.004s
+2026-09-01 18:01:49,924 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/net-mtu 0.004s
+2026-09-01 18:01:49,928 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/net-mtu-writable 0.004s
+2026-09-01 18:01:49,932 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/network_availability_zone 0.004s
+2026-09-01 18:01:49,936 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/network_ha 0.004s
+2026-09-01 18:01:49,941 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/network-ip-availability 0.004s
+2026-09-01 18:01:49,945 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/pagination 0.004s
+2026-09-01 18:01:49,950 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-device-profile 0.005s
+2026-09-01 18:01:49,955 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-mac-override 0.005s
+2026-09-01 18:01:49,960 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extens
+    ions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-mac-address-regenerate 0.004s
+2026-09-01 18:01:49,965 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-numa-affinity-policy 0.005s
+2026-09-01 18:01:49,970 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-numa-affinity-policy-socket 0.005s
+2026-09-01 18:01:49,975 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/binding 0.004s
+2026-09-01 18:01:49,981 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/binding-extended 0.006s
+2026-09-01 18:01:49,986 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-security 0.005s
+2026-09-01 18:01:49,991 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/project-id 0.005s
+2026-09-01 18:01:49,998 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/provider 0.006s
+2026-09-01 18:01:50,005 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/quota-check-limit 0.007s
+2026-09-01 18:01:50,011 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/quota-check-limit-default 0.005s
+2026-09-01 18:01:50,017 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/quotas 0.006s
+2026-09-01 18:01:50,024 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/quota_details 0.006s
+2026-09-01 18:01:50,029 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/rbac-policies 0.005s
+2026-09-01 18:01:50,034 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/rbac-address-group 0.005s
+2026-09-01 18:01:50,040 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/rbac-address-scope 0.006s
+2026-09-01 18:01:50,045 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/rbac-security-groups 0.004s
+2026-09-01 18:01:50,051 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/rbac-subnetpool 0.005s
+2026-09-01 18:01:50,057 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/revision-if-match 0.006s
+2026-09-01 18:01:50,063 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/standard-attr-revisions 0.005s
+2026-09-01 18:01:50,068 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/router_availability_zone 0.005s
+2026-09-01 18:01:50,075 5624 INFO     [tempest.li
+    b.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-groups-default-rules 0.006s
+2026-09-01 18:01:50,081 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-groups-normalized-cidr 0.006s
+2026-09-01 18:01:50,088 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/port-security-groups-filtering 0.007s
+2026-09-01 18:01:50,094 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-groups-remote-address-group 0.006s
+2026-09-01 18:01:50,100 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-groups-rules-belongs-to-default-sg 0.006s
+2026-09-01 18:01:50,106 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-groups-shared-filtering 0.006s
+2026-09-01 18:01:50,112 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/security-group 0.005s
+2026-09-01 18:01:50,118 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/service-type 0.005s
+2026-09-01 18:01:50,123 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/sorting 0.005s
+2026-09-01 18:01:50,129 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/standard-attr-description 0.006s
+2026-09-01 18:01:50,135 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/stateful-security-group 0.005s
+2026-09-01 18:01:50,140 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/subnet-external-network 0.005s
+2026-09-01 18:01:50,145 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/subnet_onboard 0.005s
+2026-09-01 18:01:50,149 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/subnet-service-types 0.004s
+2026-09-01 18:01:50,154 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/subnet_allocation 0.004s
+2026-09-01 18:01:50,162 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/subnetpool-prefix-ops 0.008s
+2026-09-01 18:01:50,167 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/tag-creation 0.004s
+2026-09-01 18:01:50,172 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/standard-attr-tag 0.005s
+2026-09-01 18:01:50,178 5624 INFO     [tempest.lib.common.rest_client] Request (ExtensionsTestJSON:test_list_show_extensions): 200 GET http://int.os.wrx.sckt.net:9696/v2.0/extensions/standard-attr-timestamp 0.006s
+
+
+tempest.scenario.test_dashboard_basic_ops.TestDashboardBasicOps.test_basic_scenario[dashboard,id-4f8851b1-0e69-482b-b63b-84c6e76f6c80,smoke]
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/usr/lib/python3.12/urllib/request.py", line 1344, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+
+      File "/usr/lib/python3.12/http/client.py", line 1365, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+
+      File "/usr/lib/python3.12/http/client.py", line 1411, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+
+      File "/usr/lib/python3.12/http/client.py", line 1360, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+
+      File "/usr/lib/python3.12/http/client.py", line 1120, in _send_output
+    self.send(msg)
+
+      File "/usr/lib/python3.12/http/client.py", line 1064, in send
+    self.connect()
+
+      File "/usr/lib/python3.12/http/client.py", line 1030, in connect
+    self.sock = self._create_connection(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/socket.py", line 852, in create_connection
+    raise exceptions[0]
+
+      File "/usr/lib/python3.12/socket.py", line 837, in create_connection
+    sock.connect(sa)
+
+    ConnectionRefusedError: [Errno 111] Connection refused
+
+    
+During handling of the above exception, another exception occurred:
+
+
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/common/utils/__init__.py", line 65, in wrapper
+    return f(*func_args, **func_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/scenario/test_dashboard_basic_ops.py", line 139, in test_basic_scenario
+    self.check_login_page()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/scenario/test_dashboard_basic_ops.py", line 84, in check_login_page
+    response = self._get_opener().open(CONF.dashboard.dashboard_url).read()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/urllib/request.py", line 515, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/urllib/request.py", line 532, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/urllib/request.py", line 492, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/urllib/request.py", line 1373, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/usr/lib/python3.12/urllib/request.py", line 1347, in do_open
+    raise URLError(err)
+
+    urllib.error.URLError: <urlopen error [Errno 111] Connection refused>
+
+
+setUpClass (neutron_tempest_plugin.api.admin.test_tag.TagFilterQosPolicyTestJSON)
+---------------------------------------------------------------------------------
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 185, in setUpClass
+    raise value.with_traceback(trace)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 178, in setUpClass
+    cls.resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 453, in resource_setup
+    super().resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 237, in resource_setup
+    cls.res_ids.append(cls._create_resource())
+                       ^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/common/utils/__init__.py", line 84, in wrapper
+    return func(*func_args, **func_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 443, in _create_resource
+    qos_policy = cls.create_qos_policy(name='test-policy', shared=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/base.py", line 907, in create_qos_policy
+    body = cls.admin_client.create_qos_policy(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/services/network/json/network_client.py", line 663, in create_qos_policy
+    resp, body = self.post(uri, self.serialize(post_data))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 314, in post
+    resp_header, resp_body = self.request(
+                             ^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 762, in request
+    self._error_checker(resp, resp_body)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 872, in _error_checker
+    raise exceptions.NotFound(resp_body, resp=resp)
+
+    tempest.lib.exceptions.NotFound: Object not found
+Details: {'type': 'HTTPNotFound', 'message': 'The resource could not be found.', 'detail': ''}
+
+
+setUpClass (neutron_tempest_plugin.api.admin.test_tag.TagFilterTrunkTestJSON)
+-----------------------------------------------------------------------------
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 185, in setUpClass
+    raise value.with_traceback(trace)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 178, in setUpClass
+    cls.resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 237, in resource_setup
+    cls.res_ids.append(cls._create_resource())
+                       ^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/common/utils/__init__.py", line 84, in wrapper
+    return func(*func_args, **func_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 470, in _create_resource
+    return cls.create_trunk(parent_port)['id']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/base.py", line 1097, in create_trunk
+    trunk = client.create_trunk(subports=subports, **kwargs)['trunk']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/services/network/json/network_client.py", line 752, in create_trunk
+    resp, body = self.post(uri, self.serialize({'trunk': kwargs}))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 314, in post
+    resp_header, resp_body = self.request(
+                             ^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 762, in request
+    self._error_checker(resp, resp_body)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 872, in _error_checker
+    raise exceptions.NotFound(resp_body, resp=resp)
+
+    tempest.lib.exceptions.NotFound: Object not found
+Details: {'type': 'HTTPNotFound', 'message': 'The resource could not be found.', 'detail': ''}
+
+
+setUpClass (neutron_tempest_plugin.api.admin.test_tag.TagQosPolicyTestJSON)
+---------------------------------------------------------------------------
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 185, in setUpClass
+    raise value.with_traceback(trace)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 178, in setUpClass
+    cls.resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 27, in resource_setup
+    cls.res_id = cls._create_resource()
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/common/utils/__init__.py", line 84, in wrapper
+    return func(*func_args, **func_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 196, in _create_resource
+    qos_policy = cls.create_qos_policy(name='test-policy', shared=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/base.py", line 907, in create_qos_policy
+    body = cls.admin_client.create_qos_policy(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/services/network/json/network_client.py", line 663, in create_qos_policy
+    resp, body = self.post(uri, self.serialize(post_data))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 314, in post
+    resp_header, resp_body = self.request(
+                             ^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 762, in request
+    self._error_checker(resp, resp_body)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 872, in _error_checker
+    raise exceptions.NotFound(resp_body, resp=resp)
+
+    tempest.lib.exceptions.NotFound: Object not found
+Details: {'type': 'HTTPNotFound', 'message': 'The resource could not be found.', 'detail': ''}
+
+
+setUpClass (neutron_tempest_plugin.api.admin.test_tag.TagTrunkTestJSON)
+-----------------------------------------------------------------------
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 185, in setUpClass
+    raise value.with_traceback(trace)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 178, in setUpClass
+    cls.resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 27, in resource_setup
+    cls.res_id = cls._create_resource()
+                 ^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/common/utils/__init__.py", line 84, in wrapper
+    return func(*func_args, **func_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/admin/test_tag.py", line 214, in _create_resource
+    return cls.create_trunk(parent_port)['id']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/api/base.py", line 1097, in create_trunk
+    trunk = client.create_trunk(subports=subports, **kwargs)['trunk']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/services/network/json/network_client.py", line 752, in create_trunk
+    resp, body = self.post(uri, self.serialize({'trunk': kwargs}))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 314, in post
+    resp_header, resp_body = self.request(
+                             ^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 762, in request
+    self._error_checker(resp, resp_body)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 872, in _error_checker
+    raise exceptions.NotFound(resp_body, resp=resp)
+
+    tempest.lib.exceptions.NotFound: Object not found
+Details: {'type': 'HTTPNotFound', 'message': 'The resource could not be found.', 'detail': ''}
+
+
+setUpClass (neutron_tempest_plugin.vpnaas.api.test_vpnaas.VPNaaSTestJSON)
+-------------------------------------------------------------------------
+
+Captured traceback:
+~~~~~~~~~~~~~~~~~~~
+    Traceback (most recent call last):
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 185, in setUpClass
+    raise value.with_traceback(trace)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/test.py", line 178, in setUpClass
+    cls.resource_setup()
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/vpnaas/api/test_vpnaas.py", line 57, in resource_setup
+    cls.vpnservice = cls.create_vpnservice(cls.subnet['id'],
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/vpnaas/api/base_vpnaas.py", line 79, in create_vpnservice
+    body = cls.client.create_vpnservice(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/neutron_tempest_plugin/services/network/json/network_client.py", line 146, in _create
+    resp, body = self.post(uri, post_data)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 314, in post
+    resp_header, resp_body = self.request(
+                             ^^^^^^^^^^^^^
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 762, in request
+    self._error_checker(resp, resp_body)
+
+      File "/home/deploy/venv/tempest/lib/python3.12/site-packages/tempest/lib/common/rest_client.py", line 872, in _error_checker
+    raise exceptions.NotFound(resp_body, resp=resp)
+
+    tempest.lib.exceptions.NotFound: Object not found
+Details: {'type': 'HTTPNotFound', 'message': 'The resource could not be found.', 'detail': ''}
+
+
+
+======
+Totals
+======
+Ran: 121 tests in 1087.1945 sec.
+ - Passed: 107
+ - Skipped: 7
+ - Expected Fail: 0
+ - Unexpected Success: 0
+ - Failed: 7
+Sum of execute time for each test: 438.7510 sec.
+
+==============
+Worker Balance
+==============
+ - Worker 0 (121 tests) => 0:18:07.194525
