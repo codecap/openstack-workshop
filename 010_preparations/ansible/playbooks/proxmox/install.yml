@@ -6,13 +6,13 @@
     - name: Remove loopback entry for hostname
       ansible.builtin.lineinfile:
         path: /etc/hosts
-        regexp: '^127[0-9.]+\s+{{ansible_hostname}}'
+        regexp: "^127[0-9.]+\\s+{{ansible_facts['hostname']}}"
         state: absent
     - name: Ensure hostname points to default IPv4 address
       ansible.builtin.lineinfile:
         path: /etc/hosts
-        regexp: "^.*\\b{{ ansible_hostname }}\\b.*"
-        line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}"
+        regexp: "^.*\\b{{ ansible_facts['hostname'] }}\\b.*"
+        line: "{{ ansible_facts['default_ipv4']['address'] }} {{ ansible_facts['fqdn'] }} {{ ansible_facts['hostname'] }}"
         state: present
         backup: true
 - hosts: all

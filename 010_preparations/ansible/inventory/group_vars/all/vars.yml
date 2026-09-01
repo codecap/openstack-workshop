@@ -64,8 +64,8 @@ resources__files:
 
   - path:    '/etc/sysctl.d/60-wrx.conf'
     content: |
-      net.ipv4.conf.{{ansible_default_ipv4.interface}}.forwarding = 1
-      net.ipv6.conf.{{ansible_default_ipv6.interface}}.forwarding = 1
+      net.ipv4.conf.{{ansible_facts['default_ipv4'].interface}}.forwarding = 1
+      net.ipv6.conf.{{ansible_facts['default_ipv6'].interface}}.forwarding = 1
 
   - path:    '/etc/systemd/system/wrx-bridge-forwarding.service'
     content: |
@@ -160,14 +160,14 @@ resources__files:
         chain forward {
             type filter hook forward priority 0; policy drop;
             ct state established,related accept
-            iifname "vmbr0" oifname "{{ansible_default_ipv4.interface}}" accept
+            iifname "vmbr0" oifname "{{ansible_facts['default_ipv4']['address']}}" accept
         }
       }
 
       table ip nat {
           chain postrouting {
               type nat hook postrouting priority 100;
-              oifname "{{ansible_default_ipv4.interface}}" ip saddr 192.168.1.0/24 masquerade
+              oifname "{{ansible_facts['default_ipv4']['address']}}" ip saddr 192.168.1.0/24 masquerade
           }
       }
 
