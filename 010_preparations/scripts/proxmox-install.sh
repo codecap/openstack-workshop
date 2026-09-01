@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+##############################################################################
+# Tools
+
 # On the baremetal node as root
 apt-get update
 
@@ -21,6 +24,8 @@ apt-get  install -y   \
  vim             \
  yq
 
+##############################################################################
+# Checkout
 cd /root
 git clone https://github.com/codecap/openstack-workshop.git
 
@@ -29,6 +34,9 @@ cd openstack-workshop
 ./scripts/print-ssh-config  >> ~/.ssh/config
 ssh-keygen -t ed25519 -N '' -f ~/.ssh/id_ed25519
 cat /root/.ssh/id_ed25519.pub >> /home/debian/.ssh/authorized_keys
+
+##############################################################################
+# Install proxmox
 
 # ansible
 cd  010_preparations/ansible/

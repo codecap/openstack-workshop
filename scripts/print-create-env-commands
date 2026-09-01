@@ -43,6 +43,7 @@ for server in server_list:
     hostname       = server.get('hostname')
     domain         = server.get('domain')
     netaddr_config = server.get('netaddr', "auto")
+    command        = server.get('command', "")
     airgapped      = server.get('airgapped', "false")
 
     netconf_obj = {}
@@ -95,7 +96,7 @@ for server in server_list:
         netconf_obj[iface] = iface_details
 
     netconf_json = json.dumps(netconf_obj)
-    command = [
+    cmd = [
         "create-vm",
         "--id",      str(vm_id),
         "--name",    hostname+"."+domain,
@@ -103,8 +104,9 @@ for server in server_list:
         "--ram",     str(server.get('ram', 2048)),
         "--disks",   "'" + json.dumps(server.get('disks', [])) + "'",
         "--netconf", "'" + netconf_json + "'",
+        "--command", "'" + command + "'",
         "--airgapped", "'" + str(airgapped).lower() + "'"
     ]
 
-    print(" ".join(command))
+    print(" ".join(cmd))
     # subprocess.run(command, check=True)

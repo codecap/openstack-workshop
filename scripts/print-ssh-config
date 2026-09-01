@@ -51,4 +51,10 @@ cat "$ENV_CONF" | yq -r '.server_conf[] | (.hostname + " " + (.id | tostring))' 
     print_host_entry
 done
 
+cat <<EOF
+Host deployment
+    AddKeysToAgent yes
+    ForwardAgent   yes
+EOF
+
 print_comment

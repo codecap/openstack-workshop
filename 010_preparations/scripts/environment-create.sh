@@ -2,31 +2,22 @@
 
 ##############################################################################
 # vars
-WRX_RAW_BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/refs/heads/main
-WRX_INFRA_NODES="dns|proxy|registry"
-WRX_DEPLOY_NODES="deployment|recorder"
-CONF_SCRIPT=$WRX_RAW_BASE_PATH/010_preparations/scripts/proxmox-template.sh
-
-##############################################################################
-# Install a template VM
-curl -sS -L $CONF_SCRIPT | bash
+WRX_INFRA_NODES_GR1="dns|proxy|registry"
+WRX_INFRA_NODES_GR2="deployment|recorder"
 
 ##############################################################################
 # Infra nodes
-print-create-env-commands  | grep -E "$WRX_INFRA_NODES" | bash
-sleep 120;
-echo 'curl -sS -L $WRX_RAW_BASE_PATH/scripts/infra/dns.sh       | bash' | ssh -t dns      'sudo -i'
-echo 'curl -sS -L $WRX_RAW_BASE_PATH/scripts/infra/proxy.sh     | bash' | ssh -t proxy    'sudo -i'
-echo 'curl -sS -L $WRX_RAW_BASE_PATH/scripts/infra/registry.sh  | bash' | ssh -t registry 'sudo -i'
+print-create-env-commands  | grep -E "$WRX_INFRA_NODES_GR1" | bash
 
 ##############################################################################
 # Deployment nodes
-print-create-env-commands  | grep -E "$WRX_DEPLOY_NODES" | bash
-sleep 120;
-echo 'curl -sS --proxy $WRX_PROXY -L $WRX_RAW_BASE_PATH/scripts/infra/recorder.sh  | bash' | ssh -t recorder 'sudo -i'
 
+sleep 120
+print-create-env-commands  | grep -E "$WRX_INFRA_NODES_GR2" | bash
+
+# copy the key to the deployment node, so we can access every node from there
 scp /root/.ssh/id_rsa* deployment:/home/deploy/.ssh
 
 ##############################################################################
 # Environment nodes
-print-create-env-commands  | grep -v -E "$WRX_INFRA_NODES|$WRX_DEPLOY_NODES" | bash
+print-create-env-commands  | grep -v -E "$WRX_INFRA_NODES_GR1|$WRX_INFRA_NODES_GR2" | bash

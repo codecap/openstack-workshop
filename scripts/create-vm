@@ -37,7 +37,9 @@ while [[ "$#" -gt 0 ]]; do
         --ram)       RAM="$2";          shift 2 ;;
         --disks)     DISKS_JSON="$2";   shift 2 ;;
         --netconf)   NETCONF_JSON="$2"; shift 2 ;;
+        --command)   COMMAND="$2";      shift 2 ;;
         --airgapped) AIRGAPPED="$2";    shift 2 ;;
+
         *) echo "Unknown parameter: $1"; exit 1 ;;
     esac
 done
@@ -177,6 +179,18 @@ runcmd:
   - mv /etc/netplan/70-wrx-rename-ifaces.yaml.off /etc/netplan/70-wrx-rename-ifaces.yaml
   - netplan apply
   - systemctl restart systemd-timesyncd
+EOF
+
+
+if [ -n "$COMMAND" ]
+  then
+cat <<EOF >> "$VENDOR_FILE"
+  - "$COMMAND"
+EOF
+fi
+
+
+cat <<EOF >> "$VENDOR_FILE"
 fs_setup:
   - device:     /dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1
     filesystem: ext4
@@ -326,8 +340,8 @@ cat <<EOF >> "$VENDOR_FILE"
     content: |
       export WRX_RAW_BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/main
       export WRX_PROXY=http://proxy.wrx.sckt.net:3128
-      export WRX_INFRA_NODES="dns|proxy|registry"
-      export WRX_DEPLOY_NODES="deployment|recorder"
+      export WRX_INFRA_NODES_GR1="dns|proxy|registry"
+      export WRX_INFRA_NODES_GR2="deployment|recorder"
 EOF
 
 #

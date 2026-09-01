@@ -27,8 +27,14 @@ cat >> ~/.profile <<EOF
 alias wrx-stack='tmuxp load -y ~/openstack-workshop/conf/tmuxp.yaml'
 EOF
 
-cd ~
-git clone https://github.com/codecap/openstack-workshop.git
+# cd ~
+# git clone https://github.com/codecap/openstack-workshop.git
+
+mkdir -p openstack-workshop && \
+curl -sSL https://github.com/codecap/openstack-workshop/archive/HEAD.tar.gz | \
+tar -xz -C openstack-workshop --strip-components=1
+
+
 
 ln -s ~/openstack-workshop/kolla-ansible openstack
 ln -s ~/openstack-workshop/cephadm       ceph
