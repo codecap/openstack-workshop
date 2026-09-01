@@ -100,68 +100,19 @@ We will need at least a single baremetal node with either:
 
 
 ---
-# Operating System
-![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
-
-```bash
-# On the baremetal node as root                                             📋
-apt-get update
-
-apt-get remove grub-cloud-amd64 -y
-apt-get dist-upgrade            -y
-
-apt-get  install -y   \
- bind9-dnsutils  \
- curl            \
- dnsmasq         \
- git             \
- htop            \
- isc-dhcp-client \
- jq              \
- nftables        \
- python3-venv    \
- tcpdump         \
- tmux            \
- vim             \
- yq
-```
-
----
-# Checkout
-![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
-```bash
-# On the baremetal node as root                                             📋
-git clone https://github.com/codecap/openstack-workshop.git
-
-cd openstack-workshop
-./scripts/print-ssh-config  >> ~/.ssh/config
-
-ssh-keygen -t ed25519 -N '' -f ~/.ssh/id_ed25519
-cat /root/.ssh/id_ed25519.pub >> /home/debian/.ssh/authorized_keys
-```
-
----
 # Proxmox
-![bg right:40% 50%](https://www.svgrepo.com/show/331552/proxmox.svg)
+![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
+
 ```bash
 # On the baremetal node as root                                             📋
-cd  010_preparations/ansible/
+WRX_RAW_BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/refs/heads/main
+CONF_SCRIPT=$WRX_RAW_BASE_PATH/010_preparations/scripts/proxmox-install.sh
 
-python3 -m venv ~/venv/wrx
-source ~/venv/wrx/bin/activate
+# Review
+curl -sS -L $CONF_SCRIPT
 
-# Install ansible
-pip3 install -U pip
-pip3 install -r requirements.txt
-
-# Install requiremnets for ansible
-ansible-galaxy role       install -r requirements.yml
-ansible-galaxy collection install -r requirements.yml
-
-ansible-playbook playbooks/proxmox/install.yml
-
-# Reboot
-reboot
+# Execute
+curl -sS -L $CONF_SCRIPT | bash
 ```
 
 ---
@@ -181,7 +132,7 @@ curl -sS -L $CONF_SCRIPT | bash
 ```
 
 ---
-# Configuration
+# Configuration Data
 ![bg right:45% 25%](https://api.iconify.design/file-icons:config.svg)
 [Link](https://github.com/codecap/openstack-workshop/blob/main/conf/env.yaml)
 ```yaml
@@ -260,23 +211,15 @@ print-create-env-commands  | grep <NODE_FILTER> | bash
 ![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
 
 ```bash
-WRX_INFRA_NODES="dns|proxy|registry"
-WRX_DEPLOY_NODES="deployment|recorder"
+# On the baremetal node as root                                             📋
+WRX_RAW_BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/refs/heads/main
+CONF_SCRIPT=$WRX_RAW_BASE_PATH/010_preparations/scripts/environment-create.sh
 
-# Infra nodes
-print-create-env-commands  | grep -E "$WRX_INFRA_NODES" | bash
-echo 'curl -sS -L $WRX_RAW_BASE_PATH/scripts/infra/dns.sh       | bash' | ssh -t dns      'sudo -i'
-echo 'curl -sS -L $WRX_RAW_BASE_PATH/scripts/infra/proxy.sh     | bash' | ssh -t proxy    'sudo -i'
-echo 'curl -sS -L $WRX_RAW_BASE_PATH/scripts/infra/registry.sh  | bash' | ssh -t registry 'sudo -i'
+# Review
+curl -sS -L $CONF_SCRIPT
 
-# Deployment nodes
-print-create-env-commands  | grep -E "$WRX_DEPLOY_NODES" | bash
-echo 'curl -sS --proxy $WRX_PROXY -L $WRX_RAW_BASE_PATH/scripts/infra/recorder.sh  | bash' | ssh -t recorder 'sudo -i'
-
-scp /root/.ssh/id_rsa* deployment:/home/deploy/.ssh
-
-# Environment nodes
-print-create-env-commands  | grep -v -E "$WRX_INFRA_NODES|$WRX_DEPLOY_NODES"   | bash
+# Execute
+curl -sS -L $CONF_SCRIPT | bash
 ```
 
 ---
@@ -324,45 +267,4 @@ print-create-env-commands  | grep -v -E "$WRX_INFRA_NODES|$WRX_DEPLOY_NODES"   |
 * Choose "Manual Configuration"
 * Put "127.0.0.1" in SOCKS Host field, Port: 8888
 * Choose SOCKS v5
-```
-
----
-# SSH Config
-![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
-
-```bash
-# On deployment node create SSH config to access the workshop environment   📋
-cat >> ~/.ssh/config <<EOF
-Host hypervisor hypervisor.wrx.sckt.net
-  User root
-
-Host *.mgmt *.mgmt.wrx.sckt.net *.wrx.sckt.net
-  User  deploy
-
-Host *
-  User                  deploy
-  StrictHostKeyChecking no
-  UserKnownHostsFile    /dev/null
-EOF
-```
-
----
-# Some Common Configs
-![bg right:40% 30%](https://www.svgrepo.com/show/282117/tools-hammer.svg)
-```bash
-# On deployment node check out the repository                               📋
-cd ~
-git clone https://github.com/codecap/openstack-workshop.git
-
-ln -s ~/openstack-workshop/kolla-ansible openstack
-ln -s ~/openstack-workshop/cephadm       ceph
-
-# Install and configure tmuxp
-sudo apt install pipx -y
-pipx install tmuxp
-
-cat >> ~/.profile <<EOF
-
-alias wrx-stack='tmuxp load -y ~/openstack-workshop/conf/tmuxp.yaml'
-EOF
 ```

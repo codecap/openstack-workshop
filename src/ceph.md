@@ -84,9 +84,9 @@ sudo apt install cephadm ceph-common python3-jinja2 -y
 for i in cephmon0{1..3} cephosd0{1..3} cephgra01 deployment
 do
   # remove keys
-  ssh -i ~/.ssh/id $i.mgmt 'sudo sed -i /root/.ssh/authorized_keys -e "/command=/d"'
+  ssh -q -i ~/.ssh/id_rsa $i.mgmt 'sudo sed -i /root/.ssh/authorized_keys -e "/command=/d"'
   # add keys
-  ssh -i ~/.ssh/id $i.mgmt 'echo "'$(cat ~/.ssh/id_rsa.pub)'" \
+  ssh -q -i ~/.ssh/id_rsa $i.mgmt 'echo "'$(cat ~/.ssh/id_rsa.pub)'" \
   | sudo tee -a /root/.ssh/authorized_keys'
 done
 ```
