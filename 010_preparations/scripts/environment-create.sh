@@ -6,18 +6,16 @@ WRX_INFRA_NODES_GR1="dns|proxy|registry"
 WRX_INFRA_NODES_GR2="deployment|recorder"
 
 ##############################################################################
-# Infra nodes
-print-create-env-commands  | grep -E "$WRX_INFRA_NODES_GR1" | bash
+# Infra nodes group1
+print-create-env-commands  | grep -E "name +($WRX_INFRA_NODES_GR1)" | bash
+
+echo ""
+echo "Waiting for the first group to get prapared"; sleep 200
+echo ""
+##############################################################################
+# Infra nodes group2
+print-create-env-commands  | grep -E "name +($WRX_INFRA_NODES_GR2)" | bash
 
 ##############################################################################
-# Deployment nodes
-
-sleep 120
-print-create-env-commands  | grep -E "$WRX_INFRA_NODES_GR2" | bash
-
-# copy the key to the deployment node, so we can access every node from there
-scp /root/.ssh/id_rsa* deployment:/home/deploy/.ssh
-
-##############################################################################
-# Environment nodes
-print-create-env-commands  | grep -v -E "$WRX_INFRA_NODES_GR1|$WRX_INFRA_NODES_GR2" | bash
+# More nodes
+print-create-env-commands  | grep -v -E "name +($WRX_INFRA_NODES_GR1|$WRX_INFRA_NODES_GR2)" | bash

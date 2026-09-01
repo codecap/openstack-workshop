@@ -2,7 +2,7 @@
 REGISTRY=registry.wrx.sckt.net:80
 IMAGE_NAME=$REGISTRY/quay/osism/ara-server:1.6.1
 
-apt update; apt install podman -y
+apt-get update; apt-get install podman -y
 
 cat > /etc/containers/registries.conf  <<EOF
 [[registry]]

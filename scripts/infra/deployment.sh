@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-apt install -y \
-  crudini      \
+apt-get update
+
+apt-get install -y \
+  crudini          \
   pipx
 
 SYS_USER_NAME=deploy
