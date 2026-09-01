@@ -160,14 +160,14 @@ resources__files:
         chain forward {
             type filter hook forward priority 0; policy drop;
             ct state established,related accept
-            iifname "vmbr0" oifname "{{ansible_facts['default_ipv4']['address']}}" accept
+            iifname "vmbr0" oifname "{{ansible_facts['default_ipv4']['interface']}}" accept
         }
       }
 
       table ip nat {
           chain postrouting {
               type nat hook postrouting priority 100;
-              oifname "{{ansible_facts['default_ipv4']['address']}}" ip saddr 192.168.1.0/24 masquerade
+              oifname "{{ansible_facts['default_ipv4']['interface']}}" ip saddr 192.168.1.0/24 masquerade
           }
       }
 
