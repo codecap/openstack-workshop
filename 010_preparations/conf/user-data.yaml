@@ -13,13 +13,10 @@ write_files:
       Type=oneshot
       ExecStart=/bin/bash -c '\
         set -euo pipefail; \
-        echo "=== Starting WRX Environment Preparation ===" >> /var/log/prepare-wrx-environment.log; \
-        \
-        WRX_RAW_BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/refs/heads/main \
-        curl -sS -L $WRX_RAW_BASE_PATH/010_preparations/scripts/proxmox-template.sh   | bash \
-        curl -sS -L $WRX_RAW_BASE_PATH/010_preparations/scripts/environment-create.sh | bash \
-        \
-        echo "=== WRX Environment Preparation Completed ===" >> /var/log/prepare-wrx-environment.log \
+        WRX_RAW_BASE_PATH=https://raw.githack.com/codecap/openstack-workshop/refs/heads/main; \
+        source /etc/profile.d/*-wrx.sh;                                                       \
+        curl -sS -L $WRX_RAW_BASE_PATH/010_preparations/scripts/proxmox-template.sh   | bash; \
+        curl -sS -L $WRX_RAW_BASE_PATH/010_preparations/scripts/environment-create.sh | bash; \
       '
       ExecStartPost=/usr/bin/touch /var/lib/prepare-wrx-environment.done
       ExecStartPost=/usr/bin/systemctl disable prepare-wrx-environment.service
